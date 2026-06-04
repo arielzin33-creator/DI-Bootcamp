@@ -1,0 +1,18 @@
+<script>
+    (function(username) {
+        const nav = document.querySelector('nav');
+
+        const userDiv = document.createElement('div');
+
+        const img = document.createElement('img');
+        img.src = 'https://api.dicebear.com/7.x/thumbs/svg?seed=' + username;
+        img.alt = username + "'s profile picture";
+
+        const greeting = document.createElement('span');
+        greeting.textContent = `Welcome, ${username}!`;
+
+        userDiv.appendChild(img);
+        userDiv.appendChild(greeting);
+        nav.appendChild(userDiv);
+    })('John');
+</script>

@@ -1,0 +1,40 @@
+// Exercise 8 : Juice Bar
+
+<!DOCTYPE html >
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Juice Bar</title>
+</head>
+
+<body>
+    <div id="output">
+    </div>
+    <script>
+        (function makeJuice(size) {
+            (function addIngredients(ing1, ing2, ing3) {
+                document.getElementById('output').textContent = `The client wants a ${size} juice, containing ${ing1}, ${ing2}, ${ing3}`;
+            })(addIngredients('apple', 'banana', 'mango'));
+        })(makeJuice('large'));
+        // part 2 
+        function makeJuice(size) {
+            let ingredients = [];
+
+            function addIngredients(ing1, ing2, ing3) {
+                ingredients.push(ing1, ing2, ing3);
+            }
+
+            function displayJuice() {
+                document.getElementById('output').textContent = `The client wants a ${size} juice, containing $ {ingredients.join(', ')}`;
+            }
+            addIngredients('apple', 'banana', 'mango');
+            addIngredients('kiwi', 'orange', 'pineapple');
+            displayJuice();
+        }
+        makeJuice('large');
+    </script>
+
+</body>
+
+</html>
