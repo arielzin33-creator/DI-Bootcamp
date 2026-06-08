@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercise_XP</title>
+</head>
+
+<body>
+    <script>
+        //Exercise 1 : print Full Name
+        function printFullName({
+            first,
+            last
+        }) {
+            return `Your full name is ${first} ${last}`
+        }
+
+        console.log(printFullName({
+            first: 'Elie',
+            last: 'Schoppik'
+        }));
+
+        //Exercise 2 : keys and values
+
+        const keysAndValues = {
+            a: 1,
+            b: 2,
+            c: 3
+        }
+
+        function separateArray(obj) {
+            const sortedKeys = Object.keys(obj).sort();
+            const sortedValues = sortedKeys.map(key => obj[key]);
+
+            return [sortedKeys, sortedValues];
+        }
+
+        console.log(separateArray(keysAndValues));
+
+        //Exercise 3 : Counter class
+
+        class Counter {
+            constructor() {
+                this.count = 0;
+            }
+
+            increment() {
+                this.count++;
+            }
+        }
+
+        const counterOne = new Counter(); // new object created in memory at Address A
+        counterOne.increment(); // count = 1
+        counterOne.increment(); // count = 2
+
+        const counterTwo = counterOne; // counterTwo points to the SAME address as counterOne
+        counterTwo.increment(); // count = 3 — modifies the SAME object
+    </script>
+</body>
+
+</html>

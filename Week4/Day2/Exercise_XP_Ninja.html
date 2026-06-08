@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exercise_XP</title>
+</head>
+
+<body>
+    <script>
+        //Exercise 1 : Bird class
+
+        //Analyze the code below, what will be the output?
+        class Bird {
+            constructor() {
+                console.log("I'm a bird. 🦢");
+            }
+        }
+
+        class Flamingo extends Bird {
+            constructor() {
+                console.log("I'm pink. 🌸");
+                super();
+            }
+        }
+
+        const pet = new Flamingo(); // The output will be "I'm pink. 🌸" I'm a bird. 🦢
+    </script>
+</body>
+
+</html>
