@@ -17,18 +17,7 @@
 
     <pre id="output"></pre>
 
-    <script>
-        document.getElementById("nameForm").addEventListener("submit", function(e) {
-            e.preventDefault();
-
-            const data = {
-                name: document.getElementById("name").value,
-                lastName: document.getElementById("lastName").value,
-            };
-
-            document.getElementById("output").textContent = JSON.stringify(data, null, 2);
-        });
-    </script>
+    <script src="Daily_challenge_HTML_Form.js"></script>
 </body>
 
 </html>
