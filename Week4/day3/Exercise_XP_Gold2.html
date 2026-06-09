@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Exercise_XP_Gold</title>
+
+<body>
+
+    <section id="output"></section>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+
+        const data = {
+            name: params.get("name"),
+            lastName: params.get("lastName"),
+        };
+
+        document.getElementById("output").textContent = JSON.stringify(data, null, 2);
+    </script>
+
+</body>
+
+</html>

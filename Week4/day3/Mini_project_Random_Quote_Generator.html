@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DocuMini project - Random Quote Generatorment</title>
+</head>
+
+<body>
+
+    <!-- Add quote form -->
+    <form id="addForm">
+        <input type="text" id="newQuote" placeholder="Quote">
+        <input type="text" id="newAuthor" placeholder="Author">
+        <input type="submit" value="Add Quote">
+    </form>
+
+    <!-- Filter form -->
+    <form id="filterForm">
+        <input type="text" id="filterAuthor" placeholder="Filter by author">
+        <input type="submit" value="Search">
+    </form>
+
+    <!-- Random quote display -->
+    <section id="output"></section>
+    <button id="btn">Generate Quote</button>
+
+    <!-- Quote action buttons -->
+    <button id="btnCharsWithSpaces">Chars (with spaces)</button>
+    <button id="btnCharsNoSpaces">Chars (no spaces)</button>
+    <button id="btnWords">Word count</button>
+    <button id="btnLike">Like </button>
+
+    <!-- Filter results display -->
+    <section id="filterOutput"></section>
+    <button id="btnPrev">Previous</button>
+    <button id="btnNext">Next</button>
+
+    <script src="Quotes.js"></script>
+</body>
+
+</html>
