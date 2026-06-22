@@ -13,7 +13,7 @@ Mythic-Atlas is an interactive web map of the real Earth, reimagined as a world 
 ## How to Run the Project
 This is a static site — there is no backend and no package installation required.
 
-**Option 1 — VS Code Live Server (easiest):**
+**Option 1 — Live on browser (easiest):**
 open `index.html` on browser.
 
 **Important:** because the map loads GeoJSON files via `fetch()`, the project must be served through a local server. Opening `index.html` directly as a file may cause the file not working properly, but worth a try as first option..
