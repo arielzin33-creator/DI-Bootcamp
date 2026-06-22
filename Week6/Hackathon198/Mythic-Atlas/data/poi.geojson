@@ -1,0 +1,225 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": { "name": "Oracle of Mount Olympus", "kind": "temple", "minZoomToShow": 4, "summary": "Seat of the twelve gods; pilgrims climb here to receive prophecy from the priestesses of Zeus." },
+      "geometry": { "type": "Point", "coordinates": [22.35, 40.09] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Sunken Halls of Atlantis", "kind": "ruin", "minZoomToShow": 3, "summary": "A kingdom swallowed by the sea in a single night, said to lie beneath the Atlantic shelf." },
+      "geometry": { "type": "Point", "coordinates": [-25.0, 31.0] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Parthenon of Athena", "kind": "temple", "minZoomToShow": 4, "summary": "The great temple atop the Acropolis, dedicated to Athena the goddess of wisdom, standing in gleaming marble above the city of Athens." },
+      "geometry": { "type": "Point", "coordinates": [23.73, 37.97] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Palace of Knossos", "kind": "castle", "minZoomToShow": 4, "summary": "The legendary labyrinthine palace of King Minos, deep within which the Minotaur waits for its next tribute of Athenian youth." },
+      "geometry": { "type": "Point", "coordinates": [25.16, 35.3] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Ruins of Troy", "kind": "ruin", "minZoomToShow": 4, "summary": "The scorched walls of Ilion, sacked after ten years of siege. Only ash and legend remain where Helen once walked." },
+      "geometry": { "type": "Point", "coordinates": [26.24, 39.96] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Temple of Karnak", "kind": "temple", "minZoomToShow": 4, "summary": "The vast complex of Amun-Ra, where the Nile priests maintained the balance of Ma'at and pharaohs bargained with the gods for eternal life." },
+      "geometry": { "type": "Point", "coordinates": [32.66, 25.72] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Great Pyramid of Osiris", "kind": "temple", "minZoomToShow": 3, "summary": "Built as a gateway between the living and the dead, aligned to the stars of Orion so the pharaoh's soul might ascend to Osiris." },
+      "geometry": { "type": "Point", "coordinates": [31.13, 29.98] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Underworld Gate of Anubis", "kind": "ruin", "minZoomToShow": 4, "summary": "A desert shrine where Anubis is said to weigh the hearts of the dead against a feather. Those found heavy vanish into darkness." },
+      "geometry": { "type": "Point", "coordinates": [33.0, 27.5] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Valhalla — Hall of the Slain", "kind": "castle", "minZoomToShow": 3, "summary": "Odin's great mead-hall where the bravest warriors feast until Ragnarok. The Valkyries ride at dusk to collect the worthy dead." },
+      "geometry": { "type": "Point", "coordinates": [9.0, 62.5] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Yggdrasil — The World Tree", "kind": "temple", "minZoomToShow": 3, "summary": "The immense ash tree whose roots reach into all nine worlds. Odin hung himself from its branches for nine days to discover the runes." },
+      "geometry": { "type": "Point", "coordinates": [15.0, 64.0] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Ruins of Utgard", "kind": "ruin", "minZoomToShow": 4, "summary": "The fortress of the frost giants at the edge of the world, where Thor was humbled by illusions and the cat he could not lift was the Midgard Serpent." },
+      "geometry": { "type": "Point", "coordinates": [25.0, 70.0] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Temple of Brahma, Pushkar", "kind": "temple", "minZoomToShow": 4, "summary": "One of the few temples dedicated to Brahma the Creator, built beside the sacred lake where a lotus fell from his hand and the world bloomed." },
+      "geometry": { "type": "Point", "coordinates": [74.55, 26.49] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Sunken City of Dwarka", "kind": "ruin", "minZoomToShow": 4, "summary": "The golden city of Krishna, swallowed by the sea the moment he departed the world. Divers still find its towers beneath the waves." },
+      "geometry": { "type": "Point", "coordinates": [68.97, 22.23] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Lanka — Ravana's Fortress", "kind": "castle", "minZoomToShow": 4, "summary": "The island stronghold of the demon king Ravana, built of gold and terror, from which Rama and Hanuman's army came to rescue Sita." },
+      "geometry": { "type": "Point", "coordinates": [80.7, 7.9] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Mount Meru — Cosmic Axis", "kind": "temple", "minZoomToShow": 3, "summary": "The sacred mountain at the center of the universe, home to the gods. Its peak pierces the heavens and its roots anchor the earth." },
+      "geometry": { "type": "Point", "coordinates": [85.0, 28.5] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Village of the Pandavas", "kind": "village", "minZoomToShow": 5, "summary": "The humble settlement where the five Pandava princes lived in exile, their fate tied to the great war described in the Mahabharata." },
+      "geometry": { "type": "Point", "coordinates": [78.0, 25.5] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Ruins of Persepolis", "kind": "ruin", "minZoomToShow": 4, "summary": "The ceremonial capital of the Achaemenid empire, built to honor Ahura Mazda. Burned by Alexander, its ghosts still walk the Hall of a Hundred Columns." },
+      "geometry": { "type": "Point", "coordinates": [52.89, 29.93] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Tower of Silence", "kind": "temple", "minZoomToShow": 4, "summary": "A Zoroastrian dakhma where the dead are offered to the sun and the vultures, cleansing the body so the soul may ascend to Ahura Mazda's light." },
+      "geometry": { "type": "Point", "coordinates": [54.4, 32.0] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Palace of Zahhak the Serpent King", "kind": "castle", "minZoomToShow": 4, "summary": "The accursed palace of the tyrant Zahhak, from whose shoulders serpents grew and demanded a daily meal of human brains." },
+      "geometry": { "type": "Point", "coordinates": [51.4, 35.7] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Jade Emperor's Temple, Chengdu", "kind": "temple", "minZoomToShow": 4, "summary": "A celestial temple where the Jade Emperor receives tribute from all the gods of heaven. His court decides the fate of every living soul." },
+      "geometry": { "type": "Point", "coordinates": [104.06, 30.66] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Dragon Gate — Yellow River", "kind": "ruin", "minZoomToShow": 4, "summary": "The mythical waterfall where carp leap against the current. Any fish that makes it through transforms into a dragon. The bones of ten thousand failures line the riverbed." },
+      "geometry": { "type": "Point", "coordinates": [110.5, 35.8] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Mount Kunlun — Home of Xi Wangmu", "kind": "temple", "minZoomToShow": 3, "summary": "The heavenly mountain home of the Queen Mother of the West, whose peach garden grows the fruit of immortality, ripening only once every three thousand years." },
+      "geometry": { "type": "Point", "coordinates": [80.1, 35.5] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Forbidden Celestial Palace, Beijing", "kind": "castle", "minZoomToShow": 4, "summary": "The earthly reflection of the Jade Emperor's heavenly court, where the Son of Heaven ruled as intermediary between the mortal world and the divine." },
+      "geometry": { "type": "Point", "coordinates": [116.39, 39.91] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Village of the Eight Immortals", "kind": "village", "minZoomToShow": 5, "summary": "A misty mountain hamlet where the Eight Immortals are said to gather, each carrying their magical treasure before crossing the sea." },
+      "geometry": { "type": "Point", "coordinates": [120.0, 36.5] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Izumo Grand Shrine", "kind": "temple", "minZoomToShow": 4, "summary": "The oldest and most sacred shrine in Japan, dedicated to Okuninushi. Every October all eight million kami gather here to decide the fates and marriages of mortals." },
+      "geometry": { "type": "Point", "coordinates": [132.69, 35.4] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Aokigahara — Gate to Yomi", "kind": "ruin", "minZoomToShow": 4, "summary": "The dense forest at the foot of Mount Fuji said to muffle all sound and compass needles. Ancient texts claim it grows over a crack leading to Yomi, the underworld." },
+      "geometry": { "type": "Point", "coordinates": [138.63, 35.48] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Ryūgū-jō — Dragon Palace", "kind": "castle", "minZoomToShow": 4, "summary": "The underwater palace of Ryūjin, the dragon god of the sea, whose tidal jewels control the rise and fall of the ocean." },
+      "geometry": { "type": "Point", "coordinates": [135.0, 32.5] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Mount Fuji Shrine — Gateway to Heaven", "kind": "temple", "minZoomToShow": 4, "summary": "The sacred peak of Fujisan, where the goddess Konohanasakuya-hime resides. Pilgrims climb through the night to greet the gods at the summit sunrise." },
+      "geometry": { "type": "Point", "coordinates": [138.73, 35.36] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Village of the Tengu", "kind": "village", "minZoomToShow": 5, "summary": "A remote mountain settlement where the long-nosed Tengu spirits are said to train wandering warriors in secret arts, then vanish with the morning mist." },
+      "geometry": { "type": "Point", "coordinates": [135.8, 34.5] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Chichen Itza — Temple of Kukulcan", "kind": "temple", "minZoomToShow": 3, "summary": "The pyramid of the feathered serpent god. At each equinox a shadow snake descends its staircase, marking the moment the god returns to earth." },
+      "geometry": { "type": "Point", "coordinates": [-88.57, 20.68] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Tikal — City of the Jaguar Lords", "kind": "ruin", "minZoomToShow": 4, "summary": "A once-great Maya city swallowed by jungle. Its pyramids pierce the canopy like stone fingers reaching for the sky, and jaguar priests still walk its plazas at night." },
+      "geometry": { "type": "Point", "coordinates": [-89.62, 17.22] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Palenque — Palace of the Sun Shield", "kind": "ruin", "minZoomToShow": 4, "summary": "Tomb of Pakal the Great, whose sarcophagus lid shows him descending into Xibalba, the Maya underworld, on a world-tree throne." },
+      "geometry": { "type": "Point", "coordinates": [-92.05, 17.48] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Uxmal — House of the Governor", "kind": "temple", "minZoomToShow": 4, "summary": "Built by a dwarf who hatched from an egg and constructed the pyramid in a single night on the orders of the rain god Chaac." },
+      "geometry": { "type": "Point", "coordinates": [-89.77, 20.36] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Xibalba — Entrance to the Underworld", "kind": "ruin", "minZoomToShow": 4, "summary": "The Hero Twins entered here through a cave to defeat the lords of death in a ball game. The howling and the cold that rise from these depths are unmistakable." },
+      "geometry": { "type": "Point", "coordinates": [-90.5, 15.5] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Machu Picchu — City in the Clouds", "kind": "ruin", "minZoomToShow": 3, "summary": "An Inca citadel built so high in the Andes that the clouds pass through its streets. Raised in honor of Inti the sun god, its Intihuatana stone tethers the sun itself." },
+      "geometry": { "type": "Point", "coordinates": [-72.54, -13.16] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Tiwanaku — Gateway of the Sun", "kind": "temple", "minZoomToShow": 4, "summary": "The monolithic gateway carved with the image of Viracocha, creator of all things, who wept golden tears and fashioned humanity from clay at this very spot." },
+      "geometry": { "type": "Point", "coordinates": [-68.67, -16.55] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Cuzco — Navel of the World", "kind": "castle", "minZoomToShow": 4, "summary": "The sacred capital of the Inca, laid out in the shape of a puma. The Temple of the Sun at its heart was sheathed in gold to dazzle the eye of Inti." },
+      "geometry": { "type": "Point", "coordinates": [-72.0, -13.53] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Island of the Sun, Lake Titicaca", "kind": "temple", "minZoomToShow": 4, "summary": "The birthplace of the Inca creation myth, where Inti the sun god placed the first Inca, Manco Capac, and commanded him to found a civilization worthy of the light." },
+      "geometry": { "type": "Point", "coordinates": [-69.19, -16.0] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Village of Viracocha", "kind": "village", "minZoomToShow": 5, "summary": "A remote Andean settlement said to be the last place Viracocha the creator god walked among humans before disappearing into the Pacific Ocean." },
+      "geometry": { "type": "Point", "coordinates": [-75.0, -11.0] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Bear Butte — Sacred Mountain of the Lakota", "kind": "temple", "minZoomToShow": 4, "summary": "The mountain where Sweet Medicine received the four sacred arrows from Maheo the All-Father, gifts that gave the Cheyenne their laws and their purpose." },
+      "geometry": { "type": "Point", "coordinates": [-103.43, 44.47] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Cahokia Mounds — City of the Sun People", "kind": "ruin", "minZoomToShow": 4, "summary": "The greatest city north of Mexico before it was abandoned. Its Woodhenge aligned to the solstice, and its mounds are said to hum at midnight with ancestral voices." },
+      "geometry": { "type": "Point", "coordinates": [-90.06, 38.66] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Mesa Verde — Cliff Palace", "kind": "ruin", "minZoomToShow": 4, "summary": "An Ancestral Puebloan city carved into the canyon cliff face, abandoned in a single generation. The kivas still hold the prayers of those who danced for rain." },
+      "geometry": { "type": "Point", "coordinates": [-108.49, 37.18] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Serpent Mound — Ohio", "kind": "temple", "minZoomToShow": 4, "summary": "A quarter-mile earthwork in the shape of an uncoiling serpent, aligned to the summer solstice sunset. No one is buried here. It was built only to be seen from the sky." },
+      "geometry": { "type": "Point", "coordinates": [-83.43, 39.02] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Village of the Thunderbird", "kind": "village", "minZoomToShow": 5, "summary": "A Pacific Northwest settlement where the great Thunderbird is said to nest in the mountains above, its wingbeats making thunder and its eyes flashing lightning." },
+      "geometry": { "type": "Point", "coordinates": [-123.5, 48.5] }
+    }
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": { "name": "Kraken of the Norwegian Sea", "kind": "kraken", "minZoomToShow": 3, "summary": "A vast many-armed terror said to drag entire ships beneath the waves off the Norwegian coast." },
+      "geometry": { "type": "Point", "coordinates": [2.0, 67.5] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Sea Serpent of Gloucester", "kind": "serpent", "minZoomToShow": 3, "summary": "A long, humped serpent reported by sailors off the New England coast, gliding just beneath the surface before vanishing." },
+      "geometry": { "type": "Point", "coordinates": [-70.66, 42.61] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Serpent of Loch Ness", "kind": "serpent", "minZoomToShow": 4, "summary": "A shy lake-dwelling serpent, glimpsed only in passing by those who happen to look at exactly the right moment." },
+      "geometry": { "type": "Point", "coordinates": [-4.57, 57.3] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Leviathan of the Deep Atlantic", "kind": "kraken", "minZoomToShow": 3, "summary": "The biblical sea monster created on the fifth day, so vast that the ocean is merely its bath. When it stirs, the tides of the world reverse." },
+      "geometry": { "type": "Point", "coordinates": [-35.0, 10.0] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Jörmungandr — Midgard Serpent", "kind": "serpent", "minZoomToShow": 3, "summary": "The World Serpent, child of Loki, coiled around the entire ocean floor with its tail in its own mouth. When it releases its bite, Ragnarok begins." },
+      "geometry": { "type": "Point", "coordinates": [-45.0, 60.0] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Makara of the Indian Ocean", "kind": "serpent", "minZoomToShow": 3, "summary": "The great sea-beast of Hindu myth — part crocodile, part fish, part elephant — on whose back the god Varuna rides across the deep." },
+      "geometry": { "type": "Point", "coordinates": [70.0, -15.0] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Kraken of the Pacific Abyss", "kind": "kraken", "minZoomToShow": 3, "summary": "Sailors crossing the vast Pacific speak of dark shapes rising beneath their hulls — a many-armed shadow large enough to blot out the moon's reflection." },
+      "geometry": { "type": "Point", "coordinates": [-150.0, 20.0] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Ryūjin's Serpent Guard", "kind": "serpent", "minZoomToShow": 3, "summary": "The great sea dragon that circles the palace of Ryūjin in the depths of the Pacific, controlling the tides with the magical jewels it holds in its coils." },
+      "geometry": { "type": "Point", "coordinates": [155.0, 25.0] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Tianlong — Celestial Dragon of the South Sea", "kind": "serpent", "minZoomToShow": 3, "summary": "One of the four dragon kings of Chinese myth, master of the South Sea, who brings rain when pleased and drowns fleets when angered." },
+      "geometry": { "type": "Point", "coordinates": [115.0, 5.0] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Kraken of the Southern Pacific", "kind": "kraken", "minZoomToShow": 3, "summary": "Polynesian navigators warned of a vast creature sleeping in the deep south waters whose breath causes sudden whirlpools and whose dreams bring storms." },
+      "geometry": { "type": "Point", "coordinates": [-140.0, -35.0] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Cipactli — Aztec Sea Monster", "kind": "kraken", "minZoomToShow": 3, "summary": "The primordial crocodilian beast that floated on the primal sea before creation. The gods Tezcatlipoca and Quetzalcoatl tore it apart to make the earth — but it still hungers." },
+      "geometry": { "type": "Point", "coordinates": [-95.0, 15.0] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Imap Ukua — Inuit Sea Serpent", "kind": "serpent", "minZoomToShow": 3, "summary": "A colossal serpent of the Arctic waters, known to the Inuit as the master of sea creatures. Shamans must appease it or the seals and whales will vanish from the ice." },
+      "geometry": { "type": "Point", "coordinates": [-60.0, 75.0] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Kraken of the South Atlantic", "kind": "kraken", "minZoomToShow": 3, "summary": "Recorded in the logs of Portuguese and Dutch sailors rounding the Cape — a vast darkness rising from below that capsized two ships and left no survivors to describe its face." },
+      "geometry": { "type": "Point", "coordinates": [-15.0, -30.0] }
+    }
+  ]
+}

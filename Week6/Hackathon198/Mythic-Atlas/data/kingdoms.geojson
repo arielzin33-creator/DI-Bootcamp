@@ -1,0 +1,148 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": { "name": "Kingdom of Olympus", "kind": "kingdom", "minZoomToShow": 2, "summary": "Home of the twelve gods, ruled from the sacred peak where Zeus holds court above the clouds." },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [19.5, 40.8], [21.5, 40.9], [23.0, 40.4], [24.5, 39.8],
+          [26.0, 39.5], [28.0, 39.2], [29.5, 38.5], [28.5, 37.2],
+          [26.0, 36.8], [24.5, 35.5], [22.0, 35.8], [20.5, 36.5],
+          [19.0, 37.5], [18.5, 38.8], [19.5, 40.8]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Sunken Realm of Atlantis", "kind": "kingdom", "minZoomToShow": 2, "summary": "A once-great island kingdom swallowed by the sea in a single night, its towers said to still glow faintly beneath the waves." },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [-34.0, 35.0], [-28.0, 38.0], [-22.0, 37.5], [-20.0, 34.0],
+          [-23.0, 30.0], [-31.0, 29.5], [-36.0, 32.0], [-34.0, 35.0]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Dominion of the Pharaoh Gods", "kind": "kingdom", "minZoomToShow": 2, "summary": "A desert kingdom ruled in the name of Ra, Osiris, and Anubis, where the dead are guided to the afterlife along the river." },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [29.8, 31.2], [31.5, 31.0], [32.5, 30.5], [31.8, 28.5],
+          [31.5, 26.0], [31.2, 23.5], [30.8, 21.0], [30.5, 18.5],
+          [30.2, 17.5], [29.5, 19.0], [29.2, 21.5], [29.0, 24.0],
+          [29.5, 27.0], [30.2, 29.5], [30.5, 31.0], [29.8, 31.2]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Realm of Asgard", "kind": "kingdom", "minZoomToShow": 2, "summary": "Hall of the Norse gods, joined to the mortal world by a bridge of fire and color that only the worthy may cross." },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [4.5, 59.0], [5.5, 59.8], [10.0, 60.5], [12.0, 61.5],
+          [18.0, 62.5], [25.0, 65.5], [28.0, 68.0], [25.0, 70.0],
+          [20.0, 69.5], [15.0, 68.0], [10.0, 66.0], [5.0, 63.5],
+          [4.0, 61.0], [4.5, 59.0]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Realm of Indra — Vedic India", "kind": "kingdom", "minZoomToShow": 2, "summary": "The sacred land of the Vedic gods, where Indra hurls lightning from the heavens and the cosmic serpent Vritra guards the rivers." },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [68.0, 37.0], [75.0, 36.5], [82.0, 35.5], [88.0, 35.0],
+          [92.0, 33.0], [94.5, 28.5], [97.0, 25.0], [97.0, 20.0],
+          [95.0, 15.0], [92.0, 12.0], [88.0, 11.5], [82.0, 13.0],
+          [75.0, 15.0], [70.0, 18.0], [68.5, 24.0], [67.0, 30.0],
+          [68.0, 37.0]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Empire of Ahura Mazda — Persia", "kind": "kingdom", "minZoomToShow": 2, "summary": "The ancient Persian empire blessed by the god of light, Ahura Mazda, in eternal struggle against the dark forces of Ahriman." },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [44.0, 37.5], [48.0, 37.8], [53.0, 37.0], [58.0, 36.5],
+          [61.0, 34.0], [61.5, 30.0], [59.0, 27.0], [56.0, 26.5],
+          [52.0, 27.5], [48.0, 29.0], [45.0, 30.5], [42.0, 32.0],
+          [41.0, 34.5], [42.0, 36.5], [44.0, 37.5]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Middle Kingdom of the Dragon Emperor", "kind": "kingdom", "minZoomToShow": 2, "summary": "The celestial empire ruled under the Mandate of Heaven, where dragon kings command the rivers and the Jade Emperor presides over all gods." },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [105.0, 42.0], [115.0, 42.5], [125.0, 41.5], [130.0, 40.0],
+          [131.0, 35.0], [130.0, 30.0], [125.0, 28.0], [120.0, 26.5],
+          [115.0, 28.0], [110.0, 30.0], [108.0, 35.0], [106.0, 39.0],
+          [105.0, 42.0]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Realm of Izanagi — Land of the Rising Sun", "kind": "kingdom", "minZoomToShow": 2, "summary": "The island chain born when Izanagi and Izanami dipped their jeweled spear into the sea, home to eight million kami spirits." },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [130.0, 34.5], [132.0, 34.0], [135.0, 33.5], [138.0, 34.5],
+          [140.5, 35.5], [141.5, 37.5], [140.0, 40.0], [138.0, 41.0],
+          [135.0, 40.5], [132.0, 39.0], [130.5, 37.0], [130.0, 35.0],
+          [130.0, 34.5]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Sacred Lands of the Maya", "kind": "kingdom", "minZoomToShow": 2, "summary": "A jungle empire built on the blood of kings and the movements of stars, where the Hero Twins descended into Xibalba and outwitted the lords of death." },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [-94.0, 18.5], [-90.0, 18.0], [-87.0, 17.5], [-85.0, 16.5],
+          [-82.0, 16.0], [-81.0, 17.5], [-82.0, 19.0], [-84.0, 20.0],
+          [-87.0, 20.5], [-89.0, 20.0], [-92.0, 19.5], [-94.0, 19.0],
+          [-94.0, 18.5]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Tawantinsuyu — Inca Empire", "kind": "kingdom", "minZoomToShow": 2, "summary": "The empire of the Sons of the Sun, stretching along the spine of the world, where Inti the sun god and Pachamama the earth mother are honored." },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [-78.0, -1.0], [-75.0, -2.5], [-72.0, -5.0], [-70.0, -8.0],
+          [-69.5, -12.0], [-69.0, -16.0], [-68.5, -20.0], [-68.0, -25.0],
+          [-68.5, -30.0], [-70.0, -32.0], [-72.0, -33.0], [-75.0, -30.0],
+          [-76.0, -25.0], [-76.5, -18.0], [-77.0, -12.0], [-77.5, -6.0],
+          [-78.0, -1.0]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": { "name": "Spirit World of the Great Plains", "kind": "kingdom", "minZoomToShow": 2, "summary": "The sacred hunting grounds watched over by Wakan Tanka, the Great Spirit of the Lakota, where the buffalo are the gift of the sky and the earth speaks in thunder." },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [-115.0, 50.0], [-110.0, 50.5], [-105.0, 50.0], [-100.0, 49.5],
+          [-95.0, 49.0], [-93.0, 48.0], [-92.0, 45.0], [-93.0, 42.0],
+          [-95.0, 41.0], [-100.0, 40.5], [-105.0, 41.0], [-110.0, 42.0],
+          [-115.0, 44.0], [-115.0, 50.0]
+        ]]
+      }
+    }
+  ]
+}

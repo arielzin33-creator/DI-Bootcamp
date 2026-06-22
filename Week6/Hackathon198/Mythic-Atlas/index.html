@@ -1,0 +1,41 @@
+<!-- Mythic-Atlas: Interactive Mythological Map -->
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta charset="utf-8" />
+    <title>Mythic-Atlas</title>
+
+    <!-- Leaflet.js CSS: Core mapping library styles -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+    <!-- Leaflet MarkerCluster CSS: Styles for clustered marker groups -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+    <div id="map"></div>
+    <div id="legend">
+        <strong>Legend</strong><br> Temple <br> Kingdom seat <br> Village <br> Kraken <br> Sea serpent
+    </div>
+
+    <!-- Welcome overlay: Full-screen,  shown on page load -->
+    <div id="intro-overlay">
+        <h2>Mythic-Atlas</h2>
+        <p>Explore the real Earth as it might have looked if the old myths were true.</p>
+        <button id="intro-close">Begin Exploring</button>
+    </div>
+
+    <!-- Leaflet.js: Core mapping library for rendering interactive maps -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <!-- Leaflet MarkerCluster: Plugin for grouping nearby markers -->
+    <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js"></script>
+
+    <!-- Application: Map initialization, data, and interactivity -->
+    <script src="script.js"></script>
+</body>
+
+</html>
