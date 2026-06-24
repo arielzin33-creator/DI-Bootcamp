@@ -1,9 +1,9 @@
 // daily-challenge/challenge.js
 
-const greet = require('./greeting');
-const showColorfulMessage = require('./colorful-message');
-const readFileData = require('./read-file');
+import { greet } from './greeting.js';
+import { displayColorfulMessage } from './colorful-message.js';
+import readFileData from './read-file.js';
 
 console.log(greet('World'));
-showColorfulMessage();
+displayColorfulMessage();
 readFileData();
