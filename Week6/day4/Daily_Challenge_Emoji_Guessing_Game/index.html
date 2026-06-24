@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Emoji Guessing Game</title>
+</head>
+
+<body>
+    <h1>Emoji Guessing Game</h1>
+
+    <label for="playerName">Player name:</label>
+    <input type="text" id="playerName" placeholder="Enter your name">
+
+    <p>Score: <span id="score">0</span></p>
+
+    <div id="emojiDisplay" style="font-size: 4rem;"></div>
+
+    <form id="guessForm">
+        <div id="optionsContainer"></div>
+        <button type="submit">Submit Guess</button>
+    </form>
+
+    <p id="feedback"></p>
+
+    <h2>Leaderboard</h2>
+    <ol id="leaderboard"></ol>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
