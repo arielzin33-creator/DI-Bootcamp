@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Exercise 2 – Move the Box</title>
+  <style>
+    #container {
+      width: 400px;
+      height: 400px;
+      position: relative;
+      background: yellow;
+    }
+    #animate {
+      width: 50px;
+      height: 50px;
+      position: absolute;
+      background-color: red;
+    }
+    body { font-family: sans-serif; padding: 20px; }
+    button { margin-bottom: 12px; padding: 8px 20px; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <p><button onclick="myMove()">Click Me</button></p>
+  <div id="container">
+    <div id="animate"></div>
+  </div>
+
+  <script>
+    'use strict';
+
+    function myMove() {
+      const box       = document.getElementById('animate');
+      const container = document.getElementById('container');
+
+      // The box can travel: container width − box width = 400 − 50 = 350 px
+      const maxLeft = container.offsetWidth - box.offsetWidth;
+
+      // Reset position so the button can be clicked multiple times
+      box.style.left = '0px';
+
+      let pos = 0;
+
+      // Move 1 px to the right every 1 millisecond
+      const id = setInterval(function () {
+        if (pos >= maxLeft) {
+          clearInterval(id); // box has reached the right edge — stop
+        } else {
+          pos++;
+          box.style.left = pos + 'px';
+        }
+      }, 1);
+    }
+  </script>
+</body>
+</html>

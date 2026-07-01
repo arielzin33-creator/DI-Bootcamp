@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Exercise 3 – Drag &amp; Drop</title>
+  <style>
+    body { font-family: sans-serif; padding: 30px; }
+
+    #target {
+      width: 200px;
+      height: 200px;
+      position: relative;
+      background: yellow;
+      border: 2px dashed #aaa;
+      /* highlight when a draggable is hovering over it */
+      transition: background 0.2s;
+    }
+
+    #target.drag-over {
+      background: #ffe066;
+      border-color: #e6a800;
+    }
+
+    #box {
+      width: 50px;
+      height: 50px;
+      position: absolute;   /* allows free positioning */
+      background-color: red;
+      cursor: grab;
+      /* draggable attribute is set in HTML */
+    }
+
+    #box.dragging {
+      cursor: grabbing;
+      opacity: 0.5;
+    }
+
+    p.status {
+      margin-top: 16px;
+      color: #555;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="target"></div>
+  <br>
+  <div id="box" draggable="true"></div>
+
+  <p class="status" id="status">Drag the red box into the yellow target.</p>
+
+  <script>
+    'use strict';
+
+    const box    = document.getElementById('box');
+    const target = document.getElementById('target');
+    const status = document.getElementById('status');
+
+    /* ─────────────────────────────────────────────────────────────────
+       Drag & Drop uses five events:
+
+       On the DRAGGABLE element (#box):
+         dragstart  – fires when the user begins dragging
+         dragend    – fires when the drag operation ends (drop or cancel)
+
+       On the DROP TARGET (#target):
+         dragover   – fires continuously while the dragged item is over
+                      the target; must call preventDefault() to allow drop
+         dragenter  – fires when dragged item enters the target
+         dragleave  – fires when dragged item leaves the target
+         drop       – fires when the user releases the mouse over the target
+    ───────────────────────────────────────────────────────────────── */
+
+    // ── Draggable: #box ────────────────────────────────────────────────
+
+    box.addEventListener('dragstart', function (e) {
+      // Store the cursor offset inside the box so the drop lands precisely
+      e.dataTransfer.setData('offsetX', e.offsetX);
+      e.dataTransfer.setData('offsetY', e.offsetY);
+      box.classList.add('dragging');
+      status.textContent = 'Dragging…';
+    });
+
+    box.addEventListener('dragend', function () {
+      box.classList.remove('dragging');
+    });
+
+    // ── Drop target: #target ───────────────────────────────────────────
+
+    target.addEventListener('dragover', function (e) {
+      e.preventDefault(); // required to allow dropping
+    });
+
+    target.addEventListener('dragenter', function () {
+      target.classList.add('drag-over');
+    });
+
+    target.addEventListener('dragleave', function () {
+      target.classList.remove('drag-over');
+    });
+
+    target.addEventListener('drop', function (e) {
+      e.preventDefault();
+      target.classList.remove('drag-over');
+
+      // Calculate where inside the target the box should land
+      const targetRect = target.getBoundingClientRect();
+      const offsetX    = parseInt(e.dataTransfer.getData('offsetX'));
+      const offsetY    = parseInt(e.dataTransfer.getData('offsetY'));
+
+      let left = e.clientX - targetRect.left - offsetX;
+      let top  = e.clientY - targetRect.top  - offsetY;
+
+      // Clamp so the box stays fully inside the target
+      left = Math.max(0, Math.min(left, target.offsetWidth  - box.offsetWidth));
+      top  = Math.max(0, Math.min(top,  target.offsetHeight - box.offsetHeight));
+
+      // Move the box into the target
+      target.appendChild(box);
+      box.style.left = left + 'px';
+      box.style.top  = top  + 'px';
+
+      status.textContent = '✅ Dropped inside the target!';
+    });
+  </script>
+</body>
+</html>

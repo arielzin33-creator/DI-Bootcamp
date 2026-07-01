@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Challenge: Create a solar system</title>
+    <style>
+        body {
+            background-color: black;
+            padding: 10px;
+            font-family: Arial, sans-serif;
+        }
+        
+        .listPlanets {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 40px;
+            padding: 20px;
+        }
+        
+        .planet {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            text-align: center;
+            padding: 10px;
+            position: relative;
+            border: 2px solid white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .planet p {
+            color: white;
+            font-size: 11px;
+            margin: 0;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px black;
+        }
+        
+        .moon {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: rgb(237, 237, 237);
+            border: 3px solid red;
+        }
+        /* Planet colors */
+        
+        .mercury {
+            background-color: #b5b5b5;
+        }
+        
+        .venus {
+            background-color: #e8c47a;
+        }
+        
+        .earth {
+            background-color: #3a7bd5;
+        }
+        
+        .mars {
+            background-color: #c1440e;
+        }
+        
+        .jupiter {
+            background-color: #c88b3a;
+        }
+        
+        .saturn {
+            background-color: #e4d191;
+        }
+        
+        .uranus {
+            background-color: #7de8e8;
+        }
+        
+        .neptune {
+            background-color: #4b70dd;
+        }
+    </style>
+</head>
+
+<body>
+    <section class="listPlanets"></section>
+    <script src="planets.js"></script>
+</body>
+
+</html>

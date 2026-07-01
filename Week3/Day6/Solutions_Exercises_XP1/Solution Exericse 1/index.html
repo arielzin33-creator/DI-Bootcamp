@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- 
+Note: In a production environment, it's best practice to separate HTML, CSS, and JavaScript into different files. 
+This combined approach is used here for easier reading of the solution.
+-->
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Todo List</title>
+    <style>
+        body {
+            font-family: 'Roboto', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        
+        h1 {
+            color: #1976D2;
+            text-align: center;
+        }
+        
+        #todo-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        
+        #todo-list li {
+            margin: 10px 0;
+            padding: 15px;
+            background-color: #ffffff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 4px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+            transition: all 0.3s cubic-bezier(.25, .8, .25, 1);
+        }
+        
+        #todo-list li:hover {
+            box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+        }
+        
+        .todo-text {
+            flex-grow: 1;
+            margin-right: 10px;
+            cursor: pointer;
+        }
+        
+        .completed .todo-text {
+            text-decoration: line-through;
+            opacity: 0.6;
+        }
+        
+        .completed .todo-text::before {
+            content: '✅';
+            margin-right: 5px;
+        }
+        
+        button {
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-weight: 500;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.26);
+        }
+        
+        button:hover:not(:disabled) {
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.26);
+        }
+        
+        button:disabled {
+            background-color: #cccccc;
+            color: #666666;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+        
+        #input-container {
+            display: flex;
+            margin-bottom: 20px;
+        }
+        
+        #new-todo {
+            flex-grow: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 4px 0 0 4px;
+            font-size: 16px;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.12), inset 0 1px 2px rgba(0, 0, 0, 0.24);
+        }
+        
+        #button-container {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        #add-todo,
+        #remove-all {
+            width: 120px;
+            height: 50%;
+        }
+        
+        #add-todo {
+            background-color: #4CAF50;
+            color: white;
+            border-radius: 0 4px 0 0;
+        }
+        
+        #add-todo:hover:not(:disabled) {
+            background-color: #45a049;
+        }
+        
+        #remove-all {
+            background-color: #F44336;
+            color: white;
+            border-radius: 0 0 4px 0;
+        }
+        
+        #remove-all:hover:not(:disabled) {
+            background-color: #d32f2f;
+        }
+        
+        .filter-btn {
+            margin-right: 5px;
+            background-color: #E0E0E0;
+            color: #424242;
+        }
+        
+        .filter-btn:hover:not(:disabled),
+        .filter-btn.active {
+            background-color: #1976D2;
+            color: white;
+        }
+        
+        #filters {
+            margin: 20px 0;
+            text-align: center;
+        }
+        
+        .remove-todo {
+            background-color: #F44336;
+            color: white;
+        }
+        
+        .remove-todo:hover:not(:disabled) {
+            background-color: #d32f2f;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>My Todo List</h1>
+    <div id="input-container">
+        <input type="text" id="new-todo" placeholder="Enter a new todo">
+        <div id="button-container">
+            <button id="add-todo" onclick="addTodo()">Add Todo</button>
+            <button id="remove-all" onclick="removeAllTodos()" disabled>Remove All</button>
+        </div>
+    </div>
+    <div id="filters">
+        <button class="filter-btn active" onclick="setFilter('all')">All</button>
+        <button class="filter-btn" onclick="setFilter('active')">Active</button>
+        <button class="filter-btn" onclick="setFilter('completed')">Completed</button>
+    </div>
+    <ul id="todo-list"></ul>
+
+    <script>
+        const input = document.getElementById('new-todo');
+        const todoList = document.getElementById('todo-list');
+        const removeAllBtn = document.getElementById('remove-all');
+        let currentFilter = 'all';
+
+        input.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                addTodo();
+            }
+        });
+
+        function addTodo() {
+            const todoText = input.value.trim();
+            if (todoText) {
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    <span class="todo-text">${todoText}</span>
+                    <button class="remove-todo" onclick="removeTodo(this)">Remove</button>
+                `;
+                li.addEventListener('click', function(e) {
+                    if (e.target !== this && e.target.tagName !== 'SPAN') return;
+                    toggleComplete(this);
+                });
+                todoList.appendChild(li);
+                input.value = '';
+                updateRemoveAllButton();
+                applyFilter();
+            }
+        }
+
+        function toggleComplete(element) {
+            element.classList.toggle('completed');
+            applyFilter();
+        }
+
+        function removeTodo(button) {
+            button.parentElement.remove();
+            updateRemoveAllButton();
+            applyFilter();
+        }
+
+        function removeAllTodos() {
+            if (confirm('Are you sure you want to remove all todos?')) {
+                todoList.innerHTML = '';
+                updateRemoveAllButton();
+                applyFilter();
+            }
+        }
+
+        function updateRemoveAllButton() {
+            removeAllBtn.disabled = todoList.children.length === 0;
+        }
+
+        function setFilter(filter) {
+            currentFilter = filter;
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelector(`.filter-btn[onclick="setFilter('${filter}')"]`).classList.add('active');
+            applyFilter();
+        }
+
+        function applyFilter() {
+            const todos = todoList.children;
+            for (let todo of todos) {
+                switch (currentFilter) {
+                    case 'all':
+                        todo.style.display = '';
+                        break;
+                    case 'active':
+                        todo.style.display = todo.classList.contains('completed') ? 'none' : '';
+                        break;
+                    case 'completed':
+                        todo.style.display = todo.classList.contains('completed') ? '' : 'none';
+                        break;
+                }
+            }
+        }
+
+        // Initial button state
+        updateRemoveAllButton();
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Drum Set</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+    <header>
+        <h1>DRUM SET</h1>
+        <p class="subtitle">Click a pad or press a key</p>
+    </header>
+
+    <main class="drum-grid">
+
+        <!-- Row 1: Cymbals / Hi-hats -->
+        <button class="drum-pad cymbal" data-key="65" data-sound="sounds/crash.mp3">
+      <span class="key-label">A</span>
+      <span class="pad-name">Crash</span>
+    </button>
+
+        <button class="drum-pad cymbal" data-key="83" data-sound="sounds/ride.mp3">
+      <span class="key-label">S</span>
+      <span class="pad-name">Ride</span>
+    </button>
+
+        <button class="drum-pad cymbal" data-key="68" data-sound="sounds/openhat.mp3">
+      <span class="key-label">D</span>
+      <span class="pad-name">Open Hat</span>
+    </button>
+
+        <!-- Row 2: Snare / Toms -->
+        <button class="drum-pad snare" data-key="70" data-sound="sounds/snare.mp3">
+      <span class="key-label">F</span>
+      <span class="pad-name">Snare</span>
+    </button>
+
+        <button class="drum-pad tom" data-key="71" data-sound="sounds/tom1.mp3">
+      <span class="key-label">G</span>
+      <span class="pad-name">Tom 1</span>
+    </button>
+
+        <button class="drum-pad tom" data-key="72" data-sound="sounds/tom2.mp3">
+      <span class="key-label">H</span>
+      <span class="pad-name">Tom 2</span>
+    </button>
+
+        <!-- Row 3: Bass / Hi-hat closed -->
+        <button class="drum-pad bass" data-key="74" data-sound="sounds/kick.mp3">
+      <span class="key-label">J</span>
+      <span class="pad-name">Kick</span>
+    </button>
+
+        <button class="drum-pad hihat" data-key="75" data-sound="sounds/hihat.mp3">
+      <span class="key-label">K</span>
+      <span class="pad-name">Hi-Hat</span>
+    </button>
+
+        <button class="drum-pad clap" data-key="76" data-sound="sounds/clap.mp3">
+      <span class="key-label">L</span>
+      <span class="pad-name">Clap</span>
+    </button>
+
+    </main>
+
+    <!-- Hidden audio elements — one per sound -->
+    <audio id="65" src="sounds/crash.mp3" preload="auto"></audio>
+    <audio id="83" src="sounds/ride.mp3" preload="auto"></audio>
+    <audio id="68" src="sounds/openhat.mp3" preload="auto"></audio>
+    <audio id="70" src="sounds/snare.mp3" preload="auto"></audio>
+    <audio id="71" src="sounds/tom1.mp3" preload="auto"></audio>
+    <audio id="72" src="sounds/tom2.mp3" preload="auto"></audio>
+    <audio id="74" src="sounds/kick.mp3" preload="auto"></audio>
+    <audio id="75" src="sounds/hihat.mp3" preload="auto"></audio>
+    <audio id="76" src="sounds/clap.mp3" preload="auto"></audio>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

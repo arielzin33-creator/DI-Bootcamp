@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- 
+Note: In a production environment, it's best practice to separate HTML, CSS, and JavaScript into different files. 
+This combined approach is used here for easier reading of the solution.
+-->
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Whack-a-Mole Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f0f0f0;
+        }
+        
+        #game-board {
+            display: grid;
+            grid-template-columns: repeat(3, 100px);
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .hole {
+            width: 100px;
+            height: 100px;
+            background-color: #654321;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+        
+        .mole {
+            font-size: 50px;
+        }
+        
+        #instructions {
+            margin-top: 20px;
+            text-align: center;
+            max-width: 400px;
+        }
+        
+        #high-scores {
+            margin-top: 20px;
+            text-align: center;
+        }
+        
+        #high-scores ol {
+            list-style-position: inside;
+            padding-left: 0;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Whack-a-Mole</h1>
+    <p>Score: <span id="score">0</span></p>
+    <p>Time: <span id="time">30</span>s</p>
+    <div id="game-board"></div>
+    <div id="instructions">
+        <h3>How to Play:</h3>
+        <p>1. Click on the moles (🐹) as they appear.</p>
+        <p>2. Each hit increases your score by 1.</p>
+        <p>3. You have 30 seconds to whack as many moles as possible!</p>
+        <p>Good luck and have fun!</p>
+    </div>
+    <div id="high-scores">
+        <h3>High Scores:</h3>
+        <ol id="high-score-list"></ol>
+    </div>
+
+    <script>
+        const gameBoard = document.getElementById('game-board');
+        const scoreDisplay = document.getElementById('score');
+        const timeDisplay = document.getElementById('time');
+        const highScoreList = document.getElementById('high-score-list');
+        let score = 0;
+        let timeLeft = 30;
+        let moleInterval;
+        let countdownInterval;
+        let highScores = [{
+            name: "Alice",
+            score: 10
+        }, {
+            name: "Bob",
+            score: 8
+        }, {
+            name: "Charlie",
+            score: 5
+        }];
+
+        function createHoles() {
+            gameBoard.innerHTML = ''; // Clear existing holes
+            for (let i = 0; i < 9; i++) {
+                const hole = document.createElement('div');
+                hole.classList.add('hole');
+                hole.dataset.index = i;
+                hole.addEventListener('click', whackMole);
+                gameBoard.appendChild(hole);
+            }
+        }
+
+        function showMole() {
+            const holes = document.querySelectorAll('.hole');
+            holes.forEach(hole => hole.innerHTML = ''); // Clear all holes
+            const randomHole = holes[Math.floor(Math.random() * holes.length)];
+            randomHole.innerHTML = '<span class="mole">🐹</span>';
+        }
+
+        function whackMole(event) {
+            if (event.target.classList.contains('mole')) {
+                score++;
+                scoreDisplay.textContent = score;
+                event.target.parentElement.innerHTML = '';
+            }
+        }
+
+        function startGame() {
+            score = 0;
+            timeLeft = 30;
+            scoreDisplay.textContent = score;
+            timeDisplay.textContent = timeLeft;
+            createHoles();
+            clearInterval(moleInterval);
+            clearInterval(countdownInterval);
+            moleInterval = setInterval(showMole, 1000);
+            countdownInterval = setInterval(countdown, 1000);
+        }
+
+        function countdown() {
+            timeLeft--;
+            timeDisplay.textContent = timeLeft;
+            if (timeLeft === 0) {
+                endGame();
+            }
+        }
+
+        function endGame() {
+            clearInterval(moleInterval);
+            clearInterval(countdownInterval);
+            gameBoard.innerHTML = '';
+            updateHighScores();
+            displayHighScores();
+            const playAgain = confirm(`Game over! Your score is ${score}. Play again?`);
+            if (playAgain) {
+                startGame();
+            }
+        }
+
+        function updateHighScores() {
+            if (score > highScores[highScores.length - 1].score) {
+                const playerName = prompt("You got a high score! Enter your name:");
+                if (playerName) {
+                    highScores.push({
+                        name: playerName,
+                        score: score
+                    });
+                    highScores.sort((a, b) => b.score - a.score);
+                    highScores = highScores.slice(0, 5); // Keep only top 5 scores
+                }
+            }
+        }
+
+        function displayHighScores() {
+            highScoreList.innerHTML = '';
+            highScores.forEach(entry => {
+                const li = document.createElement('li');
+                li.textContent = `${entry.name}: ${entry.score}`;
+                highScoreList.appendChild(li);
+            });
+        }
+
+        displayHighScores(); // Display initial high scores
+        startGame();
+    </script>
+</body>
+
+</html>

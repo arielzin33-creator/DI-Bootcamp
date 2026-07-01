@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- 
+Note: In a production environment, it's best practice to separate HTML, CSS, and JavaScript into different files. 
+This combined approach is used here for easier reading of the solution.
+-->
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Color Guessing Game</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f0f0f0;
+        }
+        
+        #color-display {
+            width: 200px;
+            height: 200px;
+            margin: 20px auto;
+            border: 2px solid #333;
+        }
+        
+        .color-option {
+            padding: 10px 20px;
+            margin: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        
+        #instructions {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        
+        #difficulty {
+            margin-bottom: 20px;
+        }
+        
+        #rgb-input {
+            display: none;
+            margin-top: 10px;
+        }
+        
+        #rgb-input input {
+            width: 50px;
+            margin-right: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Color Guessing Game</h1>
+    <div id="difficulty">
+        <button onclick="setDifficulty('easy')">Easy</button>
+        <button onclick="setDifficulty('medium')">Medium</button>
+        <button onclick="setDifficulty('hard')">Hard</button>
+    </div>
+    <div id="color-display"></div>
+    <p id="instructions">Pick a color:</p>
+    <div id="options"></div>
+    <div id="rgb-input">
+        R: <input type="number" id="r" min="0" max="255"> G: <input type="number" id="g" min="0" max="255"> B: <input type="number" id="b" min="0" max="255">
+        <button onclick="checkRgbGuess()">Guess</button>
+    </div>
+    <p id="result"></p>
+    <p id="next-color" style="display: none;">Next color in <span id="countdown">5</span> seconds</p>
+
+    <script>
+        let correctColor;
+        let difficulty = 'easy';
+        let countdownInterval;
+
+        function generateRandomColor() {
+            const r = Math.floor(Math.random() * 256);
+            const g = Math.floor(Math.random() * 256);
+            const b = Math.floor(Math.random() * 256);
+            return `rgb(${r}, ${g}, ${b})`;
+        }
+
+        function setDifficulty(level) {
+            difficulty = level;
+            clearInterval(countdownInterval);
+            startGame();
+        }
+
+        function startGame() {
+            correctColor = generateRandomColor();
+            const colorDisplay = document.getElementById('color-display');
+            const options = document.getElementById('options');
+            const result = document.getElementById('result');
+            const nextColorText = document.getElementById('next-color');
+            const rgbInput = document.getElementById('rgb-input');
+
+            colorDisplay.style.backgroundColor = correctColor;
+            options.innerHTML = '';
+            result.textContent = '';
+            nextColorText.style.display = 'none';
+
+            if (difficulty === 'hard') {
+                options.style.display = 'none';
+                rgbInput.style.display = 'block';
+            } else {
+                options.style.display = 'block';
+                rgbInput.style.display = 'none';
+                const numOptions = difficulty === 'easy' ? 3 : 6;
+                const colors = [correctColor];
+                for (let i = 1; i < numOptions; i++) {
+                    colors.push(generateRandomColor());
+                }
+                colors.sort(() => Math.random() - 0.5);
+
+                colors.forEach(color => {
+                    const button = document.createElement('button');
+                    button.className = 'color-option';
+                    if (difficulty === 'easy') {
+                        button.style.backgroundColor = color;
+                    } else {
+                        button.textContent = color;
+                    }
+                    button.onclick = () => checkGuess(color);
+                    options.appendChild(button);
+                });
+            }
+        }
+
+        function checkGuess(guessedColor) {
+            const result = document.getElementById('result');
+            const options = document.getElementById('options');
+            const nextColorText = document.getElementById('next-color');
+            if (guessedColor === correctColor) {
+                result.textContent = 'Correct! Well done!';
+                options.innerHTML = '';
+                nextColorText.style.display = 'block';
+                startCountdown();
+            } else {
+                result.textContent = 'Wrong! Try again.';
+            }
+        }
+
+        function startCountdown() {
+            clearInterval(countdownInterval);
+            let countdown = 5;
+            document.getElementById('countdown').textContent = countdown;
+            countdownInterval = setInterval(() => {
+                countdown--;
+                document.getElementById('countdown').textContent = countdown;
+                if (countdown === 0) {
+                    clearInterval(countdownInterval);
+                    startGame();
+                }
+            }, 1000);
+        }
+
+        function checkRgbGuess() {
+            const r = document.getElementById('r').value;
+            const g = document.getElementById('g').value;
+            const b = document.getElementById('b').value;
+            const guessedColor = `rgb(${r}, ${g}, ${b})`;
+            checkGuess(guessedColor);
+        }
+
+        startGame();
+    </script>
+</body>
+
+</html>

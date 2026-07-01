@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Double Slider Sign In/Up</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="container" id="container">
+
+        <!-- Sign Up Form -->
+        <div class="form-container sign-up-container">
+            <form>
+                <h1>Create Account</h1>
+                <div class="social-container">
+                    <a href="#" class="social">G</a>
+                    <a href="#" class="social">f</a>
+                    <a href="#" class="social">in</a>
+                </div>
+                <span>or use your email for registration</span>
+                <input type="text" placeholder="Name" />
+                <input type="email" placeholder="Email" />
+                <input type="password" placeholder="Password" />
+                <button type="submit">Sign Up</button>
+            </form>
+        </div>
+
+        <!-- Sign In Form -->
+        <div class="form-container sign-in-container">
+            <form>
+                <h1>Sign In</h1>
+                <div class="social-container">
+                    <a href="#" class="social">G</a>
+                    <a href="#" class="social">f</a>
+                    <a href="#" class="social">in</a>
+                </div>
+                <span>or use your account</span>
+                <input type="email" placeholder="Email" />
+                <input type="password" placeholder="Password" />
+                <a href="#" class="forgot">Forgot your password?</a>
+                <button type="submit">Sign In</button>
+            </form>
+        </div>
+
+        <!-- Overlay -->
+        <div class="overlay-container">
+            <div class="overlay">
+
+                <!-- Overlay Left Panel (shown when Sign Up is active) -->
+                <div class="overlay-panel overlay-left">
+                    <h1>Welcome Back!</h1>
+                    <p>To keep connected with us please login with your personal info</p>
+                    <button class="ghost" id="signIn">Sign In</button>
+                </div>
+
+                <!-- Overlay Right Panel (shown when Sign In is active) -->
+                <div class="overlay-panel overlay-right">
+                    <h1>Hello, Friend!</h1>
+                    <p>Enter your personal details and start your journey with us</p>
+                    <button class="ghost" id="signUp">Sign Up</button>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <script src="main.js"></script>
+</body>
+
+</html>

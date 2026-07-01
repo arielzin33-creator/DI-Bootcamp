@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<!-- 
+Note: In a production environment, it's best practice to separate HTML, CSS, and JavaScript into different files. 
+This combined approach is used here for easier reading of the solution.
+-->
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Calculator with Memory</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        
+        #calculator {
+            background-color: #333;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            max-width: 300px;
+            width: 100%;
+        }
+        
+        #display {
+            grid-column: span 4;
+            height: 60px;
+            font-size: 24px;
+            text-align: right;
+            padding: 10px;
+            background-color: #444;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+        
+        button {
+            font-size: 20px;
+            padding: 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            background-color: #666;
+            color: white;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: #888;
+        }
+        
+        .operator {
+            background-color: #FFA500;
+        }
+        
+        .operator:hover {
+            background-color: #FFB52E;
+        }
+        
+        #equals {
+            background-color: #0074D9;
+            grid-column: span 2;
+        }
+        
+        #equals:hover {
+            background-color: #0095ff;
+        }
+        
+        .memory-btn {
+            background-color: #2ECC40;
+        }
+        
+        .memory-btn:hover {
+            background-color: #3D9970;
+        }
+        
+        #ac,
+        #c {
+            background-color: #ff4136;
+        }
+        
+        #ac:hover,
+        #c:hover {
+            background-color: #ff7066;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="calculator">
+        <input type="text" id="display" readonly>
+        <button class="memory-btn" onclick="memoryAdd()">M+</button>
+        <button class="memory-btn" onclick="memorySubtract()">M-</button>
+        <button class="memory-btn" onclick="memoryRecall()">MR</button>
+        <button class="memory-btn" onclick="memoryClear()">MC</button>
+        <button id="ac" onclick="allClear()">AC</button>
+        <button id="c" onclick="clearEntry()">C</button>
+        <button onclick="appendToDisplay('±')">±</button>
+        <button class="operator" onclick="appendToDisplay('/')">/</button>
+        <button onclick="appendToDisplay('7')">7</button>
+        <button onclick="appendToDisplay('8')">8</button>
+        <button onclick="appendToDisplay('9')">9</button>
+        <button class="operator" onclick="appendToDisplay('*')">×</button>
+        <button onclick="appendToDisplay('4')">4</button>
+        <button onclick="appendToDisplay('5')">5</button>
+        <button onclick="appendToDisplay('6')">6</button>
+        <button class="operator" onclick="appendToDisplay('-')">-</button>
+        <button onclick="appendToDisplay('1')">1</button>
+        <button onclick="appendToDisplay('2')">2</button>
+        <button onclick="appendToDisplay('3')">3</button>
+        <button class="operator" onclick="appendToDisplay('+')">+</button>
+        <button onclick="appendToDisplay('0')">0</button>
+        <button onclick="appendToDisplay('.')">.</button>
+        <button id="equals" onclick="calculate()">=</button>
+    </div>
+
+    <script>
+        let memory = 0;
+        let lastOperation = '';
+        let startNew = false;
+
+        function appendToDisplay(value) {
+            const display = document.getElementById('display');
+            if (value === '±') {
+                if (display.value !== '' && display.value !== '0') {
+                    display.value = parseFloat(display.value) * -1;
+                }
+                return;
+            }
+            if (startNew) {
+                if ('+-*/'.includes(value)) {
+                    display.value += value;
+                } else {
+                    display.value = value;
+                }
+                startNew = false;
+            } else {
+                display.value += value;
+            }
+            lastOperation = '';
+        }
+
+        function clearEntry() {
+            document.getElementById('display').value = '';
+            lastOperation = '';
+            startNew = false;
+        }
+
+        function allClear() {
+            clearEntry();
+            memory = 0;
+        }
+
+        function calculate() {
+            try {
+                const display = document.getElementById('display');
+                const result = eval(display.value);
+                display.value = result;
+                lastOperation = '=';
+                startNew = true;
+            } catch (error) {
+                document.getElementById('display').value = 'Error';
+                startNew = true;
+            }
+        }
+
+        function memoryAdd() {
+            calculate();
+            memory += parseFloat(document.getElementById('display').value) || 0;
+            startNew = true;
+        }
+
+        function memorySubtract() {
+            calculate();
+            memory -= parseFloat(document.getElementById('display').value) || 0;
+            startNew = true;
+        }
+
+        function memoryRecall() {
+            const display = document.getElementById('display');
+            if (display.value === '' || '+-*/'.includes(display.value[display.value.length - 1])) {
+                display.value += memory;
+            } else {
+                display.value = memory;
+            }
+            startNew = false;
+        }
+
+        function memoryClear() {
+            memory = 0;
+        }
+    </script>
+</body>
+
+</html>

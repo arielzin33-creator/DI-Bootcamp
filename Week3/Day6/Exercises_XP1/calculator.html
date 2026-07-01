@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Calculator</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet"/>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --bg:#1c1c28;--calc:#242436;--display-bg:#0f0f1a;
+    --btn:#2e2e46;--btn-op:#3a2e6e;--btn-eq:#5b3de8;--btn-mem:#1e3a3a;
+    --btn-clear:#3a1e1e;--text:#e8e8ff;--text-lo:#7070a0;
+    --accent:#7c6fff;--mem-active:#00e5cc;
+    --font-disp:'Share Tech Mono',monospace;--font:'Nunito',sans-serif;
+    --radius:16px;--btn-r:12px;
+    --shadow:0 24px 48px rgba(0,0,0,.6);
+  }
+  body{font-family:var(--font);background:var(--bg);min-height:100vh;display:flex;align-items:center;justify-content:center;padding:16px;background-image:radial-gradient(ellipse at 60% 20%,#2a1f6622 0%,transparent 60%);}
+
+  .calc{background:var(--calc);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px;width:300px;}
+
+  /* Display */
+  .display{background:var(--display-bg);border-radius:10px;padding:14px 16px;margin-bottom:16px;text-align:right;min-height:90px;display:flex;flex-direction:column;justify-content:flex-end;gap:4px;}
+  .mem-indicator{font-family:var(--font-disp);font-size:.7rem;color:var(--mem-active);letter-spacing:.1em;min-height:.9rem;text-align:left;}
+  .expr{font-family:var(--font-disp);font-size:.8rem;color:var(--text-lo);min-height:1.1rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .result{font-family:var(--font-disp);font-size:2.2rem;color:var(--text);letter-spacing:.02em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+
+  /* Grid */
+  .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
+  button{font-family:var(--font);font-size:1rem;font-weight:600;padding:0;height:58px;border:none;border-radius:var(--btn-r);cursor:pointer;color:var(--text);background:var(--btn);transition:filter .1s,transform .08s;letter-spacing:.02em;}
+  button:hover{filter:brightness(1.2);}
+  button:active{transform:scale(.93);}
+
+  .op  {background:var(--btn-op);}
+  .eq  {background:var(--btn-eq);color:#fff;}
+  .mem {background:var(--btn-mem);font-size:.85rem;color:#a0f0e8;}
+  .clr {background:var(--btn-clear);color:#ff8a80;}
+  .span2{grid-column:span 2;}
+  .zero{grid-column:span 2;}
+
+  .mem-val{font-size:.65rem;display:block;color:var(--text-lo);font-weight:400;margin-top:2px;}
+</style>
+</head>
+<body>
+<div class="calc">
+  <div class="display">
+    <div class="mem-indicator" id="memIndicator"></div>
+    <div class="expr" id="expr"></div>
+    <div class="result" id="result">0</div>
+  </div>
+  <div class="grid" id="grid">
+    <!-- Memory row -->
+    <button class="mem" id="mc">MC</button>
+    <button class="mem" id="mr">MR</button>
+    <button class="mem" id="mplus">M+</button>
+    <button class="mem" id="mminus">M−</button>
+    <!-- Row 1 -->
+    <button class="clr" id="ac">AC</button>
+    <button class="clr" id="sign">+/−</button>
+    <button class="clr" id="pct">%</button>
+    <button class="op"  data-op="÷">÷</button>
+    <!-- Row 2 -->
+    <button data-num="7">7</button>
+    <button data-num="8">8</button>
+    <button data-num="9">9</button>
+    <button class="op" data-op="×">×</button>
+    <!-- Row 3 -->
+    <button data-num="4">4</button>
+    <button data-num="5">5</button>
+    <button data-num="6">6</button>
+    <button class="op" data-op="−">−</button>
+    <!-- Row 4 -->
+    <button data-num="1">1</button>
+    <button data-num="2">2</button>
+    <button data-num="3">3</button>
+    <button class="op" data-op="+">+</button>
+    <!-- Row 5 -->
+    <button data-num="0" class="zero">0</button>
+    <button data-num=".">.</button>
+    <button class="eq" id="eq">=</button>
+  </div>
+</div>
+
+<script>
+'use strict';
+let current  = '0';
+let previous = '';
+let operator = null;
+let fresh    = false; // true right after = or operator press
+let memory   = 0;
+let hasMemory = false;
+
+const resultEl   = document.getElementById('result');
+const exprEl     = document.getElementById('expr');
+const memInd     = document.getElementById('memIndicator');
+
+function updateDisplay() {
+  resultEl.textContent = current;
+  memInd.textContent   = hasMemory ? `M: ${memory}` : '';
+}
+
+function val() { return parseFloat(current); }
+
+function compute(a, op, b) {
+  switch(op) {
+    case '+': return a + b;
+    case '−': return a - b;
+    case '×': return a * b;
+    case '÷': return b === 0 ? 'Error' : a / b;
+  }
+}
+
+function fmt(n) {
+  if (n === 'Error') return 'Error';
+  // Avoid floating point noise
+  const s = parseFloat(n.toFixed(10)).toString();
+  return s;
+}
+
+// Number buttons
+document.querySelectorAll('[data-num]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const d = btn.dataset.num;
+    if (fresh || current === '0' && d !== '.') {
+      current = d === '.' ? '0.' : d;
+      fresh = false;
+    } else {
+      if (d === '.' && current.includes('.')) return;
+      if (current.length >= 12) return;
+      current += d;
+    }
+    updateDisplay();
+  });
+});
+
+// Operator buttons
+document.querySelectorAll('[data-op]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const op = btn.dataset.op;
+    if (operator && !fresh) {
+      // Chain: compute running result
+      const res = compute(parseFloat(previous), operator, val());
+      current   = fmt(res);
+      previous  = current;
+    } else {
+      previous = current;
+    }
+    operator = op;
+    exprEl.textContent = `${previous} ${op}`;
+    fresh = true;
+    updateDisplay();
+  });
+});
+
+// Equals
+document.getElementById('eq').addEventListener('click', () => {
+  if (!operator) return;
+  const res = compute(parseFloat(previous), operator, val());
+  exprEl.textContent = `${previous} ${operator} ${current} =`;
+  current  = fmt(res);
+  operator = null;
+  previous = '';
+  fresh    = true;
+  updateDisplay();
+});
+
+// AC
+document.getElementById('ac').addEventListener('click', () => {
+  current = '0'; previous = ''; operator = null; fresh = false;
+  exprEl.textContent = '';
+  updateDisplay();
+});
+
+// +/−
+document.getElementById('sign').addEventListener('click', () => {
+  if (current === '0' || current === 'Error') return;
+  current = current.startsWith('-') ? current.slice(1) : '-' + current;
+  updateDisplay();
+});
+
+// %
+document.getElementById('pct').addEventListener('click', () => {
+  if (current === 'Error') return;
+  current = fmt(val() / 100);
+  updateDisplay();
+});
+
+// ── Memory ───────────────────────────────────────────────────────────────────
+document.getElementById('mplus').addEventListener('click', () => {
+  if (current === 'Error') return;
+  memory += val(); hasMemory = true; updateDisplay();
+});
+document.getElementById('mminus').addEventListener('click', () => {
+  if (current === 'Error') return;
+  memory -= val(); hasMemory = memory !== 0; updateDisplay();
+});
+document.getElementById('mr').addEventListener('click', () => {
+  if (!hasMemory) return;
+  current = fmt(memory); fresh = true; updateDisplay();
+});
+document.getElementById('mc').addEventListener('click', () => {
+  memory = 0; hasMemory = false; updateDisplay();
+});
+
+// Keyboard support
+document.addEventListener('keydown', e => {
+  if ('0123456789.'.includes(e.key)) {
+    document.querySelector(`[data-num="${e.key}"]`)?.click();
+  } else if (e.key === '+') document.querySelector('[data-op="+"]').click();
+  else if (e.key === '-')   document.querySelector('[data-op="−"]').click();
+  else if (e.key === '*')   document.querySelector('[data-op="×"]').click();
+  else if (e.key === '/')   { e.preventDefault(); document.querySelector('[data-op="÷"]').click(); }
+  else if (e.key === 'Enter' || e.key === '=') document.getElementById('eq').click();
+  else if (e.key === 'Escape') document.getElementById('ac').click();
+  else if (e.key === 'Backspace') {
+    if (current.length > 1 && !fresh) current = current.slice(0,-1);
+    else current = '0';
+    updateDisplay();
+  }
+});
+
+updateDisplay();
+</script>
+</body>
+</html>

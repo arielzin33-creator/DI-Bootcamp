@@ -1,0 +1,52 @@
+/* style.css */
+
+body {
+    background-color: black;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    padding: 2rem;
+}
+
+.planet {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    /* makes each div a sphere */
+}
+
+
+/* 3. One colour class per planet */
+
+.mercury {
+    background-color: #b5b5b5;
+}
+
+.venus {
+    background-color: #e8c97a;
+}
+
+.earth {
+    background-color: #3a7bd5;
+}
+
+.mars {
+    background-color: #c1440e;
+}
+
+.jupiter {
+    background-color: #c88b3a;
+}
+
+.saturn {
+    background-color: #e4d191;
+}
+
+.uranus {
+    background-color: #7de8e8;
+}
+
+.neptune {
+    background-color: #5b6fde;
+}

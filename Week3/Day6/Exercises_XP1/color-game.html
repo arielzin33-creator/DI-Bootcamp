@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Color Guess</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;600&display=swap" rel="stylesheet"/>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --bg:#0f0f14;--surface:#1a1a24;--border:#2e2e42;
+    --text:#e8e8f0;--text-lo:#6b6b88;
+    --correct:#00e676;--wrong:#ff5252;--accent:#7c6fff;
+    --font-head:'Space Mono',monospace;--font:'DM Sans',sans-serif;
+    --radius:12px;
+  }
+  body{font-family:var(--font);background:var(--bg);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px 16px;color:var(--text);}
+  h1{font-family:var(--font-head);font-size:1.6rem;color:var(--accent);margin-bottom:4px;letter-spacing:-.02em;}
+  .tagline{font-size:.85rem;color:var(--text-lo);margin-bottom:28px;letter-spacing:.06em;text-transform:uppercase;}
+
+  /* Colour swatch */
+  .color-display{width:200px;height:200px;border-radius:50%;margin:0 auto 24px;box-shadow:0 0 60px rgba(0,0,0,.6);transition:background .3s;}
+
+  /* RGB label */
+  .rgb-label{font-family:var(--font-head);font-size:1.4rem;text-align:center;letter-spacing:.08em;margin-bottom:24px;min-height:2rem;}
+
+  /* Difficulty */
+  .difficulty-row{display:flex;gap:8px;justify-content:center;margin-bottom:24px;}
+  .diff-btn{font-family:var(--font-head);font-size:.72rem;padding:6px 14px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--text-lo);cursor:pointer;transition:all .15s;letter-spacing:.04em;}
+  .diff-btn.active{border-color:var(--accent);color:var(--accent);}
+
+  /* Options grid */
+  .options{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;max-width:520px;margin-bottom:24px;}
+
+  /* Easy: colour swatches */
+  .opt-swatch{width:88px;height:88px;border-radius:var(--radius);cursor:pointer;border:3px solid transparent;transition:transform .1s,border-color .15s,box-shadow .15s;flex-shrink:0;}
+  .opt-swatch:hover{transform:scale(1.08);box-shadow:0 4px 20px rgba(0,0,0,.5);}
+  .opt-swatch.correct{border-color:var(--correct);box-shadow:0 0 20px rgba(0,230,118,.35);}
+  .opt-swatch.wrong{border-color:var(--wrong);opacity:.5;}
+
+  /* Medium: RGB value buttons */
+  .opt-rgb{font-family:var(--font-head);font-size:.78rem;padding:10px 14px;border-radius:var(--radius);border:1px solid var(--border);background:var(--surface);color:var(--text);cursor:pointer;transition:border-color .15s,background .15s;letter-spacing:.04em;}
+  .opt-rgb:hover{border-color:var(--accent);background:#22223a;}
+  .opt-rgb.correct{border-color:var(--correct);background:rgba(0,230,118,.1);color:var(--correct);}
+  .opt-rgb.wrong{border-color:var(--wrong);background:rgba(255,82,82,.08);color:var(--wrong);}
+
+  /* Hard: text inputs */
+  .hard-form{display:flex;flex-direction:column;align-items:center;gap:12px;margin-bottom:24px;}
+  .rgb-inputs{display:flex;gap:10px;}
+  .rgb-inputs label{display:flex;flex-direction:column;align-items:center;gap:4px;font-family:var(--font-head);font-size:.72rem;color:var(--text-lo);}
+  .rgb-inputs input{width:64px;text-align:center;font-family:var(--font-head);font-size:.95rem;padding:8px;border-radius:8px;border:1px solid var(--border);background:var(--surface);color:var(--text);outline:none;transition:border-color .15s;}
+  .rgb-inputs input:focus{border-color:var(--accent);}
+  .btn-guess{font-family:var(--font-head);font-size:.85rem;padding:10px 28px;border-radius:var(--radius);border:none;background:var(--accent);color:#fff;cursor:pointer;letter-spacing:.04em;transition:background .15s,transform .08s;}
+  .btn-guess:hover{background:#9a8fff;}
+  .btn-guess:active{transform:scale(.96);}
+
+  /* Feedback */
+  .feedback{text-align:center;font-size:1rem;font-weight:600;min-height:1.5rem;letter-spacing:.04em;transition:color .2s;}
+  .feedback.correct{color:var(--correct);}
+  .feedback.wrong{color:var(--wrong);}
+
+  /* Score + timer */
+  .stats{display:flex;gap:24px;justify-content:center;margin-top:20px;}
+  .stat{text-align:center;}
+  .stat-val{font-family:var(--font-head);font-size:1.6rem;color:var(--accent);}
+  .stat-lbl{font-size:.72rem;color:var(--text-lo);text-transform:uppercase;letter-spacing:.08em;}
+
+  /* Countdown bar */
+  .timer-wrap{width:200px;height:4px;background:var(--border);border-radius:2px;margin:16px auto 0;overflow:hidden;}
+  .timer-bar{height:100%;background:var(--accent);transition:width 1s linear,background .3s;}
+
+  .hidden{display:none!important;}
+</style>
+</head>
+<body>
+<h1>Color Guess</h1>
+<p class="tagline">Can you name that colour?</p>
+
+<div class="color-display" id="colorDisplay"></div>
+<div class="rgb-label" id="rgbLabel"></div>
+
+<div class="difficulty-row">
+  <button class="diff-btn active" data-diff="easy">Easy</button>
+  <button class="diff-btn" data-diff="medium">Medium</button>
+  <button class="diff-btn" data-diff="hard">Hard</button>
+</div>
+
+<div class="options" id="options"></div>
+
+<div class="hard-form hidden" id="hardForm">
+  <div class="rgb-inputs">
+    <label>R<input type="number" id="rIn" min="0" max="255"/></label>
+    <label>G<input type="number" id="gIn" min="0" max="255"/></label>
+    <label>B<input type="number" id="bIn" min="0" max="255"/></label>
+  </div>
+  <button class="btn-guess" id="guessBtn">Guess!</button>
+</div>
+
+<div class="feedback" id="feedback"></div>
+
+<div class="stats">
+  <div class="stat"><div class="stat-val" id="score">0</div><div class="stat-lbl">Score</div></div>
+  <div class="stat"><div class="stat-val" id="streak">0</div><div class="stat-lbl">Streak</div></div>
+</div>
+
+<div class="timer-wrap hidden" id="timerWrap">
+  <div class="timer-bar" id="timerBar"></div>
+</div>
+
+<script>
+'use strict';
+let difficulty = 'easy';
+let answer = null;
+let score = 0;
+let streak = 0;
+let nextTimer = null;
+let countdownInterval = null;
+
+const colorDisplay  = document.getElementById('colorDisplay');
+const rgbLabel      = document.getElementById('rgbLabel');
+const optionsEl     = document.getElementById('options');
+const hardForm      = document.getElementById('hardForm');
+const feedbackEl    = document.getElementById('feedback');
+const scoreEl       = document.getElementById('score');
+const streakEl      = document.getElementById('streak');
+const timerWrap     = document.getElementById('timerWrap');
+const timerBar      = document.getElementById('timerBar');
+const guessBtn      = document.getElementById('guessBtn');
+
+function randInt(max) { return Math.floor(Math.random() * (max + 1)); }
+function randColor() { return { r: randInt(255), g: randInt(255), b: randInt(255) }; }
+function toRgbStr(c) { return `rgb(${c.r}, ${c.g}, ${c.b})`; }
+function toLabel(c)  { return `rgb(${c.r}, ${c.g}, ${c.b})`; }
+
+function startRound() {
+  clearTimeout(nextTimer);
+  clearInterval(countdownInterval);
+  timerWrap.classList.add('hidden');
+  feedbackEl.textContent = '';
+  feedbackEl.className = 'feedback';
+
+  answer = randColor();
+  const count = difficulty === 'easy' ? 3 : 6;
+
+  // Build decoy pool (unique enough)
+  const pool = [answer];
+  while (pool.length < count) {
+    const d = randColor();
+    pool.push(d);
+  }
+  // Shuffle
+  pool.sort(() => Math.random() - .5);
+
+  // Show/hide RGB text label
+  if (difficulty === 'easy') {
+    colorDisplay.style.background = toRgbStr(answer);
+    rgbLabel.textContent = '';
+    hardForm.classList.add('hidden');
+  } else if (difficulty === 'medium') {
+    colorDisplay.style.background = toRgbStr(answer);
+    rgbLabel.textContent = '?';
+    hardForm.classList.add('hidden');
+  } else {
+    colorDisplay.style.background = toRgbStr(answer);
+    rgbLabel.textContent = toLabel(answer);   // show the value; user inputs match
+    hardForm.classList.remove('hidden');
+    document.getElementById('rIn').value = '';
+    document.getElementById('gIn').value = '';
+    document.getElementById('bIn').value = '';
+  }
+
+  renderOptions(pool, difficulty);
+}
+
+function renderOptions(pool, diff) {
+  optionsEl.innerHTML = '';
+  if (diff === 'hard') { optionsEl.classList.add('hidden'); return; }
+  optionsEl.classList.remove('hidden');
+
+  pool.forEach(c => {
+    if (diff === 'easy') {
+      const sw = document.createElement('div');
+      sw.className = 'opt-swatch';
+      sw.style.background = toRgbStr(c);
+      sw.addEventListener('click', () => handleGuess(c, sw));
+      optionsEl.appendChild(sw);
+    } else {
+      const btn = document.createElement('button');
+      btn.className = 'opt-rgb';
+      btn.textContent = toLabel(c);
+      btn.addEventListener('click', () => handleGuess(c, btn));
+      optionsEl.appendChild(btn);
+    }
+  });
+}
+
+function colorsMatch(a, b) {
+  return a.r === b.r && a.g === b.g && a.b === b.b;
+}
+
+function handleGuess(guessed, el) {
+  const allOpts = optionsEl.querySelectorAll('.opt-swatch, .opt-rgb');
+  allOpts.forEach(o => o.style.pointerEvents = 'none'); // disable after guess
+
+  if (colorsMatch(guessed, answer)) {
+    el.classList.add('correct');
+    showFeedback(true);
+  } else {
+    el.classList.add('wrong');
+    // Highlight correct
+    allOpts.forEach(o => {
+      const rgb = difficulty === 'easy' ? o.style.background : o.textContent;
+      // For easy, compare parsed background
+      if (difficulty === 'easy' && o.style.background === toRgbStr(answer)) o.classList.add('correct');
+      if (difficulty === 'medium' && o.textContent === toLabel(answer))      o.classList.add('correct');
+    });
+    showFeedback(false);
+  }
+}
+
+guessBtn.addEventListener('click', () => {
+  const r = parseInt(document.getElementById('rIn').value);
+  const g = parseInt(document.getElementById('gIn').value);
+  const b = parseInt(document.getElementById('bIn').value);
+  if ([r,g,b].some(v => isNaN(v) || v < 0 || v > 255)) {
+    feedbackEl.textContent = 'Enter values 0–255 for each channel.';
+    feedbackEl.className = 'feedback wrong';
+    return;
+  }
+  hardForm.querySelector('button').disabled = true;
+  colorsMatch({r,g,b}, answer) ? showFeedback(true) : showFeedback(false);
+});
+
+function showFeedback(correct) {
+  if (correct) {
+    score++;
+    streak++;
+    feedbackEl.textContent = '✓ Correct!';
+    feedbackEl.className = 'feedback correct';
+  } else {
+    streak = 0;
+    feedbackEl.textContent = `✗ Wrong! It was ${toLabel(answer)}`;
+    feedbackEl.className = 'feedback wrong';
+  }
+  scoreEl.textContent  = score;
+  streakEl.textContent = streak;
+  startCountdown();
+}
+
+function startCountdown() {
+  timerWrap.classList.remove('hidden');
+  timerBar.style.transition = 'none';
+  timerBar.style.width = '100%';
+  timerBar.style.background = 'var(--accent)';
+  // Force reflow
+  void timerBar.offsetWidth;
+  timerBar.style.transition = 'width 5s linear';
+  timerBar.style.width = '0%';
+
+  let secs = 5;
+  clearInterval(countdownInterval);
+  countdownInterval = setInterval(() => {
+    secs--;
+    if (secs <= 1) timerBar.style.background = 'var(--wrong)';
+    if (secs <= 0) { clearInterval(countdownInterval); }
+  }, 1000);
+
+  nextTimer = setTimeout(() => {
+    hardForm.querySelector && (hardForm.querySelector('button').disabled = false);
+    startRound();
+  }, 5000);
+}
+
+document.querySelectorAll('.diff-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    difficulty = btn.dataset.diff;
+    document.querySelectorAll('.diff-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    score = 0; streak = 0;
+    scoreEl.textContent = 0; streakEl.textContent = 0;
+    startRound();
+  });
+});
+
+startRound();
+</script>
+</body>
+</html>

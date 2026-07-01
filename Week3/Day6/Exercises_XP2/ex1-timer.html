@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Exercise 1 – Timer</title>
+  <style>
+    p {
+      background: yellow;
+      color: red;
+    }
+    body { font-family: sans-serif; padding: 20px; }
+    button { margin: 4px; padding: 8px 16px; cursor: pointer; }
+    h3 { margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <h3>Part I – setTimeout → alert</h3>
+  <button id="runPartI">Run Part I</button>
+
+  <h3>Part II – setTimeout → append paragraph</h3>
+  <button id="runPartII">Run Part II</button>
+
+  <h3>Part III – setInterval (stops at 5 paragraphs or on button click)</h3>
+  <button id="runPartIII">Start Interval</button>
+  <button id="clear">Clear Interval</button>
+
+  <div id="container"></div>
+
+  <script>
+    'use strict';
+
+    // ── Shared reference to the interval so it can be cleared from two places ──
+    let intervalId = null;
+
+    const container = document.getElementById('container');
+
+    /* ─────────────────────────────────────────────────────────────────
+       PART I
+       Using setTimeout, alert "Hello World" after 2 seconds.
+    ───────────────────────────────────────────────────────────────── */
+    document.getElementById('runPartI').addEventListener('click', function () {
+      setTimeout(function () {
+        alert('Hello World');
+      }, 2000);
+    });
+
+    /* ─────────────────────────────────────────────────────────────────
+       PART II
+       Using setTimeout, add <p>Hello World</p> to #container after 2 s.
+    ───────────────────────────────────────────────────────────────── */
+    document.getElementById('runPartII').addEventListener('click', function () {
+      setTimeout(function () {
+        const p = document.createElement('p');
+        p.textContent = 'Hello World';
+        container.appendChild(p);
+      }, 2000);
+    });
+
+    /* ─────────────────────────────────────────────────────────────────
+       PART III
+       Using setInterval, add <p>Hello World</p> every 2 s.
+       Stop when:
+         (a) the user clicks "Clear Interval", OR
+         (b) there are already 5 paragraphs in #container.
+    ───────────────────────────────────────────────────────────────── */
+    document.getElementById('runPartIII').addEventListener('click', function () {
+      // Prevent stacking multiple intervals if the button is clicked again
+      if (intervalId !== null) return;
+
+      intervalId = setInterval(function () {
+        // Check paragraph count BEFORE adding a new one
+        const currentCount = container.querySelectorAll('p').length;
+
+        if (currentCount >= 5) {
+          clearInterval(intervalId);
+          intervalId = null;
+          return;
+        }
+
+        const p = document.createElement('p');
+        p.textContent = 'Hello World';
+        container.appendChild(p);
+
+        // Stop immediately after adding the 5th paragraph
+        if (container.querySelectorAll('p').length >= 5) {
+          clearInterval(intervalId);
+          intervalId = null;
+        }
+      }, 2000);
+    });
+
+    // "Clear Interval" button — clears the interval manually
+    document.getElementById('clear').addEventListener('click', function () {
+      clearInterval(intervalId);
+      intervalId = null;
+    });
+  </script>
+</body>
+</html>

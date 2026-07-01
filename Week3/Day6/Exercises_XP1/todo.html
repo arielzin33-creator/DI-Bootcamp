@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Todo List</title>
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Roboto+Mono&display=swap" rel="stylesheet"/>
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --primary:#6200ea;--primary-light:#9d46ff;--primary-dark:#0a00b6;
+    --surface:#fff;--bg:#f5f5f5;--on-surface:#212121;--on-bg:#424242;
+    --divider:#e0e0e0;--completed:#9e9e9e;--danger:#b00020;
+    --shadow1:0 1px 3px rgba(0,0,0,.12),0 1px 2px rgba(0,0,0,.24);
+    --shadow2:0 3px 6px rgba(0,0,0,.16),0 3px 6px rgba(0,0,0,.23);
+    --shadow4:0 10px 20px rgba(0,0,0,.19),0 6px 6px rgba(0,0,0,.23);
+    --radius:4px;--font:'Roboto',sans-serif;
+  }
+  body{font-family:var(--font);background:var(--bg);min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:24px 16px;color:var(--on-surface);}
+  h1{font-size:1.5rem;font-weight:500;letter-spacing:.0125em;color:var(--primary);margin-bottom:4px;}
+  .subtitle{font-size:.875rem;color:var(--on-bg);margin-bottom:24px;font-weight:300;}
+  .card{background:var(--surface);border-radius:var(--radius);box-shadow:var(--shadow1);width:100%;max-width:480px;overflow:hidden;transition:box-shadow .3s;}
+  .card:hover{box-shadow:var(--shadow2);}
+
+  /* Input row */
+  .input-row{display:flex;padding:16px;gap:12px;border-bottom:1px solid var(--divider);}
+  .input-row input{flex:1;border:none;border-bottom:2px solid var(--divider);outline:none;font-family:var(--font);font-size:1rem;padding:4px 0;background:transparent;color:var(--on-surface);transition:border-color .2s;}
+  .input-row input:focus{border-bottom-color:var(--primary);}
+  .btn-add{background:var(--primary);color:#fff;border:none;border-radius:50%;width:40px;height:40px;font-size:1.5rem;cursor:pointer;box-shadow:var(--shadow1);transition:background .2s,box-shadow .2s;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+  .btn-add:hover{background:var(--primary-light);box-shadow:var(--shadow2);}
+  .btn-add:active{background:var(--primary-dark);}
+
+  /* Filter chips */
+  .filter-row{display:flex;gap:8px;padding:12px 16px;border-bottom:1px solid var(--divider);}
+  .chip{font-family:var(--font);font-size:.8125rem;padding:4px 12px;border-radius:16px;border:1px solid var(--divider);background:transparent;cursor:pointer;color:var(--on-bg);transition:background .15s,color .15s,border-color .15s;}
+  .chip.active{background:var(--primary);color:#fff;border-color:var(--primary);}
+
+  /* List */
+  .todo-list{list-style:none;min-height:40px;}
+  .todo-item{display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid var(--divider);transition:background .15s;animation:slideIn .2s ease;}
+  .todo-item:last-child{border-bottom:none;}
+  .todo-item:hover{background:#f9f9f9;}
+  @keyframes slideIn{from{opacity:0;transform:translateY(-8px);}to{opacity:1;transform:translateY(0);}}
+
+  /* Material checkbox */
+  .todo-item input[type=checkbox]{appearance:none;-webkit-appearance:none;width:18px;height:18px;border:2px solid var(--divider);border-radius:2px;cursor:pointer;flex-shrink:0;transition:background .15s,border-color .15s;position:relative;}
+  .todo-item input[type=checkbox]:checked{background:var(--primary);border-color:var(--primary);}
+  .todo-item input[type=checkbox]:checked::after{content:'';position:absolute;left:3px;top:0px;width:5px;height:10px;border:2px solid #fff;border-top:none;border-left:none;transform:rotate(45deg);}
+
+  .todo-text{flex:1;font-size:.9375rem;transition:color .2s,text-decoration .2s;}
+  .todo-text.done{text-decoration:line-through;color:var(--completed);}
+
+  .btn-del{background:none;border:none;cursor:pointer;color:var(--divider);font-size:1.1rem;transition:color .15s;padding:4px;border-radius:50%;line-height:1;}
+  .btn-del:hover{color:var(--danger);}
+
+  /* Footer */
+  .card-footer{display:flex;align-items:center;justify-content:space-between;padding:10px 16px;border-top:1px solid var(--divider);background:#fafafa;}
+  .count{font-size:.8125rem;color:var(--on-bg);}
+  .btn-clear{font-family:var(--font);font-size:.8125rem;font-weight:500;color:var(--danger);background:none;border:none;cursor:pointer;letter-spacing:.04em;text-transform:uppercase;padding:4px 8px;border-radius:var(--radius);transition:background .15s;}
+  .btn-clear:hover:not(:disabled){background:rgba(176,0,32,.08);}
+  .btn-clear:disabled{color:var(--divider);cursor:default;}
+  .empty{text-align:center;padding:32px 16px;color:var(--completed);font-size:.875rem;}
+  .hidden{display:none!important;}
+</style>
+</head>
+<body>
+<h1>My Tasks</h1>
+<p class="subtitle">Stay organised. Stay focused.</p>
+<div class="card">
+  <div class="input-row">
+    <input type="text" id="taskInput" placeholder="Add a new task…" autocomplete="off"/>
+    <button class="btn-add" id="addBtn" title="Add task">+</button>
+  </div>
+  <div class="filter-row">
+    <button class="chip active" data-filter="all">All</button>
+    <button class="chip" data-filter="active">Active</button>
+    <button class="chip" data-filter="completed">Completed</button>
+  </div>
+  <ul class="todo-list" id="todoList">
+    <li class="empty" id="emptyMsg">No tasks yet. Add one above!</li>
+  </ul>
+  <div class="card-footer">
+    <span class="count" id="countLabel">0 items</span>
+    <button class="btn-clear" id="clearBtn" disabled>Remove All</button>
+  </div>
+</div>
+
+<script>
+'use strict';
+const tasks = [];
+let filter = 'all';
+let nextId = 0;
+
+const input     = document.getElementById('taskInput');
+const addBtn    = document.getElementById('addBtn');
+const list      = document.getElementById('todoList');
+const emptyMsg  = document.getElementById('emptyMsg');
+const clearBtn  = document.getElementById('clearBtn');
+const countLbl  = document.getElementById('countLabel');
+const chips     = document.querySelectorAll('.chip');
+
+function render() {
+  // Remove all task LIs (keep empty msg)
+  list.querySelectorAll('.todo-item').forEach(el => el.remove());
+
+  const visible = tasks.filter(t =>
+    filter === 'all' ? true :
+    filter === 'active' ? !t.done :
+    t.done
+  );
+
+  emptyMsg.classList.toggle('hidden', visible.length > 0);
+
+  visible.forEach(t => {
+    const li = document.createElement('li');
+    li.className = 'todo-item';
+    li.dataset.id = t.id;
+
+    const cb = document.createElement('input');
+    cb.type = 'checkbox';
+    cb.checked = t.done;
+    cb.addEventListener('change', () => toggleDone(t.id));
+
+    const span = document.createElement('span');
+    span.className = 'todo-text' + (t.done ? ' done' : '');
+    span.textContent = t.text;
+
+    const del = document.createElement('button');
+    del.className = 'btn-del';
+    del.innerHTML = '✕';
+    del.title = 'Remove';
+    del.addEventListener('click', () => removeTask(t.id));
+
+    li.append(cb, span, del);
+    list.appendChild(li);
+  });
+
+  const total = tasks.length;
+  const active = tasks.filter(t => !t.done).length;
+  countLbl.textContent = `${active} of ${total} active`;
+  clearBtn.disabled = total === 0;
+}
+
+function addTask() {
+  const text = input.value.trim();
+  if (!text) { input.focus(); return; }
+  tasks.push({ id: nextId++, text, done: false });
+  input.value = '';
+  input.focus();
+  render();
+}
+
+function toggleDone(id) {
+  const t = tasks.find(t => t.id === id);
+  if (t) t.done = !t.done;
+  render();
+}
+
+function removeTask(id) {
+  const idx = tasks.findIndex(t => t.id === id);
+  if (idx !== -1) tasks.splice(idx, 1);
+  render();
+}
+
+addBtn.addEventListener('click', addTask);
+input.addEventListener('keydown', e => { if (e.key === 'Enter') addTask(); });
+
+clearBtn.addEventListener('click', () => {
+  tasks.length = 0;
+  render();
+});
+
+chips.forEach(chip => {
+  chip.addEventListener('click', () => {
+    filter = chip.dataset.filter;
+    chips.forEach(c => c.classList.remove('active'));
+    chip.classList.add('active');
+    render();
+  });
+});
+
+render();
+</script>
+</body>
+</html>

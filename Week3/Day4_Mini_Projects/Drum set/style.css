@@ -1,0 +1,191 @@
+/* ─── Reset & Base ──────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ─── Design Tokens ─────────────────────────────────── */
+:root {
+  --bg:          #0d0d0d;
+  --surface:     #1a1a1a;
+  --border:      #2e2e2e;
+  --accent:      #e8c84a;       /* warm gold */
+  --text-hi:     #f0ece0;
+  --text-lo:     #6b6b6b;
+
+  /* pad type colours */
+  --cymbal-top:  #4a3f1a;
+  --cymbal-glow: #e8c84a;
+  --snare-top:   #1e2d3a;
+  --snare-glow:  #4ac8e8;
+  --tom-top:     #2d1e3a;
+  --tom-glow:    #c84ae8;
+  --bass-top:    #3a1e1e;
+  --bass-glow:   #e84a4a;
+  --hihat-top:   #1e3a2a;
+  --hihat-glow:  #4ae87a;
+  --clap-top:    #3a2a1e;
+  --clap-glow:   #e87a4a;
+
+  --pad-size:    140px;
+  --radius:      12px;
+  --font-display: 'Courier New', Courier, monospace;
+}
+
+/* ─── Page Layout ───────────────────────────────────── */
+body {
+  background-color: var(--bg);
+  background-image:
+    radial-gradient(ellipse 60% 40% at 50% 10%, #1e1800 0%, transparent 70%),
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 39px,
+      #ffffff04 40px
+    );
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2.5rem;
+  padding: 2rem 1rem;
+  font-family: var(--font-display);
+  color: var(--text-hi);
+}
+
+/* ─── Header ────────────────────────────────────────── */
+header {
+  text-align: center;
+}
+
+header h1 {
+  font-size: clamp(2rem, 6vw, 3.5rem);
+  letter-spacing: 0.25em;
+  color: var(--accent);
+  text-shadow: 0 0 30px #e8c84a55, 0 0 60px #e8c84a22;
+}
+
+.subtitle {
+  margin-top: 0.4rem;
+  font-size: 0.85rem;
+  letter-spacing: 0.15em;
+  color: var(--text-lo);
+  text-transform: uppercase;
+}
+
+/* ─── Grid ──────────────────────────────────────────── */
+.drum-grid {
+  display: grid;
+  grid-template-columns: repeat(3, var(--pad-size));
+  grid-template-rows: repeat(3, var(--pad-size));
+  gap: 18px;
+}
+
+/* ─── Shared Pad Styles ─────────────────────────────── */
+.drum-pad {
+  width:  var(--pad-size);
+  height: var(--pad-size);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  position: relative;
+  overflow: hidden;
+  transition:
+    transform       0.08s ease,
+    box-shadow      0.12s ease,
+    border-color    0.12s ease;
+
+  /* subtle inner shine */
+  background-image: linear-gradient(
+    135deg,
+    rgba(255,255,255,0.06) 0%,
+    transparent 60%
+  );
+}
+
+/* ripple pseudo-element */
+.drum-pad::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  opacity: 0;
+  transform: scale(0.6);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  pointer-events: none;
+}
+
+/* ─── Pad Type Colours ──────────────────────────────── */
+.cymbal  { background-color: var(--cymbal-top); }
+.cymbal::after  { background: radial-gradient(circle, #e8c84a55, transparent 70%); }
+
+.snare   { background-color: var(--snare-top);  }
+.snare::after   { background: radial-gradient(circle, #4ac8e855, transparent 70%); }
+
+.tom     { background-color: var(--tom-top);    }
+.tom::after     { background: radial-gradient(circle, #c84ae855, transparent 70%); }
+
+.bass    { background-color: var(--bass-top);   }
+.bass::after    { background: radial-gradient(circle, #e84a4a55, transparent 70%); }
+
+.hihat   { background-color: var(--hihat-top);  }
+.hihat::after   { background: radial-gradient(circle, #4ae87a55, transparent 70%); }
+
+.clap    { background-color: var(--clap-top);   }
+.clap::after    { background: radial-gradient(circle, #e87a4a55, transparent 70%); }
+
+/* ─── Text inside Pads ──────────────────────────────── */
+.key-label {
+  font-size: 1.7rem;
+  font-weight: bold;
+  letter-spacing: 0.05em;
+  color: var(--text-hi);
+  line-height: 1;
+}
+
+.pad-name {
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-lo);
+}
+
+/* ─── Active (hit) State ────────────────────────────── */
+.drum-pad.active {
+  transform: scale(0.93);
+}
+
+.drum-pad.active::after {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Glow per type when active */
+.cymbal.active  { box-shadow: 0 0 20px 4px var(--cymbal-glow), inset 0 0 12px #e8c84a33; border-color: var(--cymbal-glow); }
+.snare.active   { box-shadow: 0 0 20px 4px var(--snare-glow),  inset 0 0 12px #4ac8e833; border-color: var(--snare-glow);  }
+.tom.active     { box-shadow: 0 0 20px 4px var(--tom-glow),    inset 0 0 12px #c84ae833; border-color: var(--tom-glow);    }
+.bass.active    { box-shadow: 0 0 20px 4px var(--bass-glow),   inset 0 0 12px #e84a4a33; border-color: var(--bass-glow);   }
+.hihat.active   { box-shadow: 0 0 20px 4px var(--hihat-glow),  inset 0 0 12px #4ae87a33; border-color: var(--hihat-glow);  }
+.clap.active    { box-shadow: 0 0 20px 4px var(--clap-glow),   inset 0 0 12px #e87a4a33; border-color: var(--clap-glow);   }
+
+/* ─── Hover (non-touch) ─────────────────────────────── */
+@media (hover: hover) {
+  .drum-pad:hover {
+    filter: brightness(1.2);
+    transform: scale(1.03);
+  }
+}
+
+/* ─── Responsive ────────────────────────────────────── */
+@media (max-width: 520px) {
+  :root { --pad-size: 95px; }
+  .key-label { font-size: 1.2rem; }
+  .pad-name  { font-size: 0.6rem; }
+}

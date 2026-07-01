@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Coloring Squares</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+    <header>
+        <h1>Coloring Squares</h1>
+        <p class="subtitle">Pick a color and Click or drag to paint</p>
+    </header>
+
+    <div class="workspace">
+
+        <!-- ── Color palette ───────────────────────────── -->
+        <section class="palette" id="palette" aria-label="Color palette">
+            <!-- swatches injected by JS -->
+        </section>
+
+        <!-- ── Toolbar ─────────────────────────────────── -->
+        <div class="toolbar">
+            <button id="btn-eraser" title="Eraser">⬜ Eraser</button>
+            <button id="btn-clear" title="Clear all">🗑 Clear</button>
+
+            <label class="grid-size-label" for="grid-size">Grid</label>
+            <select id="grid-size">
+        <option value="10">10 × 10</option>
+        <option value="20" selected>20 × 20</option>
+        <option value="30">30 × 30</option>
+        <option value="40">40 × 40</option>
+      </select>
+        </div>
+
+        <!-- ── Drawing canvas (grid of squares) ────────── -->
+        <section class="canvas-wrap">
+            <div class="drawing-grid" id="drawing-grid">
+                <!-- cells injected by JS -->
+            </div>
+        </section>
+
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
