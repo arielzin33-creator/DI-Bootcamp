@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>exxercise_XP_Ninja2</title>
+</head>
+
+<body>
+    <script>
+        // ============================================
+        // Exercise 1 : Menu
+        // ============================================
+
+        const menu = [{
+            type: "starter",
+            name: "Houmous with Pita"
+        }, {
+            type: "starter",
+            name: "Vegetable Soup with Houmous peas"
+        }, {
+            type: "dessert",
+            name: "Chocolate Cake"
+        }];
+
+        const vegetarian = ["vegetable", "houmous", "eggs", "vanilla", "potatoes"];
+
+        // 1. Check if at least one element is a dessert
+        const hasDessert = menu.some((item) => item.type === "dessert");
+        console.log(hasDessert ? "There is a dessert" : "No dessert found");
+
+        // 2. Check if all elements are starters
+        const allStarters = menu.every((item) => item.type === "starter");
+        console.log(allStarters);
+
+        // 3. Check if there is a main course, if not add one
+        const hasMain = menu.some((item) => item.type === "main");
+        if (!hasMain) {
+            menu.push({
+                type: "main",
+                name: "Grilled Salmon"
+            });
+        }
+        console.log(menu);
+
+        // 4. Add vegetarian key to each menu item
+        const menuWithVegetarian = menu.map((item) => {
+            const isVegetarian = vegetarian.some((vegWord) =>
+                item.name.toLowerCase().includes(vegWord)
+            );
+            return {...item,
+                vegetarian: isVegetarian
+            };
+        });
+        console.log(menuWithVegetarian);
+
+
+        // ============================================
+        // Exercise 2 : Chop into chunks
+        // ============================================
+
+        function string_chop(str, size) {
+            const chunks = [];
+            for (let i = 0; i < str.length; i += size) {
+                chunks.push(str.slice(i, i + size));
+            }
+            return chunks;
+        }
+
+        console.log(string_chop('developers', 2));
+
+
+        // ============================================
+        // Exercise 3 : You said string ?
+        // ============================================
+
+        function search_word(str, word) {
+            const count = str.split(' ').filter((w) => w === word).length;
+            return `'${word}' was found ${count} times.`;
+        }
+
+        console.log(search_word('The quick brown fox', 'fox'));
+
+
+        // ============================================
+        // Exercise 4 : Reverse Array
+        // ============================================
+
+        function reverseArray(arr) {
+            return arr.reverse();
+        }
+
+        console.log(reverseArray([1, 2, 3, 4, 5]));
+        console.log(reverseArray([1, 2]));
+        console.log(reverseArray([]));
+        console.log(reverseArray([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]));
+    </script>
+</body>
+
+</html>

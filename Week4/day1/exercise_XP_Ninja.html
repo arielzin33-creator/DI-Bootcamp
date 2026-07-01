@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>exercise_XP</title>
+</head>
+
+<body>
+    <script>
+        //Exercise 1 : Dog age to Human years
+        const data = [{
+            name: 'Butters',
+            age: 3,
+            type: 'dog'
+        }, {
+            name: 'Cuty',
+            age: 5,
+            type: 'rabbit'
+        }, {
+            name: 'Lizzy',
+            age: 6,
+            type: 'dog'
+        }, {
+            name: 'Red',
+            age: 1,
+            type: 'cat'
+        }, {
+            name: 'Joey',
+            age: 3,
+            type: 'dog'
+        }, {
+            name: 'Rex',
+            age: 10,
+            type: 'dog'
+        }, ];
+        const dogAge = data
+            .filter((animal) => animal.type === 'dog')
+            .map((dog) => {
+                return {
+                    name: dog.name,
+                    humanAge: dog.age * 7
+                };
+            });
+
+        console.log(dogAge);
+
+        //Exercise 2 : Email
+        const userEmail3 = ' cannotfillemailformcorrectly@gmail.com '
+        const newEmail = userEmail3.split("").filter(char => char !== " ").join("")
+        console.log(newEmail)
+
+        //Exercise 3 : Employees #3
+        const users = [{
+            firstName: 'Bradley',
+            lastName: 'Bouley',
+            role: 'Full Stack Resident'
+        }, {
+            firstName: 'Chloe',
+            lastName: 'Alnaji',
+            role: 'Full Stack Resident'
+        }, {
+            firstName: 'Jonathan',
+            lastName: 'Baughn',
+            role: 'Enterprise Instructor'
+        }, {
+            firstName: 'Michael',
+            lastName: 'Herman',
+            role: 'Lead Instructor'
+        }, {
+            firstName: 'Robert',
+            lastName: 'Hajek',
+            role: 'Full Stack Resident'
+        }, {
+            firstName: 'Wes',
+            lastName: 'Reid',
+            role: 'Instructor'
+        }, {
+            firstName: 'Zach',
+            lastName: 'Klabunde',
+            role: 'Instructor'
+        }];
+        const userRoles = {}
+        users.forEach((user) => {
+            const fullName = `${user.firstName} ${user.lastName}`;
+            userRoles[fullName] = user.role;
+        });
+
+        console.log(userRoles)
+
+        //Exercise 4 : Array to Object
+        const letters = ['x', 'y', 'z', 'z'];
+        // 1. Using a for loop
+        const letterCount = {};
+
+        for (let i = 0; i < letters.length; i++) {
+            const letter = letters[i];
+            if (letterCount[letter]) {
+                letterCount[letter]++;
+            } else {
+                letterCount[letter] = 1;
+            }
+        }
+
+        console.log(letterCount);
+
+        // 2. Using reduce()
+        const letterCount2 = letters.reduce((acc, letter) => {
+            if (acc[letter]) {
+                acc[letter]++;
+            } else {
+                acc[letter] = 1;
+            }
+            return acc;
+        }, {});
+
+        console.log(letterCount2);
+    </script>
+</body>
+
+</html>

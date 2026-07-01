@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>exercise_XP_Gold2</title>
+</head>
+
+<body>
+    <script>
+        //Exercise 1 : Sum elements
+        //const sum = arr.reduce((acc, val) => acc + val, 0);
+
+        //Exercise 2 : Remove Duplicates
+        //const uniqueArray = [...new Set(array)];
+
+        //Exercise 3 : Remove certain values
+        //const sampleArray = [NaN, 0, 15, false, -22, '', undefined, 47, null]
+        //Expected result: [15, -22, 47]
+
+        //const newArray = sampleArray.filter(Boolean);
+        //console.log(newArray);
+
+        //Exercise 4 : Repeat please!
+        //console.log(repeat('Ha!', 3));
+        //"Ha!Ha!Ha!"
+
+        function repeat(word, n = 1) {
+            return word.repeat(n);
+        }
+        console.log(repeat('Hi', 15))
+
+        //Exercise 5 : Turtle & Rabbit
+        const startLine = '  ||<- Start line';
+        let turtle = '🐢';
+        let rabbit = '🐇';
+
+        console.log(startLine);
+        console.log(turtle);
+        console.log(rabbit);
+
+        turtle = turtle.trim().padEnd(9, '=')
+        console.log(turtle);
+    </script>
+</body>
+
+</html>
