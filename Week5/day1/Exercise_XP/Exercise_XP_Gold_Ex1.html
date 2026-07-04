@@ -1,0 +1,46 @@
+<!-- Exercise 1: Fetch and Display a Random Gif  -->
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Random Gif</title>
+</head>
+
+<body>
+    <div id="gif-container"></div>
+
+    <script>
+        const apiKey = "hpvZycW22qCjn5cRM1xtWB8NKq4dQ2My";
+        const url = `https://api.giphy.com/v1/gifs/search?q=funny&api_key=${apiKey}&limit=25`;
+
+        async function getRandomGif() {
+            try {
+                const response = await fetch(url);
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+
+                const data = await response.json();
+
+                // Pick a random gif from the results array
+                const randomIndex = Math.floor(Math.random() * data.data.length);
+                const randomGif = data.data[randomIndex];
+                const gifUrl = randomGif.images.original.url;
+
+                // Append the gif to the page
+                const img = document.createElement("img");
+                img.src = gifUrl;
+                document.getElementById("gif-container").appendChild(img);
+
+            } catch (error) {
+                console.error("Error fetching gif:", error);
+            }
+        }
+
+        getRandomGif();
+    </script>
+</body>
+
+</html>

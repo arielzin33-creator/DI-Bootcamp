@@ -1,0 +1,21 @@
+body {
+    background-image: url('Background_image.jpg');
+    background-color: rgba(255, 255, 255, 0.3);
+    background-blend-mode: screen;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+.semi-transparent-rect {
+    width: 400px;
+    height: 200px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+    background-attachment: fixed;
+    text-align: center;
+    /* Black background at 50% opacity */
+    background-color: rgba(219, 215, 215, 0.5);
+}

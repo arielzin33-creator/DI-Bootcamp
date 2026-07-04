@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="stylesheet" href="Currency_Converter.css">
+    <title>Currency Converter</title>
+</head>
+
+<body>
+    <div class="semi-transparent-rect">
+        <h1>Currency Converter</h1>
+        <p>Live exchange rates via ExchangeRate-API</p>
+        <div class="card">
+            <!-- API key entry -->
+            <div class="api-key-notice">
+                <a href="https://app.exchangerate-api.com/sign-up" target="_blank" style="color:inherit;text-decoration:underline;margin-left:4px">exchangerate-api.com</a>&nbsp;to load live rates.
+            </div>
+        </div>
+        <h3>FROM:</h3>
+        <div class="api-key-row">
+            <input type="password" id="apiKeyInput" placeholder="63036e84284399976d87460f" autocomplete="off" />
+            <button id="loadBtn">Load Rates</button>
+        </div>
+
+        <h3>TO:</h3>
+
+        <h3>AMOUNT:</h3>
+        <!-- Amount -->
+        <div class="field">
+            <label for="amount">Amount</label>
+            <input type="number" id="amount" value="1" min="0" step="any" placeholder="Enter amount" />
+        </div>
+        <button></button>
+
+        <!-- From / Switch / To -->
+        <div class="currency-row">
+            <div class="field" style="margin-bottom:0">
+                <label for="fromCurrency">From</label>
+                <div class="select-wrap">
+                    <select id="fromCurrency" disabled>
+          <option>— load rates first —</option>
+        </select>
+                </div>
+            </div>
+
+            <button class="switch-btn" id="switchBtn" title="Switch currencies" disabled>⇄</button>
+
+            <div class="field" style="margin-bottom:0">
+                <label for="toCurrency">To</label>
+                <div class="select-wrap">
+                    <select id="toCurrency" disabled>
+          <option>— load rates first —</option>
+        </select>
+                </div>
+            </div>
+        </div>
+
+        <button class="convert-btn" id="convertBtn" disabled>Convert</button>
+
+        <div class="result" id="result">
+            <div class="result-label">Converted amount</div>
+            <div class="result-main" id="resultMain"></div>
+            <div class="result-rate" id="resultRate"></div>
+        </div>
+
+        <div class="status" id="status"></div>
+
+
+        <footer>
+            Rates provided by <a href="https://www.exchangerate-api.com" target="_blank">ExchangeRate-API</a> · for informational use only
+        </footer>
+    </div>
+    </div>
+    <script src="Currency_Converter.js"></script>
+</body>
+
+</html>

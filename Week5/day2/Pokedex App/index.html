@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pokédex</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Logo -->
+  <img src="images/logo.png" alt="Pokémon Logo" class="logo" />
+
+  <!-- Pokédex shell -->
+  <div class="pokedex">
+
+    <!-- Left panel -->
+    <div class="panel left-panel">
+
+      <!-- Big screen -->
+      <div class="screen-outer">
+        <div class="screen-inner" id="screen">
+          <i class="fa-solid fa-spinner fa-spin fa-2x loading-icon" id="loadingIcon"></i>
+          <img id="pokeImg" src="" alt="" />
+          <p id="errorMsg" class="error-msg"></p>
+        </div>
+      </div>
+
+      <!-- Info strip -->
+      <div class="info-strip">
+        <span id="pokeName">-</span>
+        <span id="pokeId">#000</span>
+      </div>
+
+      <!-- Stats -->
+      <div class="stats">
+        <div class="stat-row">
+          <span class="stat-label">Height</span>
+          <span class="stat-value" id="pokeHeight">-</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">Weight</span>
+          <span class="stat-value" id="pokeWeight">-</span>
+        </div>
+        <div class="stat-row">
+          <span class="stat-label">Type</span>
+          <span class="stat-value" id="pokeType">-</span>
+        </div>
+      </div>
+
+      <!-- Navigation buttons -->
+      <div class="nav-buttons">
+        <button id="btnPrev" class="nav-btn" title="Previous">
+          <i class="fa-solid fa-chevron-left"></i>
+        </button>
+        <button id="btnRandom" class="random-btn">Random</button>
+        <button id="btnNext" class="nav-btn" title="Next">
+          <i class="fa-solid fa-chevron-right"></i>
+        </button>
+      </div>
+
+    </div>
+
+    <!-- Right panel (decorative) -->
+    <div class="panel right-panel">
+      <div class="right-screen"></div>
+      <div class="right-dots">
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

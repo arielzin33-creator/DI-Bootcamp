@@ -1,0 +1,33 @@
+    body {
+        background-image: url('pexels-kaip-1341279.jpg');
+        background-blend-mode: screen;
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+    }
+    
+    .logo {
+        /*width: 400px;*/
+        /*height: 200px;*/
+        display: flex;
+        justify-content: center;
+    }
+    
+    .showbox {
+        /*width: 400px;*/
+        /*height: 200px;*/
+        display: flex;
+        justify-content: center;
+        border-color: yellow;
+        border-radius: 10px;
+        border-width: 20px;
+    }
+    
+    .button {
+        display: flex;
+        justify-content: center;
+        border-radius: var(--fa-border-radius, .1em);
+        border: var(--fa-border-width, .08em) var(--fa-border-style, solid) var(--fa-border-color, #eee);
+        padding: var(--fa-border-padding, .2em .25em .15em)
+    }

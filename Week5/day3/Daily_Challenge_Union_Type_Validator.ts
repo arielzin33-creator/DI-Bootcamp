@@ -1,17 +1,28 @@
-//Daily Challenge: Union Type Validator
-
-
 function validateUnionType(value: any, allowedTypes: string[]): boolean {
-  return allowedTypes.includes(typeof value);
+  const valueType = typeof value;
+
+  // Loop through the allowed types to see if the value's type matches any of them
+  for (let i = 0; i < allowedTypes.length; i++) {
+    if (allowedTypes[i] === valueType) {
+      return true;
+    }
+  }
+
+  return false;
 }
 
-// Test variables
-const num = 42;
-const str = "Hello";
-const bool = true;
-const obj = { name: "Alice" };
+// Demonstration / usage
 
-console.log(validateUnionType(num, ["number", "string"]));  // true
-console.log(validateUnionType(str, ["number", "string"]));  // true
-console.log(validateUnionType(bool, ["number", "string"])); // false
-console.log(validateUnionType(obj, ["number", "string"]));  // false
+let age: any = 25;
+let name1: any = "Alice";
+let isActive: any = true;
+let data: any = { id: 1 };
+let notDefined: any = undefined;
+
+console.log(validateUnionType(age, ["number", "string"]));       // true  -> 25 is a number
+console.log(validateUnionType(name1, ["number", "string"]));      // true  -> "Alice" is a string
+console.log(validateUnionType(isActive, ["number", "string"]));  // false -> boolean is not in the list
+console.log(validateUnionType(isActive, ["boolean"]));           // true  -> boolean is in the list
+console.log(validateUnionType(data, ["object", "number"]));      // true  -> data is an object
+console.log(validateUnionType(notDefined, ["undefined"]));       // true  -> matches "undefined"
+console.log(validateUnionType(notDefined, ["string", "number"])); // false -> no match

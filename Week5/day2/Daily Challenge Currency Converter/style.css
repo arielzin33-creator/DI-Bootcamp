@@ -1,0 +1,192 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 60%, #0f3460 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  padding: 20px;
+}
+
+/* Card */
+.card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 36px 32px;
+  width: 100%;
+  max-width: 480px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+/* Title */
+.title {
+  font-size: 22px;
+  font-weight: 700;
+  color: #1a1a2e;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.title i {
+  color: #0f3460;
+  font-size: 20px;
+}
+
+/* Field group */
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  flex: 1;
+}
+
+.field-group label {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: #666;
+}
+
+input[type="number"],
+select {
+  padding: 11px 14px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 15px;
+  color: #222;
+  background: #fafafa;
+  outline: none;
+  transition: border-color 0.2s;
+  width: 100%;
+}
+
+input[type="number"]:focus,
+select:focus {
+  border-color: #0f3460;
+  background: #fff;
+}
+
+/* Selects row */
+.selects-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+/* Switch button */
+.switch-btn {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 2px solid #0f3460;
+  background: #fff;
+  color: #0f3460;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-bottom: 2px;
+  transition: background 0.2s, color 0.2s, transform 0.3s;
+}
+
+.switch-btn:hover {
+  background: #0f3460;
+  color: #fff;
+}
+
+.switch-btn.spinning {
+  transform: rotate(180deg);
+}
+
+/* Convert button */
+.convert-btn {
+  padding: 13px;
+  background: #0f3460;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  letter-spacing: 0.5px;
+  transition: background 0.2s, transform 0.1s;
+}
+
+.convert-btn:hover:not(:disabled) {
+  background: #16213e;
+}
+
+.convert-btn:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.convert-btn:disabled {
+  background: #aaa;
+  cursor: not-allowed;
+}
+
+/* Result */
+.result {
+  background: #f0f7ff;
+  border: 2px solid #c8dff8;
+  border-radius: 10px;
+  padding: 18px 20px;
+  text-align: center;
+  font-size: 15px;
+  color: #1a1a2e;
+  line-height: 1.7;
+}
+
+.result .converted-amount {
+  font-size: 28px;
+  font-weight: 800;
+  color: #0f3460;
+  display: block;
+  margin: 4px 0;
+}
+
+.result .rate-info {
+  font-size: 12px;
+  color: #888;
+}
+
+/* Loading */
+.loading {
+  text-align: center;
+  color: #0f3460;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+/* Error */
+.error {
+  background: #fff0f0;
+  border: 2px solid #ffcccc;
+  border-radius: 10px;
+  padding: 14px 16px;
+  color: #cc0000;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: center;
+}
+
+/* Utility */
+.hidden {
+  display: none !important;
+}

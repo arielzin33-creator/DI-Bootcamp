@@ -1,0 +1,71 @@
+<!-- Exercise 1: Giphy API with Search Form and Delete Button -->
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Giphy Search</title>
+</head>
+
+<body>
+
+    <form id="search-form">
+        <input type="text" id="search-input" placeholder="Enter a category (e.g. cats)" required />
+        <button type="submit">Search</button>
+    </form>
+
+    <button id="delete-btn">Delete All Gifs</button>
+
+    <div id="gif-container"></div>
+
+    <script>
+        const apiKey = "hpvZycW22qCjn5cRM1xtWB8NKq4dQ2My";
+        const form = document.getElementById("search-form");
+        const input = document.getElementById("search-input");
+        const gifContainer = document.getElementById("gif-container");
+        const deleteBtn = document.getElementById("delete-btn");
+
+        form.addEventListener("submit", async function(event) {
+            event.preventDefault(); // prevent page reload on form submit
+
+            const query = input.value.trim();
+            if (!query) return;
+
+            await fetchGifs(query);
+            input.value = "";
+        });
+
+        deleteBtn.addEventListener("click", function() {
+            gifContainer.innerHTML = "";
+        });
+
+        async function fetchGifs(query) {
+            const url = `https://api.giphy.com/v1/gifs/search?q=${encodeURIComponent(query)}&api_key=${apiKey}&limit=10`;
+
+            try {
+                const response = await fetch(url);
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+
+                const data = await response.json();
+                displayGifs(data.data);
+
+            } catch (error) {
+                console.error("Error fetching gifs:", error);
+            }
+        }
+
+        function displayGifs(gifs) {
+            gifs.forEach(gif => {
+                const img = document.createElement("img");
+                img.src = gif.images.fixed_height.url;
+                img.alt = gif.title;
+                gifContainer.appendChild(img);
+            });
+        }
+    </script>
+</body>
+
+</html>

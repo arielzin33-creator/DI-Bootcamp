@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Currency Converter</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <div class="card">
+    <h1 class="title">
+      <i class="fa-solid fa-money-bill-transfer"></i>
+      Currency Converter
+    </h1>
+
+    <!-- Amount -->
+    <div class="field-group">
+      <label for="amount">Amount</label>
+      <input type="number" id="amount" value="1" min="0" step="any" />
+    </div>
+
+    <!-- FROM / switch / TO row -->
+    <div class="selects-row">
+      <div class="field-group">
+        <label for="fromCurrency">From</label>
+        <select id="fromCurrency">
+          <option value="">Loading…</option>
+        </select>
+      </div>
+
+      <button id="switchBtn" class="switch-btn" title="Switch currencies">
+        <i class="fa-solid fa-right-left"></i>
+      </button>
+
+      <div class="field-group">
+        <label for="toCurrency">To</label>
+        <select id="toCurrency">
+          <option value="">Loading…</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Convert button -->
+    <button id="convertBtn" class="convert-btn" disabled>
+      Convert
+    </button>
+
+    <!-- Result -->
+    <div id="result" class="result hidden"></div>
+
+    <!-- Loading -->
+    <div id="loading" class="loading hidden">
+      <i class="fa-solid fa-spinner fa-spin"></i>
+      Converting…
+    </div>
+
+    <!-- Error -->
+    <div id="error" class="error hidden"></div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

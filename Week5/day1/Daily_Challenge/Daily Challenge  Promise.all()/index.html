@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Sunrise Comparator</title>
+</head>
+
+<body>
+
+    <h1>Compare Sunrise Times for Two Cities</h1>
+
+    <form id="sunrise-form">
+        <fieldset>
+            <legend>City 1</legend>
+            <label for="lat1">Latitude:</label>
+            <input type="text" id="lat1" placeholder="e.g. 48.864716" required />
+
+            <label for="lng1">Longitude:</label>
+            <input type="text" id="lng1" placeholder="e.g. 2.349014" required />
+        </fieldset>
+
+        <fieldset>
+            <legend>City 2</legend>
+            <label for="lat2">Latitude:</label>
+            <input type="text" id="lat2" placeholder="e.g. 40.730610" required />
+
+            <label for="lng2">Longitude:</label>
+            <input type="text" id="lng2" placeholder="e.g. -73.935242" required />
+        </fieldset>
+
+        <button type="submit">Get Sunrise Times</button>
+    </form>
+
+    <div id="results"></div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
