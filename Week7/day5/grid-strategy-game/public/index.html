@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Turn-Based Grid Strategy Game</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background: #1e1e24; color: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; }
+        h1 { margin-bottom: 10px; color: #4caf50; }
+        
+        #auth-panel, #game-panel { background: #2a2a35; padding: 25px; border-radius: 10px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); width: 100%; max-width: 600px; text-align: center; }
+        #game-panel { max-width: 900px; display: none; }
+        
+        .form-group { margin-bottom: 15px; text-align: left; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; color: #ccc; }
+        input { width: 100%; padding: 10px; border: 1px solid #444; background: #1e1e24; color: #fff; border-radius: 5px; }
+        
+        button { background: #4caf50; color: white; padding: 12px 20px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; font-size: 16px; margin-top: 10px; transition: 0.2s; }
+        button:hover { background: #45a049; }
+        
+        .layout-container { display: flex; gap: 30px; justify-content: center; align-items: flex-start; margin-top: 20px; }
+        
+        /* Grid Board Matrix */
+        #grid-board { display: grid; grid-template-columns: repeat(10, 45px); grid-template-rows: repeat(10, 45px); gap: 2px; background: #444; padding: 4px; border-radius: 6px; }
+        .cell { background: #3a3a4a; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; border-radius: 2px; transition: background 0.2s; }
+        
+        .cell.obstacle { background: #555565; color: #777; position: relative; }
+        .cell.obstacle::after { content: "█"; color: #888; font-size: 20px; }
+        
+        .cell.base-p1 { background: #1b4d3e; border: 2px solid #2e7d32; color: #a5d6a7; }
+        .cell.base-p2 { background: #b71c1c; border: 2px solid #d32f2f; color: #ef9a9a; }
+        
+        .cell.player-p1 { background: #2e7d32 !important; color: #fff; box-shadow: inset 0 0 10px #fff; z-index: 2; font-size: 16px; }
+        .cell.player-p2 { background: #c62828 !important; color: #fff; box-shadow: inset 0 0 10px #fff; z-index: 2; font-size: 16px; }
+
+        .controls { display: flex; flex-direction: column; gap: 15px; min-width: 250px; text-align: left; background: #23232e; padding: 20px; border-radius: 8px; }
+        .status-box { font-size: 18px; font-weight: bold; margin-bottom: 10px; padding: 10px; background: #1e1e24; border-radius: 5px; border-left: 5px solid #4caf50; text-align: center; }
+        
+        .d-pad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; max-width: 150px; margin: 0 auto; }
+        .d-pad button { margin: 0; padding: 10px; background: #3a3a4a; }
+        .d-pad button:hover { background: #555565; }
+        
+        .alert { color: #ffeb3b; font-weight: bold; margin-top: 10px; min-height: 20px; }
+    </style>
+</head>
+<body>
+
+    <h1>Tactical Turn Strategy Grid</h1>
+
+    <!-- Phase 1: Authentication / Room Initiation Setup -->
+    <div id="auth-panel">
+        <h2 style="margin-bottom: 15px;">Enter Game Session</h2>
+        <div class="form-group">
+            <label>Player 1 Username (Green - Top Left)</label>
+            <input type="text" id="p1-username" value="PlayerOne">
+        </div>
+        <div class="form-group">
+            <label>Player 2 Username (Red - Bottom Right)</label>
+            <input type="text" id="p2-username" value="PlayerTwo">
+        </div>
+        <button onclick="startSession()">Initialize New Board Match</button>
+        <div id="auth-alert" class="alert"></div>
+    </div>
+
+    <!-- Phase 2: Live Turn Game Loop Interface -->
+    <div id="game-panel">
+        <div class="status-box" id="turn-indicator">Current Turn: Waiting...</div>
+        
+        <div class="layout-container">
+            <!-- 10x10 Board Grid Matrix -->
+            <div id="grid-board"></div>
+
+            <!-- Direction Controls & Action D-Pad -->
+            <div class="controls">
+                <h3 style="border-bottom: 1px solid #444; padding-bottom: 5px; color:#4caf50;">Controls</h3>
+                <div class="d-pad">
+                    <div></div>
+                    <button onclick="submitMove('up')">▲</button>
+                    <div></div>
+                    <button onclick="submitMove('left')">◀</button>
+                    <div></div>
+                    <button onclick="submitMove('right')">▶</button>
+                    <div></div>
+                    <button onclick="submitMove('down')">▼</button>
+                    <div></div>
+                </div>
+                <div style="margin-top: 10px; text-align: center;">
+                    <button onclick="checkGameStatus()" style="background: #2196f3; font-size:12px; padding: 6px 12px;">Refresh Board Sync</button>
+                </div>
+                <div id="game-alert" class="alert" style="text-align: center;"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentTurn = '';
+        let gameOver = false;
+
+        async function startSession() {
+            const p1 = document.getElementById('p1-username').value.trim();
+            const p2 = document.getElementById('p2-username').value.trim();
+            const alertBox = document.getElementById('auth-alert');
+
+            if (!p1 || !p2) {
+                alertBox.innerText = "Both strategy player handles must be filled.";
+                return;
+            }
+
+            try {
+                const response = await fetch('/game/start', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ player1: p1, player2: p2 })
+                });
+                const data = await response.json();
+
+                if (response.status === 200) {
+                    document.getElementById('auth-panel').style.display = 'none';
+                    document.getElementById('game-panel').style.display = 'block';
+                    renderBoard(data.state);
+                    updateStatus(data.state);
+                } else {
+                    alertBox.innerText = data.error || "Initialization failed.";
+                }
+            } catch (err) {
+                alertBox.innerText = "Connection link error.";
+            }
+        }
+
+        async function submitMove(direction) {
+            if (gameOver) return;
+            const gameAlert = document.getElementById('game-alert');
+            gameAlert.innerText = '';
+
+            try {
+                const response = await fetch('/game/move', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ direction })
+                });
+                const data = await response.json();
+
+                if (response.status === 200) {
+                    renderBoard(data.state);
+                    updateStatus(data.state);
+                    if (data.state.winner) {
+                        gameOver = true;
+                        document.getElementById('turn-indicator').innerText = `🏆 MATCH OVER! WINNER: ${data.state.winner.toUpperCase()} 🏆`;
+                        document.getElementById('turn-indicator').style.borderLeftColor = "#ffeb3b";
+                    }
+                } else {
+                    gameAlert.innerText = data.error || "Invalid movement vector attempted.";
+                }
+            } catch (err) {
+                gameAlert.innerText = "Error broadcasting movement sequence.";
+            }
+        }
+
+        async function checkGameStatus() {
+            try {
+                const response = await fetch('/game/status');
+                const data = await response.json();
+                if (response.status === 200 && data.state) {
+                    renderBoard(data.state);
+                    updateStatus(data.state);
+                }
+            } catch (err) { console.error("Sync sync failure", err); }
+        }
+
+        function renderBoard(state) {
+            const board = document.getElementById('grid-board');
+            board.innerHTML = '';
+
+            const p1Pos = state.players.p1.position;
+            const p2Pos = state.players.p2.position;
+            const p1Base = state.bases.p1;
+            const p2Base = state.bases.p2;
+            const obstacles = state.obstacles || [];
+
+            for (let r = 0; r < 10; r++) {
+                for (let c = 0; c < 10; c++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'cell';
+
+                    // Check obstacle configuration map blocks
+                    const isObstacle = obstacles.some(o => o.row === r && o.col === c);
+                    if (isObstacle) cell.classList.add('obstacle');
+
+                    // Check structural Base assignments
+                    if (p1Base.row === r && p1Base.col === c) {
+                        cell.classList.add('base-p1');
+                        cell.innerText = "B1";
+                    }
+                    if (p2Base.row === r && p2Base.col === c) {
+                        cell.classList.add('base-p2');
+                        cell.innerText = "B2";
+                    }
+
+                    // Check live coordinate locations for player pieces
+                    if (p1Pos.row === r && p1Pos.col === c) {
+                        cell.classList.add('player-p1');
+                        cell.innerText = "P1";
+                    }
+                    if (p2Pos.row === r && p2Pos.col === c) {
+                        cell.classList.add('player-p2');
+                        cell.innerText = "P2";
+                    }
+
+                    board.appendChild(cell);
+                }
+            }
+        }
+
+        function updateStatus(state) {
+            if (state.winner) return;
+            const currentActivePlayerName = state.players[state.turn].name;
+            document.getElementById('turn-indicator').innerText = `Current Turn: ${currentActivePlayerName} (${state.turn.toUpperCase()})`;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-Time Chat Rooms</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background: #f0f2f5; display: flex; justify-content: center; align-items: center; height: 100vh; }
+        
+        /* Join Container STYLING */
+        #join-container { background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 100%; max-width: 400px; text-align: center; }
+        #join-container h2 { margin-bottom: 20px; color: #333; }
+        input, select { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ccc; border-radius: 6px; font-size: 16px; }
+        button { width: 100%; padding: 12px; background: #007bff; color: white; border: none; border-radius: 6px; font-size: 16px; cursor: pointer; font-weight: bold; transition: background 0.2s; }
+        button:hover { background: #0056b3; }
+
+        /* Chat Container STYLING */
+        #chat-container { display: none; width: 90vw; max-width: 900px; height: 80vh; background: #fff; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); overflow: hidden; }
+        .chat-header { background: #007bff; color: white; padding: 15px 20px; display: flex; justify-content: space-between; align-items: center; }
+        .chat-header button { width: auto; padding: 8px 15px; background: #dc3545; font-size: 14px; }
+        .chat-header button:hover { background: #bd2130; }
+        
+        .chat-main { display: flex; height: calc(100% - 120px); }
+        .sidebar { width: 25%; background: #343a40; color: white; padding: 20px; overflow-y: auto; }
+        .sidebar h3 { margin-bottom: 15px; font-size: 16px; text-transform: uppercase; letter-spacing: 1px; color: #adb5bd; }
+        .room-title { font-size: 20px; font-weight: bold; margin-bottom: 25px; color: #fff; }
+        .user-list { list-style: none; }
+        .user-list li { padding: 8px 0; border-bottom: 1px solid #495057; font-size: 15px; display: flex; align-items: center; }
+        .user-list li::before { content: "●"; color: #28a745; margin-right: 8px; font-size: 12px; }
+
+        .messages-area { width: 75%; padding: 20px; overflow-y: auto; background: #f8f9fa; display: flex; flex-direction: column; gap: 12px; }
+        .msg { max-width: 70%; padding: 10px 14px; border-radius: 8px; font-size: 15px; line-height: 1.4; position: relative; }
+        .msg.incoming { background: #e9ecef; align-self: flex-start; }
+        .msg.outgoing { background: #007bff; color: white; align-self: flex-end; }
+        .msg.system { background: #fff3cd; color: #856404; align-self: center; text-align: center; font-size: 13px; max-width: 90%; border: 1px solid #ffeeba; }
+        .msg .meta { font-size: 11px; margin-bottom: 4px; opacity: 0.7; font-weight: bold; }
+        .msg .time { font-size: 10px; display: block; text-align: right; margin-top: 4px; opacity: 0.6; }
+
+        .chat-form-area { height: 60px; border-top: 1px solid #dee2e6; padding: 10px 20px; display: flex; gap: 10px; align-items: center; }
+        .chat-form-area input { margin: 0; height: 100%; }
+        .chat-form-area button { width: 120px; height: 100%; }
+    </style>
+</head>
+<body>
+
+    <!-- Stage 1: Entrance Setup -->
+    <div id="join-container">
+        <h2>Join Global Chat</h2>
+        <input type="text" id="username" placeholder="Choose Username..." required />
+        <select id="room">
+            <option value="JavaScript Council">JavaScript Council</option>
+            <option value="Python Devs">Python Devs</option>
+            <option value="DevOps & Systems">DevOps & Systems</option>
+        </select>
+        <button onclick="enterChat()">Join Chatroom</button>
+    </div>
+
+    <!-- Stage 2: Live Room Panel -->
+    <div id="chat-container">
+        <header class="chat-header">
+            <h2 id="room-display">Room</h2>
+            <button onclick="leaveChat()">Leave Room</button>
+        </header>
+        <main class="chat-main">
+            <div class="sidebar">
+                <h3>Active Room</h3>
+                <div class="room-title" id="room-name-text">-</div>
+                <h3>Active Users</h3>
+                <ul id="users" class="user-list"></ul>
+            </div>
+            <div class="messages-area" id="msg-window"></div>
+        </main>
+        <footer class="chat-form-area">
+            <input type="text" id="msg-input" placeholder="Type a message..." autocomplete="off" onkeypress="handleKeyPair(event)" />
+            <button onclick="broadcastMessage()">Send</button>
+        </footer>
+    </div>
+
+    <!-- Load Socket.io client broker library dynamically from server endpoint code -->
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        let socket;
+        let username;
+        let room;
+
+        function enterChat() {
+            username = document.getElementById('username').value.trim();
+            room = document.getElementById('room').value;
+
+            if (!username) {
+                alert('Please provide a valid username.');
+                return;
+            }
+
+            // Establish full-duplex socket channel handshake connection
+            socket = io();
+
+            document.getElementById('join-container').style.display = 'none';
+            document.getElementById('chat-container').style.display = 'block';
+            document.getElementById('room-name-text').innerText = room;
+            document.getElementById('room-display').innerText = `Room: ${room}`;
+
+            // Emit registration transaction payload handshake
+            socket.emit('joinRoom', { username, room });
+
+            // Notification Listener: Audio alert trigger API
+            const notificationSound = new Audio('https://assets.mixkit.co/active_storage/sfx/2357/2357-84.wav');
+
+            // Wire up event streams
+            socket.on('message', (message) => {
+                outputMessage(message);
+                if (message.username !== 'System' && message.username !== username) {
+                    notificationSound.play().catch(() => {}); // Play alert if message arrives from another user
+                }
+            });
+
+            socket.on('roomUsers', ({ room, users }) => {
+                outputUsers(users);
+            });
+        }
+
+        function handleKeyPair(e) {
+            if (e.key === 'Enter') broadcastMessage();
+        }
+
+        function broadcastMessage() {
+            const input = document.getElementById('msg-input');
+            const message = input.value.trim();
+            if (!message) return;
+
+            socket.emit('chatMessage', message);
+            input.value = '';
+            input.focus();
+        }
+
+        function outputMessage(message) {
+            const div = document.createElement('div');
+            const win = document.getElementById('msg-window');
+            
+            if (message.username === 'System') {
+                div.className = 'msg system';
+                div.innerHTML = `<p>${message.text}</p>`;
+            } else {
+                const isOutgoing = message.username === username;
+                div.className = `msg ${isOutgoing ? 'outgoing' : 'incoming'}`;
+                div.innerHTML = `
+                    <div class="meta">${isOutgoing ? 'You' : message.username}</div>
+                    <p class="text">${message.text}</p>
+                    <span class="time">${message.time}</span>
+                `;
+            }
+            
+            win.appendChild(div);
+            win.scrollTop = win.scrollHeight; // Keep scrolling down to newest message frame
+        }
+
+        function outputUsers(users) {
+            const userList = document.getElementById('users');
+            userList.innerHTML = users.map(user => `<li>${user.username}</li>`).join('');
+        }
+
+        function leaveChat() {
+            if (socket) socket.disconnect();
+            location.reload(); // Hard resets environment lifecycle cleanly back to join prompt
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Game</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f4f9; padding: 40px; display: flex; justify-content: center; }
+        .quiz-container { background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); width: 100%; max-width: 500px; }
+        h2 { margin-top: 0; color: #333; }
+        .option-btn { display: block; width: 100%; background: #eef2f7; border: 1px solid #ced4da; padding: 12px; margin: 8px 0; border-radius: 4px; text-align: left; font-size: 16px; cursor: pointer; transition: background 0.2s; }
+        .option-btn:hover { background: #dee2e6; }
+        .selected { background: #007bff !important; color: white; border-color: #0056b3; }
+        #submit-btn { width: 100%; background: #28a745; color: white; border: none; padding: 14px; font-size: 16px; border-radius: 4px; cursor: pointer; margin-top: 15px; display: none; }
+        #submit-btn:hover { background: #218838; }
+        #feedback { margin-top: 15px; font-weight: bold; padding: 10px; border-radius: 4px; display: none; }
+        .correct-alert { background: #d4edda; color: #155724; }
+        .wrong-alert { background: #f8d7da; color: #721c24; }
+        #score-board { margin-top: 15px; font-size: 14px; color: #666; }
+    </style>
+</head>
+<body>
+
+<div class="quiz-container">
+    <div id="quiz-box">
+        <h3 id="question-text">Loading Quiz...</h3>
+        <div id="options-box"></div>
+        <button id="submit-btn" onclick="sendAnswer()">Submit Answer</button>
+        <div id="feedback"></div>
+        <div id="score-board"></div>
+    </div>
+</div>
+
+<script>
+    let selectedAnswer = null;
+    let nextQuestionData = null;
+
+    async function loadQuiz() {
+        const res = await fetch('/api/quiz/start');
+        const data = await res.json();
+        renderQuestion(data);
+    }
+
+    function renderQuestion(data) {
+        selectedAnswer = null;
+        nextQuestionData = null;
+        document.getElementById('submit-btn').style.display = 'none';
+        document.getElementById('feedback').style.display = 'none';
+        
+        document.getElementById('question-text').innerText = `Question ${data.index + 1}/${data.total}: ${data.question}`;
+        const optionsBox = document.getElementById('options-box');
+        optionsBox.innerHTML = '';
+        
+        data.options.forEach(opt => {
+            const btn = document.createElement('button');
+            btn.className = 'option-btn';
+            btn.innerText = opt;
+            btn.onclick = () => {
+                document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
+                btn.classList.add('selected');
+                selectedAnswer = opt;
+                document.getElementById('submit-btn').style.display = 'block';
+            };
+            optionsBox.appendChild(btn);
+        });
+        document.getElementById('score-board').innerText = '';
+    }
+
+    async function sendAnswer() {
+        if (!selectedAnswer) return;
+        
+        const res = await fetch('/api/quiz/submit', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ answer: selectedAnswer })
+        });
+        const data = await res.json();
+        
+        const feedback = document.getElementById('feedback');
+        feedback.style.display = 'block';
+        if (data.correct) {
+            feedback.className = 'correct-alert';
+            feedback.innerText = 'Correct answer!';
+        } else {
+            feedback.className = 'wrong-alert';
+            feedback.innerText = `Incorrect. Correct answer was: ${data.correctAnswer}`;
+        }
+        
+        document.getElementById('submit-btn').style.display = 'none';
+        
+        setTimeout(() => {
+            if (data.isFinished) {
+                document.getElementById('quiz-box').innerHTML = `<h2>Quiz Completed!</h2><h3>Your Final Score: ${data.score}</h3><button class='option-btn' onclick='location.reload()' style='text-align:center;background:#007bff;color:white;'>Play Again</button>`;
+            } else {
+                renderQuestion(data.nextQuestion);
+            }
+        }, 2000);
+    }
+
+    window.onload = loadQuiz;
+</script>
+</body>
+</html>
