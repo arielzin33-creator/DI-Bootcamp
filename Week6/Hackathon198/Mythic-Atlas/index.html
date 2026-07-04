@@ -17,11 +17,97 @@
 
 <body>
     <div id="map"></div>
+
     <div id="legend">
-        <strong>Legend</strong><br> Temple <br> Kingdom seat <br> Village <br> Kraken <br> Sea serpent
+        <strong>Legend</strong>
+        <div class="legend-item"><img src="./icons/temple.svg" /> Temple</div>
+        <div class="legend-item"><img src="./icons/castle.svg" /> Castle</div>
+        <div class="legend-item"><img src="./icons/village.svg" /> Village</div>
+        <div class="legend-item"><img src="./icons/ruin.svg" /> Ruin</div>
+        <div class="legend-item"><img src="./icons/kraken.svg" /> Kraken</div>
+        <div class="legend-item"><img src="./icons/serpent.svg" /> Sea Serpent</div>
     </div>
 
-    <!-- Welcome overlay: Full-screen,  shown on page load -->
+    <!-- Search box -->
+    <div id="search-box">
+        <input id="search-input" type="text" placeholder="Search a place..." />
+        <div id="search-results"></div>
+    </div>
+
+    <!-- Era time slider -->
+    <div id="era-slider">
+        <label id="era-label">Age of Creation</label>
+        <input id="slider" type="range" min="0" max="2" value="0" step="1" />
+        <div id="era-names">
+            <span>Creation</span>
+            <span>Heroes</span>
+            <span>Monsters</span>
+        </div>
+    </div>
+
+    <!-- Click-to-add lore -->
+    <button id="add-lore-btn">+ Add Myth</button>
+    <div id="add-lore-panel" class="hidden">
+        <strong>Add Your Own Myth</strong>
+        <input id="lore-name" type="text" placeholder="Name" />
+        <textarea id="lore-summary" placeholder="Lore summary..."></textarea>
+        <select id="lore-kind">
+            <option value="temple">Temple</option>
+            <option value="castle">Castle</option>
+            <option value="village">Village</option>
+            <option value="ruin">Ruin</option>
+            <option value="kraken">Kraken</option>
+            <option value="serpent">Sea Serpent</option>
+        </select>
+        <p id="lore-hint">Click anywhere on the map to place it.</p>
+        <button id="lore-cancel">Cancel</button>
+    </div>
+
+    <!-- Games button + menu -->
+    <button id="game-btn">⚔ Games</button>
+    <div id="game-menu" class="hidden">
+        <strong>Choose a Game</strong>
+        <button class="game-choice-btn" id="start-quiz-btn">
+            🗺 Mythology Quiz
+            <small>Guess where each place is on the map</small>
+        </button>
+        <button class="game-choice-btn" id="start-hunt-btn">
+            🐙 Creature Hunt
+            <small>Find sea monsters hiding in the fog</small>
+        </button>
+        <button id="game-menu-close">✕ Cancel</button>
+    </div>
+
+    <!-- Quiz panel -->
+    <div id="quiz-panel" class="hidden">
+        <div class="game-panel-header">
+            <span id="quiz-counter"></span>
+            <span id="quiz-score-display">0 pts</span>
+        </div>
+        <p class="game-instruction">Where in the world is this place?</p>
+        <blockquote id="quiz-text"></blockquote>
+        <div id="quiz-result" class="hidden">
+            <div id="quiz-place-name"></div>
+            <div id="quiz-distance"></div>
+            <div id="quiz-points-earned"></div>
+        </div>
+        <button id="quiz-next" class="hidden">Next →</button>
+        <button id="quiz-exit" class="game-exit-btn">✕ Exit Quiz</button>
+    </div>
+
+    <!-- Creature Hunt panel -->
+    <div id="hunt-panel" class="hidden">
+        <div class="game-panel-header">
+            <strong>🐙 Creature Hunt</strong>
+            <span id="hunt-score-display">0 found</span>
+        </div>
+        <p class="game-instruction">Click the ocean where you think this creature lurks.</p>
+        <blockquote id="hunt-clue"></blockquote>
+        <div id="hunt-feedback"></div>
+        <button id="hunt-exit" class="game-exit-btn">✕ Exit Hunt</button>
+    </div>
+
+    <!-- Welcome overlay -->
     <div id="intro-overlay">
         <h2>Mythic-Atlas</h2>
         <p>Explore the real Earth as it might have looked if the old myths were true.</p>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Quiz Game</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+    <div class="quiz-container">
+        <h1>Quiz Game</h1>
+
+        <div id="quiz-screen">
+            <p id="question-counter"></p>
+            <h2 id="question-text"></h2>
+
+            <div id="options-container"></div>
+
+            <button id="submit-btn" disabled>Submit Answer</button>
+
+            <p id="feedback"></p>
+        </div>
+
+        <div id="result-screen" class="hidden">
+            <h2>Quiz Complete!</h2>
+            <p id="final-score"></p>
+            <button id="restart-btn">Play Again</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

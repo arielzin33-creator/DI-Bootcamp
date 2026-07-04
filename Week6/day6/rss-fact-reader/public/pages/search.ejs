@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../partials/head') %>
+
+    <body>
+        <%- include('../partials/header') %>
+
+            <div class="container mt-4">
+                <h2 class="text-center mb-4">Search Facts</h2>
+
+                <div class="row">
+                    <!-- Search by Title -->
+                    <div class="col-md-6 mb-4">
+                        <div class="card p-3">
+                            <h5>Search by Title</h5>
+                            <form action="/search/title" method="POST">
+                                <div class="mb-3">
+                                    <input type="text" name="title" class="form-control" placeholder="Enter a fact title..." required />
+                                </div>
+                                <button type="submit" class="btn btn-primary w-100">Search</button>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Search by Category -->
+                    <div class="col-md-6 mb-4">
+                        <div class="card p-3">
+                            <h5>Search by Category</h5>
+                            <form action="/search/category" method="POST">
+                                <div class="mb-3">
+                                    <select name="category" class="form-select" required>
+                <option value="" disabled selected>Select a category</option>
+                <% if (typeof categories !== 'undefined' && categories) { %>
+                  <% categories.forEach(function(cat) { %>
+                    <option value="<%= cat %>"><%= cat %></option>
+                  <% }); %>
+                <% } %>
+              </select>
+                                </div>
+                                <button type="submit" class="btn btn-primary w-100">Search</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <%- include('../partials/posts', { posts: posts }) %>
+
+                <%- include('../partials/footer') %>
+
+                    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    </body>
+
+</html>

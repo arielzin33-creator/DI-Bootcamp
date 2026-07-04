@@ -1,57 +1,553 @@
-/* Mythic-Atlas Stylesheet: Theme and Layout Styles*/
+/* Mythic-Atlas Stylesheet */
 
-html,
-body,
-#map {
+html, body, #map {
     height: 100%;
     margin: 0;
+    font-family: Georgia, serif;
 }
 
+.hidden { display: none !important; }
+
 .ancient-tiles {
-    /* Apply CSS filters to create a vintage, aged appearance */
-    filter: sepia(0.65)/* Add 65% sepia tone (brownish tint) */
-    saturate(1.3) contrast(1.05) brightness(1.05) hue-rotate(-8deg);
-    /* Rotate hue slightly toward orange */
+    filter: sepia(0.65) saturate(1.3) brightness(1.05) hue-rotate(-8deg);
+}
+
+/* ---- Leaflet controls — parchment theme ---------------------------------- */
+
+.leaflet-control-zoom a,
+.leaflet-control-layers {
+    background: rgba(232, 217, 171, 0.95) !important;
+    border: 1px solid #8a6c42 !important;
+    border-radius: 0 !important;
+    color: #3a2510 !important;
+    font-family: Georgia, serif !important;
+}
+
+.leaflet-control-zoom a {
+    font-size: 18px !important;
+    line-height: 26px !important;
+    width: 28px !important;
+    height: 28px !important;
+}
+
+.leaflet-control-zoom a:hover {
+    background: rgba(200, 180, 120, 0.95) !important;
+}
+
+.leaflet-control-zoom-in {
+    border-bottom: 1px solid #8a6c42 !important;
+}
+
+.leaflet-control-layers {
+    padding: 6px 10px !important;
+    font-size: 13px !important;
+    box-shadow: none !important;
+}
+
+.leaflet-control-layers-separator {
+    border-top: 1px solid #8a6c42 !important;
+}
+
+.leaflet-control-attribution {
+    background: rgba(232, 217, 171, 0.8) !important;
+    font-family: Georgia, serif !important;
+    font-size: 10px !important;
+    color: #5a3a10 !important;
+}
+
+/* ---- Popups -------------------------------------------------------------- */
+
+.leaflet-popup-content-wrapper {
+    background: rgba(245, 235, 200, 0.98) !important;
+    border: 1px solid #8a6c42 !important;
+    border-radius: 0 !important;
+    box-shadow: 2px 3px 8px rgba(0,0,0,0.35) !important;
+}
+
+.leaflet-popup-tip {
+    background: rgba(245, 235, 200, 0.98) !important;
 }
 
 .popup-mythic {
-    font-family: Georgia, serif;
+    min-width: 180px;
+    max-width: 240px;
+}
+
+.popup-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 6px;
+}
+
+.popup-icon {
+    width: 28px;
+    height: 28px;
+    flex-shrink: 0;
 }
 
 .popup-mythic h3 {
-    margin: 0 0 4px;
-    letter-spacing: 1px;
+    margin: 0;
+    font-size: 14px;
+    letter-spacing: 0.5px;
+    color: #2a1505;
+    line-height: 1.3;
 }
+
+.popup-divider {
+    height: 1px;
+    background: #8a6c42;
+    margin: 6px 0;
+    opacity: 0.5;
+}
+
+.popup-mythic p {
+    margin: 0;
+    font-size: 12px;
+    color: #3a2510;
+    line-height: 1.5;
+}
+
+.popup-remove-btn {
+    margin-top: 6px;
+    width: 100%;
+    padding: 5px;
+    font-family: Georgia, serif;
+    font-size: 11px;
+    cursor: pointer;
+    border: 1px solid #8a4a20;
+    background: transparent;
+    color: #8a4a20;
+}
+
+.popup-remove-btn:hover {
+    background: rgba(138, 74, 32, 0.12);
+}
+
+.popup-era-note {
+    display: block;
+    margin-top: 6px;
+    font-size: 11px;
+    color: #8a4a20;
+    font-style: italic;
+}
+
+/* ---- Legend -------------------------------------------------------------- */
 
 #legend {
     position: absolute;
-    bottom: 20px;
+    bottom: 80px;
     left: 20px;
-    background: rgba(232, 217, 171, 0.5);
+    background: rgba(232, 217, 171, 0.95);
     padding: 10px 14px;
     border: 1px solid #8a6c42;
-    font-family: Georgia, serif;
+    font-size: 13px;
     z-index: 500;
-    /* Above map (z-index: 400), below overlays */
 }
+
+#legend strong {
+    display: block;
+    margin-bottom: 8px;
+    letter-spacing: 1px;
+    border-bottom: 1px solid #8a6c42;
+    padding-bottom: 4px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 5px;
+}
+
+.legend-item img {
+    width: 20px;
+    height: 20px;
+}
+
+/* ---- Search box ---------------------------------------------------------- */
+
+#search-box {
+    position: absolute;
+    top: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 500;
+    width: 280px;
+}
+
+#search-input {
+    width: 100%;
+    padding: 8px 12px;
+    font-family: Georgia, serif;
+    font-size: 13px;
+    border: 1px solid #8a6c42;
+    background: rgba(232, 217, 171, 0.97);
+    box-sizing: border-box;
+    color: #2a1505;
+    outline: none;
+}
+
+#search-input::placeholder {
+    color: #8a6c42;
+    font-style: italic;
+}
+
+#search-results {
+    background: rgba(240, 228, 190, 0.99);
+    border: 1px solid #8a6c42;
+    border-top: none;
+    font-size: 13px;
+}
+
+#search-results div {
+    padding: 7px 12px;
+    cursor: pointer;
+    color: #2a1505;
+    border-bottom: 1px solid rgba(138, 108, 66, 0.2);
+}
+
+#search-results div:hover {
+    background: rgba(180, 150, 90, 0.35);
+}
+
+/* ---- Era slider ---------------------------------------------------------- */
+
+#era-slider {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 500;
+    background: rgba(232, 217, 171, 0.95);
+    border: 1px solid #8a6c42;
+    padding: 10px 18px 8px;
+    text-align: center;
+    min-width: 280px;
+}
+
+#era-label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 6px;
+    letter-spacing: 1.5px;
+    font-size: 13px;
+    color: #2a1505;
+}
+
+#slider {
+    width: 100%;
+    accent-color: #8a6c42;
+    cursor: pointer;
+}
+
+#era-names {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: #5a4020;
+    margin-top: 3px;
+}
+
+/* ---- Add Myth ------------------------------------------------------------ */
+
+#add-lore-btn {
+    position: absolute;
+    bottom: 80px;
+    right: 20px;
+    z-index: 500;
+    padding: 8px 14px;
+    font-family: Georgia, serif;
+    font-size: 13px;
+    background: rgba(232, 217, 171, 0.97);
+    border: 1px solid #8a6c42;
+    cursor: pointer;
+    color: #2a1505;
+    letter-spacing: 0.5px;
+}
+
+#add-lore-btn:hover {
+    background: rgba(200, 175, 110, 0.97);
+}
+
+#add-lore-panel {
+    position: absolute;
+    bottom: 120px;
+    right: 20px;
+    z-index: 500;
+    background: rgba(240, 228, 190, 0.99);
+    border: 1px solid #8a6c42;
+    padding: 14px;
+    width: 220px;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    box-shadow: 2px 3px 8px rgba(0,0,0,0.25);
+}
+
+#add-lore-panel.hidden {
+    display: none;
+}
+
+#add-lore-panel strong {
+    font-size: 14px;
+    letter-spacing: 1px;
+    color: #2a1505;
+    border-bottom: 1px solid #8a6c42;
+    padding-bottom: 6px;
+}
+
+#lore-name, #lore-summary, #lore-kind {
+    font-family: Georgia, serif;
+    font-size: 12px;
+    border: 1px solid #8a6c42;
+    background: rgba(255, 248, 220, 0.95);
+    padding: 6px;
+    color: #2a1505;
+    outline: none;
+}
+
+#lore-summary {
+    height: 70px;
+    resize: vertical;
+}
+
+#lore-hint {
+    margin: 0;
+    font-size: 11px;
+    color: #5a4020;
+    font-style: italic;
+}
+
+#lore-cancel {
+    font-family: Georgia, serif;
+    font-size: 12px;
+    cursor: pointer;
+    padding: 5px;
+    border: 1px solid #8a6c42;
+    background: transparent;
+    color: #2a1505;
+}
+
+#lore-cancel:hover {
+    background: rgba(180, 150, 90, 0.3);
+}
+
+/* ---- Games --------------------------------------------------------------- */
+
+#game-btn {
+    position: absolute;
+    top: 80px;
+    left: 10px;
+    z-index: 500;
+    padding: 7px 14px;
+    font-family: Georgia, serif;
+    font-size: 13px;
+    background: rgba(232, 217, 171, 0.97);
+    border: 1px solid #8a6c42;
+    cursor: pointer;
+    color: #2a1505;
+    letter-spacing: 0.5px;
+}
+
+#game-btn:hover { background: rgba(200, 175, 110, 0.97); }
+
+#game-menu {
+    position: absolute;
+    top: 115px;
+    left: 10px;
+    z-index: 500;
+    background: rgba(240, 228, 190, 0.99);
+    border: 1px solid #8a6c42;
+    padding: 14px;
+    width: 260px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    box-shadow: 2px 3px 8px rgba(0,0,0,0.3);
+}
+
+#game-menu strong {
+    font-size: 14px;
+    letter-spacing: 1px;
+    color: #2a1505;
+    border-bottom: 1px solid #8a6c42;
+    padding-bottom: 6px;
+}
+
+.game-choice-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 3px;
+    padding: 10px 12px;
+    font-family: Georgia, serif;
+    font-size: 13px;
+    background: rgba(255, 248, 220, 0.9);
+    border: 1px solid #8a6c42;
+    cursor: pointer;
+    color: #2a1505;
+    text-align: left;
+}
+
+.game-choice-btn:hover { background: rgba(200, 175, 110, 0.5); }
+
+.game-choice-btn small {
+    font-size: 11px;
+    color: #5a4020;
+    font-style: italic;
+}
+
+#game-menu-close {
+    padding: 5px;
+    font-family: Georgia, serif;
+    font-size: 12px;
+    background: transparent;
+    border: 1px solid #8a6c42;
+    cursor: pointer;
+    color: #5a4020;
+    align-self: flex-end;
+}
+
+/* Quiz and Hunt shared panel styles */
+#quiz-panel, #hunt-panel {
+    position: absolute;
+    top: 115px;
+    left: 10px;
+    z-index: 500;
+    background: rgba(240, 228, 190, 0.99);
+    border: 1px solid #8a6c42;
+    padding: 14px;
+    width: 280px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    box-shadow: 2px 3px 10px rgba(0,0,0,0.35);
+    max-height: calc(100vh - 140px);
+    overflow-y: auto;
+}
+
+.game-panel-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #8a6c42;
+    padding-bottom: 6px;
+    font-size: 13px;
+    font-weight: bold;
+    color: #2a1505;
+    letter-spacing: 0.5px;
+}
+
+.game-instruction {
+    margin: 0;
+    font-size: 12px;
+    color: #5a4020;
+    font-style: italic;
+}
+
+#quiz-panel blockquote,
+#hunt-panel blockquote {
+    margin: 4px 0;
+    padding: 8px 10px;
+    border-left: 3px solid #8a6c42;
+    font-size: 12px;
+    color: #2a1505;
+    line-height: 1.6;
+    background: rgba(255, 248, 220, 0.6);
+}
+
+#quiz-result {
+    padding: 8px;
+    background: rgba(255, 248, 220, 0.8);
+    border: 1px solid #8a6c42;
+    font-size: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+#quiz-place-name { font-weight: bold; font-size: 13px; color: #2a1505; }
+#quiz-distance   { color: #5a4020; }
+#quiz-points-earned { font-weight: bold; color: #2a6a20; }
+
+#quiz-next {
+    padding: 8px;
+    font-family: Georgia, serif;
+    font-size: 13px;
+    background: rgba(42, 106, 32, 0.15);
+    border: 1px solid #2a6a20;
+    cursor: pointer;
+    color: #2a1505;
+    letter-spacing: 0.5px;
+}
+
+#quiz-next:hover { background: rgba(42, 106, 32, 0.3); }
+
+#hunt-feedback {
+    font-size: 12px;
+    min-height: 18px;
+    color: #2a1505;
+    font-style: italic;
+}
+
+.game-exit-btn {
+    margin-top: 4px;
+    padding: 6px;
+    font-family: Georgia, serif;
+    font-size: 11px;
+    background: transparent;
+    border: 1px solid #8a4a20;
+    cursor: pointer;
+    color: #8a4a20;
+    align-self: flex-end;
+}
+
+.game-exit-btn:hover { background: rgba(138, 74, 32, 0.12); }
+
+/* ---- Intro overlay ------------------------------------------------------- */
 
 #intro-overlay {
     position: fixed;
     inset: 0;
-    background: rgba(40, 30, 20, 0.85);
+    background: rgba(25, 18, 10, 0.9);
     color: #e8d9ab;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     z-index: 1000;
-    font-family: Georgia, serif;
     text-align: center;
+    padding: 20px;
+}
+
+#intro-overlay h2 {
+    font-size: 2.4rem;
+    letter-spacing: 4px;
+    margin-bottom: 10px;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.6);
+}
+
+#intro-overlay p {
+    font-size: 1rem;
+    max-width: 400px;
+    line-height: 1.6;
+    color: #d4c090;
 }
 
 #intro-overlay button {
-    margin-top: 16px;
-    padding: 8px 20px;
+    margin-top: 24px;
+    padding: 10px 28px;
     font-family: Georgia, serif;
+    font-size: 14px;
+    letter-spacing: 2px;
     cursor: pointer;
+    background: transparent;
+    border: 1px solid #e8d9ab;
+    color: #e8d9ab;
+    transition: background 0.2s;
+}
+
+#intro-overlay button:hover {
+    background: rgba(232, 217, 171, 0.15);
 }

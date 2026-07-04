@@ -1,0 +1,4 @@
+// daily-challenge/files/file-data.txt
+
+Hello! This is some sample text content stored in a file.
+It will be read using Node.js's built-in fs module.
