@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bookmark Manager</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="header-top">
+        <h1>&#128278; Bookmark Manager</h1>
+        <button id="theme-toggle" class="btn btn-theme" title="Toggle dark/light mode">&#9790;</button>
+      </div>
+      <p>Save and organize your favorite links</p>
+    </header>
+
+    <!-- Add Bookmark Form -->
+    <div class="card">
+      <h2>Add Bookmark</h2>
+      <form id="bookmark-form" novalidate>
+        <div class="form-group">
+          <label for="title-input">Title</label>
+          <input type="text" id="title-input" placeholder="My favorite site" autocomplete="off" />
+          <div class="error-msg" id="title-error">Please enter a title.</div>
+        </div>
+        <div class="form-group">
+          <label for="url-input">URL</label>
+          <input type="url" id="url-input" placeholder="https://example.com" autocomplete="off" />
+          <div class="error-msg" id="url-error">Please enter a valid URL.</div>
+        </div>
+        <button type="submit" class="btn btn-primary">&#43; Add Bookmark</button>
+      </form>
+    </div>
+
+    <!-- Bookmark List -->
+    <div class="card">
+      <div class="stats">
+        <h2 style="margin:0">Saved Bookmarks</h2>
+        <span class="count-badge" id="count">0</span>
+      </div>
+      <input type="text" id="search" placeholder="Search bookmarks..." />
+      <ul id="bookmark-list"></ul>
+      <div class="empty-state" id="empty-state">
+        <div class="icon">&#128278;</div>
+        <p>No bookmarks yet. Add one above!</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

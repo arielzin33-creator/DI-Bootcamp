@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Baking Paws Bakery</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #fff;
+            color: #1a1a5e;
+        }
+
+        /* ── Announcement Bar ── */
+        .announcement-bar {
+            background-color: #1a1a5e;
+            color: #fff;
+            text-align: center;
+            padding: 10px 20px;
+            font-size: 13px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        /* ── Navbar ── */
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 40px;
+            height: 72px;
+            background-color: #fff;
+            border-bottom: 1px solid #e8e8e8;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .navbar-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .navbar-logo img {
+            height: 48px;
+            width: auto;
+        }
+
+        .navbar-logo span {
+            font-family: 'Playfair Display', serif;
+            font-size: 22px;
+            color: #1a1a5e;
+            font-weight: 700;
+            line-height: 1;
+        }
+
+        .navbar-logo small {
+            display: block;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 9px;
+            letter-spacing: 3px;
+            color: #1a1a5e;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .navbar-links {
+            display: flex;
+            list-style: none;
+            gap: 36px;
+        }
+
+        .navbar-links a {
+            text-decoration: none;
+            color: #1a1a5e;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            transition: opacity 0.2s;
+        }
+
+        .navbar-links a:hover {
+            opacity: 0.6;
+        }
+
+        .navbar-icons {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .navbar-icons a {
+            text-decoration: none;
+            color: #1a1a5e;
+            display: flex;
+            align-items: center;
+        }
+
+        .navbar-icons svg {
+            width: 22px;
+            height: 22px;
+            stroke: #1a1a5e;
+            fill: none;
+            stroke-width: 1.8;
+            transition: opacity 0.2s;
+        }
+
+        .navbar-icons a:hover svg {
+            opacity: 0.6;
+        }
+
+        /* ── Hero Section ── */
+        .hero {
+            display: flex;
+            height: calc(100vh - 108px);
+            min-height: 520px;
+        }
+
+        .hero-image {
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .hero-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            display: block;
+        }
+
+        .hero-content {
+            flex: 0 0 45%;
+            background-color: #f5f0ea;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 60px 50px;
+        }
+
+        .hero-content h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 48px;
+            font-weight: 700;
+            color: #1a1a5e;
+            line-height: 1.2;
+            margin-bottom: 24px;
+        }
+
+        .hero-content p {
+            font-size: 15px;
+            color: #444;
+            line-height: 1.7;
+            max-width: 380px;
+            margin-bottom: 40px;
+        }
+
+        .hero-btn {
+            display: inline-block;
+            background-color: #1a1a5e;
+            color: #fff;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            padding: 18px 48px;
+            transition: background-color 0.25s, transform 0.2s;
+        }
+
+        .hero-btn:hover {
+            background-color: #2e2e8a;
+            transform: translateY(-1px);
+        }
+
+        /* ── Featured Strip ── */
+        .features {
+            display: flex;
+            background-color: #1a1a5e;
+            color: #fff;
+            text-align: center;
+        }
+
+        .feature-item {
+            flex: 1;
+            padding: 28px 20px;
+            border-right: 1px solid rgba(255,255,255,0.15);
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .feature-item:last-child {
+            border-right: none;
+        }
+
+        .feature-item span {
+            display: block;
+            margin-bottom: 8px;
+            line-height: 1;
+        }
+
+        /* ── Products Section ── */
+        .section-title {
+            text-align: center;
+            padding: 60px 20px 40px;
+        }
+
+        .section-title h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 38px;
+            color: #1a1a5e;
+            margin-bottom: 10px;
+        }
+
+        .section-title p {
+            font-size: 14px;
+            color: #666;
+            letter-spacing: 0.5px;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            max-width: 1200px;
+            margin: 0 auto 80px;
+            padding: 0 40px;
+            gap: 32px;
+        }
+
+        .product-card {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-card-img {
+            width: 100%;
+            aspect-ratio: 1;
+            object-fit: cover;
+            display: block;
+        }
+
+        .product-card-body {
+            padding: 18px 4px;
+        }
+
+        .product-card-body h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 20px;
+            color: #1a1a5e;
+            margin-bottom: 6px;
+        }
+
+        .product-card-body p {
+            font-size: 13px;
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 14px;
+        }
+
+        .product-card-body a {
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: #1a1a5e;
+            text-decoration: none;
+            border-bottom: 2px solid #1a1a5e;
+            padding-bottom: 2px;
+            transition: opacity 0.2s;
+        }
+
+        .product-card-body a:hover {
+            opacity: 0.6;
+        }
+
+        /* ── Story Banner ── */
+        .story-banner {
+            display: flex;
+            height: 420px;
+        }
+
+        .story-banner-content {
+            flex: 0 0 50%;
+            background-color: #1a1a5e;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 60px;
+        }
+
+        .story-banner-content h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 40px;
+            color: #fff;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .story-banner-content p {
+            font-size: 14px;
+            color: rgba(255,255,255,0.8);
+            line-height: 1.8;
+            margin-bottom: 32px;
+            max-width: 380px;
+        }
+
+        .story-banner-content a {
+            display: inline-block;
+            background-color: #fff;
+            color: #1a1a5e;
+            text-decoration: none;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            padding: 16px 40px;
+            transition: background-color 0.25s;
+            align-self: flex-start;
+        }
+
+        .story-banner-content a:hover {
+            background-color: #f5f0ea;
+        }
+
+        .story-banner-image {
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .story-banner-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* ── Locations Section ── */
+        .locations-section {
+            background-color: #f5f0ea;
+            padding: 80px 40px;
+        }
+
+        .locations-section .section-title {
+            padding-top: 0;
+        }
+
+        .locations-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .location-card {
+            background-color: #fff;
+            padding: 32px 28px;
+            border-top: 4px solid #1a1a5e;
+        }
+
+        .location-card h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 20px;
+            color: #1a1a5e;
+            margin-bottom: 12px;
+        }
+
+        .location-card p {
+            font-size: 13px;
+            color: #555;
+            line-height: 1.8;
+        }
+
+        .location-card .hours {
+            margin-top: 14px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: #1a1a5e;
+        }
+
+        /* ── Order Section ── */
+        .order-section {
+            padding: 80px 40px;
+            background-color: #fff;
+        }
+
+        .order-section .section-title {
+            padding-top: 0;
+        }
+
+        .order-form-wrapper {
+            max-width: 640px;
+            margin: 0 auto;
+            background-color: #f5f0ea;
+            padding: 52px 56px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 24px;
+        }
+
+        .form-group.full {
+            grid-column: 1 / -1;
+        }
+
+        .form-group label {
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: #1a1a5e;
+            margin-bottom: 8px;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            border: 1.5px solid #d0c8be;
+            background-color: #fff;
+            padding: 14px 16px;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 14px;
+            color: #333;
+            outline: none;
+            transition: border-color 0.2s;
+            appearance: none;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            border-color: #1a1a5e;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-submit {
+            display: block;
+            width: 100%;
+            background-color: #1a1a5e;
+            color: #fff;
+            border: none;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 13px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            padding: 18px;
+            cursor: pointer;
+            transition: background-color 0.25s, transform 0.2s;
+            margin-top: 8px;
+        }
+
+        .form-submit:hover {
+            background-color: #2e2e8a;
+            transform: translateY(-1px);
+        }
+
+        /* ── Footer ── */
+        footer {
+            background-color: #f5f0ea;
+            padding: 50px 40px 30px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            gap: 20px;
+        }
+
+        footer .footer-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 28px;
+            color: #1a1a5e;
+            font-weight: 700;
+        }
+
+        footer nav {
+            display: flex;
+            gap: 30px;
+        }
+
+        footer nav a {
+            text-decoration: none;
+            color: #1a1a5e;
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: opacity 0.2s;
+        }
+
+        footer nav a:hover {
+            opacity: 0.6;
+        }
+
+        footer p {
+            font-size: 12px;
+            color: #888;
+            border-top: 1px solid #ddd;
+            padding-top: 20px;
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Announcement Bar -->
+    <div class="announcement-bar">
+        Fresh From the Oven Every Morning &mdash; Order Before 10am for Same-Day Pickup
+    </div>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <a href="#home" class="navbar-logo">
+            <img src="Logo images/Baking Paws logo.png" alt="Baking Paws Logo"
+                 onerror="this.style.display='none'">
+            <div>
+                <span>Baking Paws</span>
+                <small>Bakery</small>
+            </div>
+        </a>
+
+        <ul class="navbar-links">
+            <li><a href="#menu">Cookies</a></li>
+            <li><a href="#order">Order</a></li>
+            <li><a href="#locations">Locations</a></li>
+            <li><a href="#story">About</a></li>
+        </ul>
+
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero" id="home">
+        <div class="hero-image">
+            <img
+                src="https://images.unsplash.com/photo-1558961363-fa8fdf82db35?w=1200&auto=format&fit=crop&q=80"
+                alt="Stack of freshly baked chocolate chip cookies">
+        </div>
+        <div class="hero-content">
+            <h1>Sweet &amp; Golden,<br>Baked with Love</h1>
+            <p>
+                With rich chocolate chunks and a perfectly crisp edge, our signature
+                cookie is the reason people line up around the block. Baked fresh every
+                morning &mdash; only while supplies last.
+            </p>
+            <a href="#menu" class="hero-btn">Shop All Cookies</a>
+        </div>
+    </section>
+
+    <!-- Feature Strip -->
+    <div class="features">
+        <div class="feature-item">
+            <span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.5" width="28" height="28">
+                    <circle cx="12" cy="12" r="9"/>
+                    <circle cx="9" cy="11" r="1" fill="#fff" stroke="none"/>
+                    <circle cx="14" cy="9" r="1" fill="#fff" stroke="none"/>
+                    <circle cx="15" cy="14" r="1" fill="#fff" stroke="none"/>
+                    <circle cx="10" cy="15" r="1" fill="#fff" stroke="none"/>
+                </svg>
+            </span>
+            Baked Fresh Daily
+        </div>
+        <div class="feature-item">
+            <span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.5" width="28" height="28">
+                    <rect x="1" y="3" width="15" height="13" rx="1"/>
+                    <path d="M16 8h4l3 5v4h-7V8z"/>
+                    <circle cx="5.5" cy="18.5" r="2.5"/>
+                    <circle cx="18.5" cy="18.5" r="2.5"/>
+                </svg>
+            </span>
+            Nationwide Shipping
+        </div>
+        <div class="feature-item">
+            <span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.5" width="28" height="28">
+                    <path d="M12 2C8 2 5 6 5 10c0 5 7 12 7 12s7-7 7-12c0-4-3-8-7-8z"/>
+                    <circle cx="12" cy="10" r="3"/>
+                </svg>
+            </span>
+            Natural Ingredients
+        </div>
+        <div class="feature-item">
+            <span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.5" width="28" height="28">
+                    <path d="M20 12V22H4V12"/>
+                    <path d="M22 7H2v5h20V7z"/>
+                    <path d="M12 22V7"/>
+                    <path d="M12 7H7.5a2.5 2.5 0 010-5C11 2 12 7 12 7z"/>
+                    <path d="M12 7h4.5a2.5 2.5 0 000-5C13 2 12 7 12 7z"/>
+                </svg>
+            </span>
+            Gift Boxes Available
+        </div>
+    </div>
+
+    <!-- Products / Menu -->
+    <section id="menu">
+        <div class="section-title">
+            <h2>Our Signature Treats</h2>
+            <p>Every batch made by hand, with ingredients you can actually pronounce.</p>
+        </div>
+
+        <div class="products-grid">
+            <div class="product-card">
+                <img class="product-card-img"
+                    src="https://images.unsplash.com/photo-1499636136210-6f4ee915583e?w=600&auto=format&fit=crop&q=80"
+                    alt="Chocolate Chip Cookies">
+                <div class="product-card-body">
+                    <h3>Classic Chocolate Chip</h3>
+                    <p>Our forever favourite &mdash; gooey centre, crispy edge, loaded with dark chocolate chunks.</p>
+                    <a href="#order">Order Now</a>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <img class="product-card-img"
+                    src="https://images.unsplash.com/photo-1509440159596-0249088772ff?w=600&auto=format&fit=crop&q=80"
+                    alt="Fresh Sourdough Bread">
+                <div class="product-card-body">
+                    <h3>Artisan Sourdough</h3>
+                    <p>72-hour cold ferment, blistered crust, and a chewy open crumb that speaks for itself.</p>
+                    <a href="#order">Order Now</a>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <img class="product-card-img"
+                    src="https://images.unsplash.com/photo-1483695028939-5bb13f8648b0?w=600&auto=format&fit=crop&q=80"
+                    alt="Cinnamon Rolls">
+                <div class="product-card-body">
+                    <h3>Cinnamon Rolls</h3>
+                    <p>Pillowy dough swirled with brown sugar &amp; cinnamon, finished with a vanilla cream glaze.</p>
+                    <a href="#order">Order Now</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Story Banner -->
+    <section class="story-banner" id="story">
+        <div class="story-banner-content">
+            <h2>Baked with<br>Heart Since 2018</h2>
+            <p>
+                What started as a tiny kitchen experiment has grown into a neighbourhood
+                institution. Every recipe is tested obsessively, every ingredient sourced
+                with care. We believe great baking is an act of love.
+            </p>
+        </div>
+        <div class="story-banner-image">
+            <img
+                src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=900&auto=format&fit=crop&q=80"
+                alt="Baker at work in the kitchen">
+        </div>
+    </section>
+
+    <!-- Locations -->
+    <section class="locations-section" id="locations">
+        <div class="section-title">
+            <h2>Find Us Near You</h2>
+            <p>Three locations, one obsession &mdash; perfect baked goods, every time.</p>
+        </div>
+        <div class="locations-grid">
+            <div class="location-card">
+                <h3>Downtown</h3>
+                <p>14 Baker Street<br>New York, NY 10001</p>
+                <p class="hours">Mon – Fri: 7am – 7pm<br>Sat – Sun: 8am – 5pm</p>
+            </div>
+            <div class="location-card">
+                <h3>Midtown</h3>
+                <p>88 Fifth Avenue<br>New York, NY 10018</p>
+                <p class="hours">Mon – Fri: 7am – 8pm<br>Sat – Sun: 9am – 6pm</p>
+            </div>
+            <div class="location-card">
+                <h3>Brooklyn</h3>
+                <p>3 Prospect Park West<br>Brooklyn, NY 11215</p>
+                <p class="hours">Mon – Fri: 8am – 6pm<br>Sat – Sun: 8am – 4pm</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Order Form -->
+    <section class="order-section" id="order">
+        <div class="section-title">
+            <h2>Place Your Order</h2>
+            <p>Fill in your details and we'll have it ready for pickup or delivery.</p>
+        </div>
+
+        <div class="order-form-wrapper">
+            <form action="#" method="post">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="username">Full Name</label>
+                        <input type="text" id="username" name="username" placeholder="Jane Smith" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" name="phone" placeholder="+1 (555) 000-0000" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group full">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" placeholder="jane@example.com" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group full">
+                        <label for="address">Delivery Address</label>
+                        <input type="text" id="address" name="address" placeholder="123 Main St, City, State, ZIP" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group full">
+                        <label for="item">Item</label>
+                        <select id="item" name="item" required>
+                            <option value="" disabled selected>Select a product&hellip;</option>
+                            <option value="chocolate-chip">Classic Chocolate Chip</option>
+                            <option value="sourdough">Artisan Sourdough</option>
+                            <option value="cinnamon-roll">Cinnamon Rolls</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group full">
+                        <label for="notes">Special Instructions</label>
+                        <textarea id="notes" name="notes" placeholder="Allergies, quantity, pickup time&hellip;"></textarea>
+                    </div>
+                </div>
+
+                <button type="submit" class="form-submit">Submit Order</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-logo">Baking Paws</div>
+        <nav>
+            <a href="#home">Home</a>
+            <a href="#menu">Menu</a>
+            <a href="#story">Our Story</a>
+            <a href="#locations">Locations</a>
+            <a href="#order">Order</a>
+        </nav>
+        <p>&copy; 2026 Baking Paws Bakery &mdash; All rights reserved.</p>
+    </footer>
+
+</body>
+</html>

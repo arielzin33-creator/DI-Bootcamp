@@ -1,0 +1,217 @@
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    background-color: #2A3439;
+    color: white;
+}
+
+.technology {
+    position: relative;
+    overflow: hidden;
+}
+
+.background-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: 0;
+}
+
+.technology .section-inner {
+    position: relative;
+    z-index: 1;
+}
+
+.navbar {
+    height: 60px;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    background-color: #2A3439;
+    position: fixed;
+    /* Keeps it in a fixed spot relative to the viewport */
+    top: 0;
+    /* Aligns it directly at the top of the screen */
+    width: 100%;
+    /* Stretches the navbar across the entire screen width */
+    z-index: 1000;
+    /* Ensures it stays on top of other content */
+}
+
+.navbar header {
+    width: 100%;
+}
+
+.navbar nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.navbar nav #header-img img {
+    height: 40px;
+    display: block;
+}
+
+.navbar ul {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: 20px;
+}
+
+.navbar ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+.navbar ul li a:hover {
+    text-decoration: underline;
+}
+
+#form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding: 40px 20px;
+}
+
+footer {
+    text-align: center;
+    padding: 30px 20px;
+    color: white;
+}
+
+footer p {
+    margin: 10px 0;
+}
+
+.social-links {
+    display: flex;
+    justify-content: center;
+    list-style: none;
+    margin: 16px 0;
+    padding: 0;
+    gap: 24px;
+}
+
+.social-links a {
+    color: white;
+    font-size: 28px;
+    transition: opacity 0.2s;
+}
+
+.social-links a:hover {
+    opacity: 0.7;
+}
+
+@media (max-width: 768px) {
+    .navbar nav {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+    }
+
+    .navbar {
+        height: auto;
+        padding: 12px 20px;
+    }
+
+    .section-inner {
+        padding: 28px 24px;
+    }
+
+    .carousel-slide {
+        flex: 0 0 80%;
+    }
+
+    #form {
+        padding: 24px 16px;
+    }
+}
+
+
+/* Sections */
+
+.section {
+    padding: 80px 20px;
+}
+
+.section-inner {
+    max-width: 860px;
+    margin: 0 auto;
+    background: rgba(10, 20, 40, 0.65);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 48px 56px;
+    backdrop-filter: blur(6px);
+}
+
+.section h2 {
+    font-size: 32px;
+    font-weight: 700;
+    margin: 0 0 20px 0;
+    letter-spacing: 1px;
+    color: #e8a030;
+}
+
+.section p {
+    font-size: 17px;
+    line-height: 1.8;
+    color: rgba(255, 255, 255, 0.88);
+    margin: 0;
+}
+
+
+/* Gallery carousel — pure CSS scroll snap */
+
+.gallery-carousel {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    padding-bottom: 12px;
+    margin-top: 28px;
+    scrollbar-width: thin;
+    scrollbar-color: #e8a030 rgba(255, 255, 255, 0.1);
+}
+
+.gallery-carousel::-webkit-scrollbar {
+    height: 5px;
+}
+
+.gallery-carousel::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+}
+
+.gallery-carousel::-webkit-scrollbar-thumb {
+    background: #e8a030;
+    border-radius: 4px;
+}
+
+.carousel-slide {
+    flex: 0 0 calc((100% - 32px) / 3);
+    scroll-snap-align: start;
+}
+
+.gallery-img {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: 10px;
+    border: 1px dashed rgba(255, 255, 255, 0.25);
+    background: rgba(255, 255, 255, 0.07);
+    display: block;
+}

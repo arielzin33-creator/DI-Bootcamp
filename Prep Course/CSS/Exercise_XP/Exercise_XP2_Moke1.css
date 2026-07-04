@@ -1,0 +1,57 @@
+/*  Exercise 4: Mock 1*/
+
+body {
+    background-color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.container {
+    width: 100%;
+    max-width: 800px;
+    border: 2px solid #000000;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    /* Vertical gap between rows and the footer */
+}
+
+.row {
+    display: flex;
+    gap: 20px;
+    /* Horizontal gap between the red and blue boxes */
+    width: 100%;
+}
+
+.box,
+.box-yellow {
+    border: 3px solid #000000;
+    height: 110px;
+    /* Controls uniform block heights */
+}
+
+.box-red {
+    background-color: #de6b6b;
+    /* Soft red/coral */
+    width: 25%;
+    /* Takes up roughly a quarter of the width */
+}
+
+.box-blue {
+    background-color: #8cb9f1;
+    /* Soft blue */
+    width: 75%;
+    /* Takes up the remaining space */
+    flex-grow: 1;
+}
+
+.box-yellow {
+    background-color: #fce18a;
+    /* Soft matte yellow */
+    width: 100%;
+    /* Spans the entire width of the container */
+}

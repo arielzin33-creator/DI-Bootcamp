@@ -1,0 +1,110 @@
+/* Exercise 1: Float*/
+
+Body {
+    margin: 0;
+    padding: 40px;
+    font-family: sans-serif;
+    background-color: #364371;
+}
+
+#nav {
+    background-color: #b0cfff;
+}
+
+#nav h2 {
+    margin-top: 0;
+    font-size: 24px;
+}
+
+#nav ul {
+    padding-left: 20px;
+}
+
+#nav li {
+    margin-bottom: 5px;
+}
+
+#nav a {
+    color: #0022cc;
+    font-weight: bold;
+}
+
+#wrap {
+    display: flex;
+    max-width: 900px;
+    margin: 0 auto;
+}
+
+#content {
+    background-color: #5b7fbd;
+    /* Medium blue panel */
+    width: 75%;
+    padding: 30px;
+    text-align: center;
+    /* Centers the heading, paragraph, and sonnet lines */
+}
+
+#content h1 {
+    margin-top: 0;
+    font-size: 32px;
+}
+
+#content p {
+    line-height: 1.4;
+    margin-bottom: 25px;
+}
+
+
+/* 5. Sonnet Lines Styling */
+
+#content ul {
+    list-style-type: none;
+    /* Removes the bullet points for the poem */
+    padding: 0;
+    margin: 0 auto 30px auto;
+    display: inline-block;
+    /* Helps keep the block centered but aligned nicely */
+}
+
+#content li {
+    margin-bottom: 4px;
+    font-size: 16px;
+}
+
+
+/* 6. Footer / Copyright Section */
+
+#content .copyright {
+    margin-top: 40px;
+    font-size: 14px;
+    /* Shifts the footer text outside of the main block style visually */
+    position: absolute;
+    left: 0;
+    right: 0;
+    transform: translateY(20px);
+}
+
+
+/* Making sure the copyright text color blends correctly below the panels */
+
+#wrap+#content .copyright,
+body {
+    color: #000000;
+}
+
+
+/* Adjusting footer placement so it sits beautifully underneath the layout */
+
+#content {
+    position: relative;
+}
+
+.copyright {
+    position: absolute;
+    top: 100%;
+    left: -33.33%;
+    /* Offsets it to sit across the bottom of both sections */
+    width: 133.33%;
+    text-align: center;
+    padding-top: 15px;
+}

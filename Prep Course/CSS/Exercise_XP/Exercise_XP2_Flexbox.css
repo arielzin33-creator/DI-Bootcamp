@@ -1,0 +1,68 @@
+/*  Exercise 3: Flexbox*/
+
+body {
+    background-color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.container {
+    width: 100%;
+    max-width: 800px;
+    border: 2px solid #000000;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    /* Generates the white gap between top and bottom blocks */
+}
+
+.top-row {
+    background-color: #9b72cb;
+    /* Matte purple */
+    border: 3px solid #000000;
+    height: 120px;
+    width: 100%;
+}
+
+.middle-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    /* Generates the white gaps between columns */
+    height: 250px;
+    /* Controls the height of the column grid */
+}
+
+.bottom-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    /* Generates the white gaps between columns */
+    height: 250px;
+    /* Controls the height of the column grid */
+}
+
+.col {
+    flex: 1;
+    /* Makes all 3 columns take up equal width dynamically */
+    border: 3px solid #000000;
+}
+
+.column-red {
+    background-color: #de6b6b;
+    /* Soft red/coral */
+}
+
+.column-green {
+    background-color: #8cc681;
+    /* Soft green */
+}
+
+.column-orange {
+    background-color: #fca11a;
+    /* Bright orange */
+}
