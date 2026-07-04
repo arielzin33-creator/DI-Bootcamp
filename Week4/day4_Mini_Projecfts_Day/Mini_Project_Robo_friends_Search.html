@@ -5,6 +5,92 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mini_Project_Robo_friends_Search</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #f4f4f4;
+        }
+
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #1f2937;
+            padding: 15px 30px;
+        }
+
+        .ROBOFRIENDS {
+            color: #fff;
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .search-form {
+            display: flex;
+            gap: 8px;
+        }
+
+        .search-form input[type="search"] {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 4px;
+            width: 220px;
+        }
+
+        .search-form button {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            background-color: #4f46e5;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .card-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            padding: 30px;
+        }
+
+        .robot-card {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+            width: 200px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .robot-card img {
+            width: 100%;
+            border-radius: 6px;
+        }
+
+        .robot-card h3 {
+            margin: 10px 0 5px;
+        }
+
+        .robot-card p {
+            margin: 2px 0;
+            font-size: 0.85rem;
+            color: #555;
+        }
+
+        .no-results {
+            text-align: center;
+            width: 100%;
+            color: #777;
+            font-size: 1.1rem;
+        }
+    </style>
 </head>
 
 <body>
@@ -12,16 +98,14 @@
         <!-- Clickable Logo Text -->
         <a href="#" class="ROBOFRIENDS">ROBOFRIENDS</a>
 
-        <form class="search-form" role="search" action="/search" method="get">
-            <input type="search" name="q" placeholder="Search..." aria-label="Search website">
+        <form class="search-form" id="searchForm" role="search">
+            <input type="search" id="searchBox" name="q" placeholder="Search..." aria-label="Search website">
             <button type="submit">Search</button>
         </form>
     </nav>
 
-
-
-
-
+    <!-- Container where the robot cards will be rendered -->
+    <div class="card-container" id="cardContainer"></div>
 
     <script src="Mini_Project_Robo_friends_Search.js"></script>
 </body>
