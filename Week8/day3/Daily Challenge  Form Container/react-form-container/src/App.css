@@ -1,0 +1,84 @@
+.App {
+  max-width: 480px;
+  margin: 40px auto;
+  padding: 0 20px;
+  font-family: "Segoe UI", Arial, sans-serif;
+}
+
+.form-container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.form-row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 12px;
+  border: none;
+  padding: 0;
+}
+
+.form-row label {
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.form-row input[type="text"],
+.form-row input[type="number"],
+.form-row select {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+fieldset.form-row {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  align-items: center;
+}
+
+fieldset.form-row label {
+  font-weight: 400;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+button[type="submit"] {
+  padding: 10px 16px;
+  background: #2f6fed;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  align-self: flex-start;
+}
+
+button[type="submit"]:hover {
+  background: #2559c4;
+}
+
+.form-values {
+  background: #f4f6f9;
+  border-radius: 6px;
+  padding: 16px 20px;
+}
+
+.form-values h3 {
+  margin-top: 0;
+}
+
+.form-values ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.form-values li {
+  padding: 2px 0;
+}
