@@ -1,0 +1,914 @@
+import React, { useState, useMemo, useRef, useCallback, useEffect } from 'react';
+
+/* ============================================================
+   Layered (Sugiyama-style) layout — zero dependencies.
+   ============================================================ */
+const DEFAULTS = {
+  direction: 'LR',
+  nodeWidth: 220,
+  nodeHeight: 70,
+  rankGap: 130,
+  nodeGap: 26,
+  groupPadding: 28,
+  laneGap: 56,
+};
+
+function nodeSize(node, opt) {
+  const ports = Math.max(node.inputs?.length ?? 1, node.outputs?.length ?? 1);
+  const extra = Math.max(0, ports - 1) * 20;
+  return { width: opt.nodeWidth, height: opt.nodeHeight + extra };
+}
+
+function findBackEdges(nodes, edges) {
+  const adj = new Map(nodes.map((n) => [n.id, []]));
+  for (const e of edges) if (adj.has(e.source)) adj.get(e.source).push(e);
+  const WHITE = 0, GREY = 1, BLACK = 2;
+  const color = new Map(nodes.map((n) => [n.id, WHITE]));
+  const back = new Set();
+  for (const start of nodes) {
+    if (color.get(start.id) !== WHITE) continue;
+    const stack = [{ id: start.id, i: 0 }];
+    color.set(start.id, GREY);
+    while (stack.length) {
+      const frame = stack[stack.length - 1];
+      const out = adj.get(frame.id) ?? [];
+      if (frame.i < out.length) {
+        const e = out[frame.i++];
+        const c = color.get(e.target);
+        if (c === GREY) back.add(e.id);
+        else if (c === WHITE) {
+          color.set(e.target, GREY);
+          stack.push({ id: e.target, i: 0 });
+        }
+      } else {
+        color.set(frame.id, BLACK);
+        stack.pop();
+      }
+    }
+  }
+  return back;
+}
+
+function assignRanks(nodes, edges, backEdges) {
+  const forward = edges.filter((e) => !backEdges.has(e.id));
+  const indeg = new Map(nodes.map((n) => [n.id, 0]));
+  const out = new Map(nodes.map((n) => [n.id, []]));
+  for (const e of forward) {
+    if (!indeg.has(e.target) || !out.has(e.source)) continue;
+    indeg.set(e.target, indeg.get(e.target) + 1);
+    out.get(e.source).push(e.target);
+  }
+  const rank = new Map(nodes.map((n) => [n.id, 0]));
+  const queue = nodes.filter((n) => indeg.get(n.id) === 0).map((n) => n.id);
+  queue.sort();
+  let head = 0;
+  while (head < queue.length) {
+    const id = queue[head++];
+    for (const t of out.get(id) ?? []) {
+      rank.set(t, Math.max(rank.get(t), rank.get(id) + 1));
+      indeg.set(t, indeg.get(t) - 1);
+      if (indeg.get(t) === 0) queue.push(t);
+    }
+  }
+  return rank;
+}
+
+function orderWithinRanks(nodes, edges, rank, lanes) {
+  const layers = new Map();
+  for (const n of nodes) {
+    const r = rank.get(n.id) ?? 0;
+    if (!layers.has(r)) layers.set(r, []);
+    layers.get(r).push(n.id);
+  }
+  for (const ids of layers.values()) ids.sort();
+
+  const pos = new Map();
+  for (const ids of layers.values()) ids.forEach((id, i) => pos.set(id, i));
+
+  const preds = new Map(nodes.map((n) => [n.id, []]));
+  const succs = new Map(nodes.map((n) => [n.id, []]));
+  for (const e of edges) {
+    if (!preds.has(e.target) || !succs.has(e.source)) continue;
+    preds.get(e.target).push(e.source);
+    succs.get(e.source).push(e.target);
+  }
+
+  const laneIndex = new Map((lanes ?? []).map((l, i) => [l, i]));
+  const nodeById = new Map(nodes.map((n) => [n.id, n]));
+  const laneOf = (id) => laneIndex.get(nodeById.get(id)?.lane) ?? Number.MAX_SAFE_INTEGER;
+
+  const sortedRanks = [...layers.keys()].sort((a, b) => a - b);
+
+  const sweep = (ranks, neighbours) => {
+    for (const r of ranks) {
+      const ids = layers.get(r);
+      const bary = new Map(
+        ids.map((id) => {
+          const ns = (neighbours.get(id) ?? []).map((x) => pos.get(x)).filter((v) => v !== undefined);
+          const b = ns.length ? ns.reduce((a, c) => a + c, 0) / ns.length : pos.get(id);
+          return [id, b];
+        })
+      );
+      ids.sort((a, b) => {
+        const la = laneOf(a), lb = laneOf(b);
+        if (la !== lb) return la - lb;
+        const d = bary.get(a) - bary.get(b);
+        return d !== 0 ? d : (a < b ? -1 : 1);
+      });
+      ids.forEach((id, i) => pos.set(id, i));
+    }
+  };
+
+  for (let pass = 0; pass < 4; pass++) {
+    sweep(sortedRanks.slice(1), preds);
+    sweep([...sortedRanks].reverse().slice(1), succs);
+  }
+  return { layers, pos, sortedRanks };
+}
+
+function layoutGraph(graph, options = {}) {
+  const opt = { ...DEFAULTS, ...options };
+  const horizontal = opt.direction === 'LR';
+  const isContainer = (n) => n.kind === 'group' || n.kind === 'folder';
+  const children = graph.nodes.filter((n) => !isContainer(n));
+  const containers = graph.nodes.filter(isContainer);
+
+  const backEdges = findBackEdges(children, graph.edges);
+  const rank = assignRanks(children, graph.edges, backEdges);
+  const { layers, pos, sortedRanks } = orderWithinRanks(children, graph.edges, rank, graph.lanes);
+
+  const sizes = new Map(children.map((n) => [n.id, nodeSize(n, opt)]));
+  const placed = new Map();
+  const childById = new Map(children.map((n) => [n.id, n]));
+
+  for (const r of sortedRanks) {
+    const ids = layers.get(r);
+    const along = r * (horizontal ? opt.nodeWidth + opt.rankGap : opt.nodeHeight + opt.rankGap);
+    const total = ids.reduce((acc, id) => {
+      const s = sizes.get(id);
+      return acc + (horizontal ? s.height : s.width) + opt.nodeGap;
+    }, -opt.nodeGap);
+
+    let cross = -total / 2;
+    let prevLane = null;
+    for (const id of ids) {
+      const s = sizes.get(id);
+      const lane = childById.get(id)?.lane ?? null;
+      if (prevLane !== null && lane !== prevLane) cross += opt.laneGap;
+      prevLane = lane;
+      placed.set(id, {
+        x: horizontal ? along : cross,
+        y: horizontal ? cross : along,
+        width: s.width, height: s.height, rank: r, order: pos.get(id),
+      });
+      cross += (horizontal ? s.height : s.width) + opt.nodeGap;
+    }
+  }
+
+  for (const c of containers) {
+    const kids = children.filter((n) => n.parent === c.id).map((n) => placed.get(n.id)).filter(Boolean);
+    if (!kids.length) {
+      placed.set(c.id, { x: 0, y: 0, width: opt.nodeWidth, height: opt.nodeHeight, rank: 0, order: 0 });
+      continue;
+    }
+    const minX = Math.min(...kids.map((k) => k.x)) - opt.groupPadding;
+    const minY = Math.min(...kids.map((k) => k.y)) - opt.groupPadding - 20;
+    const maxX = Math.max(...kids.map((k) => k.x + k.width)) + opt.groupPadding;
+    const maxY = Math.max(...kids.map((k) => k.y + k.height)) + opt.groupPadding;
+    placed.set(c.id, { x: minX, y: minY, width: maxX - minX, height: maxY - minY, rank: -1, order: 0 });
+  }
+
+  // Fallback: guarantee every node has a layout box, so the renderer can never
+  // dereference `undefined` and take the whole canvas down.
+  for (const n of graph.nodes) {
+    if (!placed.has(n.id)) {
+      placed.set(n.id, { x: 0, y: 0, width: opt.nodeWidth, height: opt.nodeHeight, rank: 0, order: 0 });
+    }
+  }
+
+  const nodes = graph.nodes.map((n) => ({ ...n, layout: placed.get(n.id) }));
+  const edges = graph.edges.map((e) => ({ ...e, isBackEdge: backEdges.has(e.id) }));
+
+  const all = [...placed.values()];
+  const bounds = all.length
+    ? {
+        x: Math.min(...all.map((p) => p.x)),
+        y: Math.min(...all.map((p) => p.y)),
+        width: Math.max(...all.map((p) => p.x + p.width)) - Math.min(...all.map((p) => p.x)),
+        height: Math.max(...all.map((p) => p.y + p.height)) - Math.min(...all.map((p) => p.y)),
+      }
+    : { x: 0, y: 0, width: 0, height: 0 };
+
+  return { nodes, edges, bounds, cycles: [...backEdges] };
+}
+
+function portAnchor(node, portId, side) {
+  const L = node.layout;
+  if (!L) return { x: 0, y: 0 };
+  const list = side === 'in' ? (node.inputs ?? [{ id: 'in' }]) : (node.outputs ?? [{ id: 'out' }]);
+  const i = Math.max(0, list.findIndex((p) => p.id === portId));
+  const frac = (i + 1) / (list.length + 1);
+  return { x: side === 'in' ? L.x : L.x + L.width, y: L.y + L.height * frac };
+}
+
+/* ============================================================
+   Theme tokens
+   ============================================================ */
+const THEME_CSS = `
+.fm { --fm-bg:#1a1a1e; --fm-grid:#2a2a30; --fm-surface:#26262c; --fm-surface-hi:#2f2f37;
+  --fm-border:#3a3a44; --fm-text:#e8e8ec; --fm-text-dim:#9a9aa6; --fm-edge:#55555f; --fm-edge-hi:#8b8b99;
+  --fm-entrypoint:#4ade80; --fm-screen:#60a5fa; --fm-component:#7dd3fc; --fm-api:#a78bfa; --fm-service:#f472b6;
+  --fm-logic:#fbbf24; --fm-decision:#fb923c; --fm-job:#22d3ee; --fm-store:#94a3b8; --fm-event:#c084fc;
+  --fm-external:#64748b; --fm-group:#3f3f4a; --fm-folder:#3f3f4a;
+  --fm-e-nav:#60a5fa; --fm-e-call:#8b8b99; --fm-e-data:#94a3b8; --fm-e-event:#c084fc; --fm-e-dep:#4a4a55; --fm-e-error:#f87171;
+  --fm-radius:10px; --fm-font: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --fm-mono: ui-monospace, "SF Mono", Menlo, monospace;
+  background: var(--fm-bg); color: var(--fm-text); font-family: var(--fm-font); }
+.fm-node { background: var(--fm-surface); border: 1px solid var(--fm-border);
+  border-left: 3px solid var(--fm-accent, var(--fm-service)); border-radius: var(--fm-radius);
+  padding: 10px 12px; box-shadow: 0 1px 3px rgba(0,0,0,.4); transition: background .12s, border-color .12s, transform .12s; }
+.fm-node:hover { background: var(--fm-surface-hi); border-color: var(--fm-edge-hi); }
+.fm-node--selected { outline: 2px solid var(--fm-accent); outline-offset: 1px; }
+.fm-node--inferred { border-style: dashed; opacity: .85; }
+.fm-node--drillable { cursor: pointer; }
+.fm-node--drillable:hover { transform: translateY(-1px); }
+.fm-node__label { font-size: 13px; font-weight: 600; line-height: 1.28; }
+.fm-node__kind { font-size: 10px; color: var(--fm-text-dim); text-transform: uppercase; letter-spacing: .05em; margin-top: 3px; }
+.fm-node__badge { position: absolute; top: 6px; right: 8px; font-size: 10px; color: var(--fm-text-dim); }
+.fm-node--external { border-style: dashed; }
+.fm-port { width:9px; height:9px; border-radius:50%; background: var(--fm-bg); border: 2px solid var(--fm-accent, var(--fm-edge)); }
+.fm-bar { display:flex; align-items:center; gap:6px; font-size:12px; color: var(--fm-text-dim);
+  background: rgba(26,26,30,.93); border: 1px solid var(--fm-border); border-radius: 8px; padding: 6px 10px; }
+.fm-bar button { background:none; border:none; color: var(--fm-text-dim); cursor:pointer; font: inherit; padding: 2px 4px; border-radius: 4px; }
+.fm-bar button:hover { color: var(--fm-text); background: var(--fm-surface-hi); }
+.fm-bar__current { color: var(--fm-text); font-weight: 600; }
+.fm-legend { font-size: 11px; background: rgba(26,26,30,.93); border: 1px solid var(--fm-border);
+  border-radius: 8px; padding: 8px 10px; display: grid; gap: 3px; }
+.fm-legend__row { display: flex; align-items: center; gap: 6px; color: var(--fm-text-dim); }
+.fm-legend__swatch { width: 8px; height: 8px; border-radius: 2px; }
+.fm-inspector { width: 290px; flex: 0 0 290px; padding: 14px; background: var(--fm-surface);
+  border-left: 1px solid var(--fm-border); overflow-y: auto; font-size: 12px; }
+.fm-inspector h3 { margin: 0 0 2px; font-size: 14px; }
+.fm-inspector__warn { color: #fbbf24; font-size: 11px; margin-top: 10px; border-left: 2px solid #fbbf24; padding-left: 8px; line-height:1.5; }
+.fm-zoom { display:flex; flex-direction:column; gap:4px; }
+.fm-zoom button { width: 30px; height: 28px; font-size: 13px; background: rgba(26,26,30,.93);
+  border: 1px solid var(--fm-border); color: var(--fm-text-dim); border-radius: 6px; cursor: pointer; }
+.fm-zoom button:hover { color: var(--fm-text); background: var(--fm-surface-hi); }
+`;
+
+const ACCENT = {
+  entrypoint: 'var(--fm-entrypoint)', screen: 'var(--fm-screen)', component: 'var(--fm-component)',
+  api: 'var(--fm-api)', service: 'var(--fm-service)', logic: 'var(--fm-logic)',
+  decision: 'var(--fm-decision)', job: 'var(--fm-job)', store: 'var(--fm-store)',
+  event: 'var(--fm-event)', external: 'var(--fm-external)', group: 'var(--fm-group)', folder: 'var(--fm-folder)',
+};
+const EDGE_COLOR = {
+  nav: 'var(--fm-e-nav)', call: 'var(--fm-e-call)', data: 'var(--fm-e-data)',
+  event: 'var(--fm-e-event)', dep: 'var(--fm-e-dep)', error: 'var(--fm-e-error)',
+};
+const EDGE_DASH = { event: '5 4', dep: '2 4' };
+
+const MIN_K = 0.12;
+const MAX_K = 2.5;
+const clampK = (k) => (Number.isFinite(k) && k > 0 ? Math.min(MAX_K, Math.max(MIN_K, k)) : 1);
+
+/* FIX 4: keep the graph tethered to the viewport. Without this you can drag the
+   whole diagram off-screen and be left looking at an empty grid — visually
+   indistinguishable from a crash. Always leave KEEP px of the graph on screen. */
+const KEEP = 140;
+function clampPan(x, y, k, size, bounds) {
+  if (!size.w || !size.h || !bounds.width || !bounds.height) return { x, y };
+  const gw = bounds.width * k, gh = bounds.height * k;
+  const ox = bounds.x * k, oy = bounds.y * k;
+  const minX = size.w - KEEP - ox - gw;
+  const maxX = KEEP - ox;
+  const minY = size.h - KEEP - oy - gh;
+  const maxY = KEEP - oy;
+  return {
+    x: Math.min(maxX, Math.max(minX, x)),
+    y: Math.min(maxY, Math.max(minY, y)),
+  };
+}
+
+function elbowPath(a, b, r = 12) {
+  const midX = a.x + (b.x - a.x) / 2;
+  if (Math.abs(a.y - b.y) < 2) return `M ${a.x},${a.y} L ${b.x},${b.y}`;
+  const dir = b.y > a.y ? 1 : -1;
+  const rr = Math.min(r, Math.abs(b.y - a.y) / 2, Math.abs(midX - a.x) || r);
+  return [
+    `M ${a.x},${a.y}`, `L ${midX - rr},${a.y}`, `Q ${midX},${a.y} ${midX},${a.y + rr * dir}`,
+    `L ${midX},${b.y - rr * dir}`, `Q ${midX},${b.y} ${midX + rr},${b.y}`, `L ${b.x},${b.y}`,
+  ].join(' ');
+}
+function backEdgePath(a, b) {
+  const y = Math.max(a.y, b.y) + 88;
+  return `M ${a.x},${a.y} C ${a.x + 60},${y} ${b.x - 60},${y} ${b.x},${b.y}`;
+}
+
+function NodeCard({ node, selected, onSelect, onDrill }) {
+  const L = node.layout;
+  if (!L) return null;
+  const kind = node.kind;
+  const accent = ACCENT[kind] ?? 'var(--fm-service)';
+  const drillable = Boolean(node.drilldown);
+  const ins = node.inputs ?? [{ id: 'in' }];
+  const outs = node.outputs ?? [{ id: 'out' }];
+
+  const cls = ['fm-node', `fm-node--${kind}`, selected && 'fm-node--selected',
+    node.inferred && 'fm-node--inferred', drillable && 'fm-node--drillable'].filter(Boolean).join(' ');
+
+  return (
+    <g transform={`translate(${L.x},${L.y})`}>
+      <foreignObject width={L.width} height={L.height} style={{ overflow: 'visible' }}>
+        <div className={cls}
+          style={{ '--fm-accent': accent, width: L.width, height: L.height, boxSizing: 'border-box', position: 'relative' }}
+          onPointerDown={(e) => e.stopPropagation()}
+          onClick={(e) => { e.stopPropagation(); onSelect(node.id); }}
+          onDoubleClick={(e) => { e.stopPropagation(); if (drillable) onDrill(node.drilldown, node.label); }}
+          title={drillable ? 'Double-click to open this phase' : (node.meta?.summary ?? '')}>
+          <div className="fm-node__label">{node.label}</div>
+          <div className="fm-node__kind">{kind}</div>
+          {drillable && <div className="fm-node__badge">&#10530;</div>}
+          {node.inferred && !drillable && <div className="fm-node__badge" style={{ color: 'var(--fm-logic)' }}>?</div>}
+        </div>
+      </foreignObject>
+      {ins.map((p, i) => (
+        <circle key={p.id} className="fm-port" cx={0} cy={(L.height * (i + 1)) / (ins.length + 1)}
+          r={4.5} fill="var(--fm-bg)" stroke={accent} strokeWidth={2} />
+      ))}
+      {outs.map((p, i) => {
+        const y = (L.height * (i + 1)) / (outs.length + 1);
+        return (
+          <g key={p.id}>
+            <circle cx={L.width} cy={y} r={4.5} fill="var(--fm-bg)" stroke={accent} strokeWidth={2} />
+            {p.label && outs.length > 1 && (
+              <text x={L.width + 9} y={y + 3} fill="var(--fm-text-dim)" fontSize={9}>{p.label}</text>
+            )}
+          </g>
+        );
+      })}
+    </g>
+  );
+}
+
+/* An error boundary so an unexpected throw shows a readable message
+   instead of an unexplained black rectangle. */
+class ErrorBoundary extends React.Component {
+  constructor(props) { super(props); this.state = { err: null, info: null }; }
+  static getDerivedStateFromError(err) { return { err }; }
+  componentDidCatch(err, info) { this.setState({ info }); }
+  render() {
+    if (this.state.err) {
+      const e = this.state.err;
+      return (
+        <div style={{ padding: 24, background: '#1a1a1e', color: '#e8e8ec', height: '100%',
+                      overflow: 'auto', fontFamily: 'ui-monospace, Menlo, monospace', fontSize: 12 }}>
+          <div style={{ color: '#f87171', fontSize: 14, marginBottom: 10 }}>The diagram failed to render.</div>
+          <pre style={{ whiteSpace: 'pre-wrap', margin: 0 }}>{String((e && e.message) || e)}</pre>
+          {e && e.stack && (
+            <pre style={{ whiteSpace: 'pre-wrap', marginTop: 10, color: '#9a9aa6', fontSize: 11 }}>{e.stack}</pre>
+          )}
+          {this.state.info && this.state.info.componentStack && (
+            <pre style={{ whiteSpace: 'pre-wrap', marginTop: 10, color: '#9a9aa6', fontSize: 11 }}>
+              {this.state.info.componentStack}
+            </pre>
+          )}
+          <button onClick={() => this.setState({ err: null, info: null })}
+            style={{ marginTop: 16, padding: '8px 14px', background: '#2f2f37', color: '#e8e8ec',
+                     border: '1px solid #3a3a44', borderRadius: 6, cursor: 'pointer' }}>
+            Try again
+          </button>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
+
+function FlowMapStandalone({ doc }) {
+  const [stack, setStack] = useState([{ id: doc.rootGraph, label: doc.graphs[doc.rootGraph].title }]);
+  const [selected, setSelected] = useState(null);
+  const [view, setView] = useState({ x: 0, y: 0, k: 1 });
+  const [size, setSize] = useState({ w: 0, h: 0 });
+  const [dragging, setDragging] = useState(false);
+  const wrapRef = useRef(null);
+  const drag = useRef(null);
+  const viewRef = useRef(view);
+  viewRef.current = view;
+  const sizeRef = useRef(size);
+  sizeRef.current = size;
+  const boundsRef = useRef({ x: 0, y: 0, width: 0, height: 0 });
+
+  const current = stack[stack.length - 1];
+  const graph = doc.graphs[current.id];
+  const laid = useMemo(() => layoutGraph(graph, { direction: 'LR' }), [graph]);
+  const byId = useMemo(() => Object.fromEntries(laid.nodes.map((n) => [n.id, n])), [laid]);
+  boundsRef.current = laid.bounds;
+
+  /* FIX 1: measure the container with a ResizeObserver instead of reading
+     getBoundingClientRect() once at mount. If the container is 0x0 when the
+     component mounts (hidden panel, iframe not laid out yet, background tab),
+     the old code computed scale(0) and rendered an invisible — i.e. black —
+     canvas that never recovered. Now we simply wait for a real size. */
+  useEffect(() => {
+    const el = wrapRef.current;
+    if (!el) return;
+    const measure = () => {
+      const r = el.getBoundingClientRect();
+      setSize((s) => (Math.abs(s.w - r.width) > 1 || Math.abs(s.h - r.height) > 1
+        ? { w: r.width, h: r.height } : s));
+    };
+    measure();
+    let ro;
+    if (typeof ResizeObserver !== 'undefined') {
+      ro = new ResizeObserver(measure);
+      ro.observe(el);
+    }
+    window.addEventListener('resize', measure);
+    return () => { if (ro) ro.disconnect(); window.removeEventListener('resize', measure); };
+  }, []);
+
+  const fit = useCallback(() => {
+    const { w: cw, h: ch } = size;
+    const B = laid.bounds;
+    if (!cw || !ch || !B.width || !B.height) return;      // never divide into a zero box
+    const k = clampK(Math.min(cw / (B.width + 140), ch / (B.height + 140), 1.15));
+    setView({ k, x: (cw - B.width * k) / 2 - B.x * k, y: (ch - B.height * k) / 2 - B.y * k });
+  }, [size, laid]);
+
+  useEffect(() => { fit(); }, [fit]);
+
+  const drill = useCallback((graphId, label) => {
+    if (!doc.graphs[graphId]) return;
+    setStack((s) => [...s, { id: graphId, label }]);
+    setSelected(null);
+  }, [doc]);
+  const popTo = useCallback((i) => { setStack((s) => s.slice(0, i + 1)); setSelected(null); }, []);
+
+  useEffect(() => {
+    const onKey = (e) => { if (e.key === 'Escape') setStack((s) => (s.length > 1 ? s.slice(0, -1) : s)); };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, []);
+
+  /* FIX 2: register wheel manually with { passive: false }. React attaches
+     onWheel passively, so e.preventDefault() silently failed ("Unable to
+     preventDefault inside passive event listener invocation") and the wheel
+     scrolled the *page* instead of zooming — scrolling the diagram out of
+     view, which looks exactly like a crash to black. */
+  useEffect(() => {
+    const el = wrapRef.current;
+    if (!el) return;
+    const onWheel = (e) => {
+      e.preventDefault();
+      const rect = el.getBoundingClientRect();
+      const mx = e.clientX - rect.left, my = e.clientY - rect.top;
+      const v = viewRef.current;
+      const k = clampK(v.k * (e.deltaY < 0 ? 1.12 : 1 / 1.12));
+      const c = clampPan(mx - ((mx - v.x) / v.k) * k, my - ((my - v.y) / v.k) * k,
+                         k, sizeRef.current, boundsRef.current);
+      setView({ k, x: c.x, y: c.y });
+    };
+    el.addEventListener('wheel', onWheel, { passive: false });
+    return () => el.removeEventListener('wheel', onWheel);
+  }, []);
+
+  const zoomBy = (factor) => {
+    const v = viewRef.current;
+    const cx = size.w / 2, cy = size.h / 2;
+    const k = clampK(v.k * factor);
+    const c = clampPan(cx - ((cx - v.x) / v.k) * k, cy - ((cy - v.y) / v.k) * k,
+                       k, sizeRef.current, boundsRef.current);
+    setView({ k, x: c.x, y: c.y });
+  };
+
+  /* FIX 3: the pan handler used to read `drag.current.x` INSIDE the setView
+     updater. The `if (!drag.current) return` guard runs at event time, but React
+     invokes the updater later during the render phase — by which point pointerup
+     may already have set drag.current = null, throwing
+     "Cannot read properties of null (reading 'x')" and killing the canvas.
+     Read the ref once, into locals, before handing anything to setState.
+     Pointer events + pointer capture also mean a drag can no longer be orphaned
+     by the cursor leaving the SVG mid-gesture. */
+  const onDown = (e) => {
+    const v = viewRef.current;
+    drag.current = { x: e.clientX - v.x, y: e.clientY - v.y };
+    setDragging(true);
+    try { if (e.pointerId != null) e.currentTarget.setPointerCapture(e.pointerId); } catch (_) { /* non-fatal */ }
+  };
+  const onMove = (e) => {
+    const d = drag.current;                 // snapshot the ref, never close over it
+    if (!d) return;
+    const v0 = viewRef.current;
+    const c = clampPan(e.clientX - d.x, e.clientY - d.y, v0.k, sizeRef.current, boundsRef.current);
+    setView((v) => (v.x === c.x && v.y === c.y ? v : { ...v, x: c.x, y: c.y }));
+  };
+  const onUp = (e) => {
+    drag.current = null;
+    setDragging(false);
+    try { if (e && e.pointerId != null) e.currentTarget.releasePointerCapture(e.pointerId); } catch (_) { /* non-fatal */ }
+  };
+
+  const sel = selected ? byId[selected] : null;
+  const kinds = [...new Set(laid.nodes.map((n) => n.kind))];
+  const shortTitle = (t) => t.replace(/^Phase (\d+).*$/, 'Phase $1').replace(/ — .*$/, '');
+
+  return (
+    <div className="fm" style={{ display: 'flex', width: '100%', height: '100%', position: 'relative', overflow: 'hidden' }}>
+      <style>{THEME_CSS}</style>
+      <div ref={wrapRef} style={{ flex: '1 1 auto', position: 'relative', overflow: 'hidden', minWidth: 0 }}>
+
+        <div style={{ position: 'absolute', top: 12, left: 12, zIndex: 10, display: 'flex', gap: 8, flexWrap: 'wrap', maxWidth: 'calc(100% - 90px)' }}>
+          <div className="fm-bar">
+            {stack.map((s, i) => (
+              <React.Fragment key={s.id + i}>
+                {i > 0 && <span>/</span>}
+                {i === stack.length - 1
+                  ? <span className="fm-bar__current">{s.label}</span>
+                  : <button onClick={() => popTo(i)}>{s.label}</button>}
+              </React.Fragment>
+            ))}
+          </div>
+          {doc.views?.length > 1 && (
+            <div className="fm-bar">
+              {doc.views.map((v) => (
+                <button key={v}
+                  style={{ color: current.id === v ? 'var(--fm-text)' : undefined, fontWeight: current.id === v ? 600 : 400 }}
+                  onClick={() => { setStack([{ id: v, label: doc.graphs[v].title }]); setSelected(null); }}>
+                  {shortTitle(doc.graphs[v].title)}
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* A manual escape hatch: whatever happens to the viewport, Fit brings
+            the graph back. Previously there was no way to recover a lost view. */}
+        <div className="fm-zoom" style={{ position: 'absolute', top: 12, right: 12, zIndex: 10 }}>
+          <button onClick={() => zoomBy(1.25)} title="Zoom in">+</button>
+          <button onClick={() => zoomBy(1 / 1.25)} title="Zoom out">&minus;</button>
+          <button onClick={fit} title="Fit to screen" style={{ fontSize: 11 }}>Fit</button>
+        </div>
+
+        <div className="fm-legend" style={{ position: 'absolute', bottom: 12, left: 12, zIndex: 10 }}>
+          {kinds.map((k) => (
+            <div className="fm-legend__row" key={k}>
+              <span className="fm-legend__swatch" style={{ background: ACCENT[k] ?? 'var(--fm-service)' }} />{k}
+            </div>
+          ))}
+          <div className="fm-legend__row" style={{ marginTop: 4, borderTop: '1px solid var(--fm-border)', paddingTop: 4 }}>
+            <span style={{ border: '1px dashed var(--fm-text-dim)', width: 8, height: 8, display: 'inline-block' }} />
+            inferred — planned, not yet executed
+          </div>
+        </div>
+
+        <div style={{ position: 'absolute', bottom: 12, right: 12, zIndex: 10, fontSize: 11, color: 'var(--fm-text-dim)',
+          background: 'rgba(26,26,30,.93)', border: '1px solid var(--fm-border)', borderRadius: 8, padding: '6px 10px' }}>
+          Double-click a phase to open it · drag to pan · scroll to zoom · Esc to go back
+        </div>
+
+        <svg width="100%" height="100%"
+          style={{ cursor: dragging ? 'grabbing' : 'grab', display: 'block', touchAction: 'none' }}
+          onPointerDown={onDown} onPointerMove={onMove} onPointerUp={onUp} onPointerCancel={onUp}
+          onClick={() => setSelected(null)}>
+          <defs>
+            <pattern id="fm-grid" width={24} height={24} patternUnits="userSpaceOnUse">
+              <circle cx={1} cy={1} r={1} fill="var(--fm-grid)" />
+            </pattern>
+            {Object.entries(EDGE_COLOR).map(([k, c]) => (
+              <marker key={k} id={`fm-arrow-${k}`} markerWidth={8} markerHeight={8} refX={7} refY={4} orient="auto">
+                <path d="M0,1 L7,4 L0,7 z" fill={c} />
+              </marker>
+            ))}
+          </defs>
+          <rect width="100%" height="100%" fill="url(#fm-grid)" />
+          <g transform={`translate(${view.x},${view.y}) scale(${view.k})`}>
+            {laid.edges.map((e) => {
+              const s = byId[e.source], t = byId[e.target];
+              if (!s || !t || !s.layout || !t.layout) return null;
+              const a = portAnchor(s, e.sourcePort ?? (s.outputs?.[0]?.id ?? 'out'), 'out');
+              const b = portAnchor(t, e.targetPort ?? (t.inputs?.[0]?.id ?? 'in'), 'in');
+              const color = EDGE_COLOR[e.kind] ?? 'var(--fm-edge)';
+              const d = e.isBackEdge ? backEdgePath(a, b) : elbowPath(a, b);
+              const dim = selected && e.source !== selected && e.target !== selected;
+              return (
+                <g key={e.id} opacity={dim ? 0.22 : 1}>
+                  <path d={d} fill="none" stroke={color} strokeWidth={e.kind === 'dep' ? 1 : 1.6}
+                    strokeDasharray={e.isBackEdge ? '5 4' : EDGE_DASH[e.kind]}
+                    markerEnd={e.kind === 'dep' ? undefined : `url(#fm-arrow-${e.kind})`} />
+                  {e.label && (
+                    <text x={(a.x + b.x) / 2} y={(a.y + b.y) / 2 - 6} fill="var(--fm-text-dim)" fontSize={10} textAnchor="middle"
+                      style={{ paintOrder: 'stroke', stroke: 'var(--fm-bg)', strokeWidth: 4 }}>{e.label}</text>
+                  )}
+                </g>
+              );
+            })}
+            {laid.nodes.map((n) => (
+              <NodeCard key={n.id} node={n} selected={selected === n.id} onSelect={setSelected} onDrill={drill} />
+            ))}
+          </g>
+        </svg>
+      </div>
+
+      {sel && (
+        <div className="fm-inspector">
+          <h3>{sel.label}</h3>
+          <div className="fm-node__kind">{sel.kind}</div>
+          {sel.meta?.summary && <p style={{ marginTop: 10, lineHeight: 1.55 }}>{sel.meta.summary}</p>}
+          {sel.inferred && (
+            <div className="fm-inspector__warn">
+              Planned / inferred from the AAAEE system prompt. This phase has not been executed yet.
+            </div>
+          )}
+          {sel.drilldown && (
+            <button style={{ marginTop: 14, width: '100%', padding: '8px', background: 'var(--fm-surface-hi)',
+              color: 'var(--fm-text)', border: '1px solid var(--fm-border)', borderRadius: 6, cursor: 'pointer' }}
+              onClick={() => drill(sel.drilldown, sel.label)}>
+              Open {sel.label} &rarr;
+            </button>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+
+/* The flow.json IR for the AAAEE 7-phase pipeline (spec mode). */
+const doc = {
+  "version": "1.0",
+  "project": {
+    "name": "AAAEE — Agnostic App Architecture & Execution Engine",
+    "source": "spec",
+    "generatedAt": "2026-08-03"
+  },
+  "views": ["system", "phase1", "phase2", "phase3", "phase4", "phase5", "phase6", "phase7"],
+  "rootGraph": "system",
+  "assumptions": [
+    "This map models the AAAEE discovery/build PROCESS defined in the system prompt (the 7-phase gatekeeper pipeline) — not the Vector LLM Capstone app's own internal software architecture, since that architecture will only be finalized once Phases 5 and 6 are actually run in this conversation.",
+    "Assumed each phase ends in a binary Approve/Revise gate, since the system prompt's 'Linear Gatekeeper Execution' rule requires explicit user approval before advancing but does not name the approval mechanism.",
+    "Assumed a 'Revise' outcome loops back to redo the SAME phase rather than restarting the whole pipeline from Phase 1, since the prompt only states that phases are sequential and gated, not what a rejection does.",
+    "Assumed the 'Project Ledger' is a single running store updated after every phase, since the prompt requires it to be maintained 'at the bottom of every turn' but does not specify a storage mechanism.",
+    "The questions and deliverables listed inside each phase's sub-diagram are transcribed directly from the system prompt's own phase definitions; nothing beyond what that document states has been added or guessed.",
+    "Because no phase has been executed yet in this conversation, every node here is necessarily a plan, not an observed system — this diagram will need to be revisited/expanded once each phase actually produces its real deliverables."
+  ],
+  "graphs": {
+
+    "system": {
+      "id": "system",
+      "title": "AAAEE Pipeline — System Overview",
+      "kind": "system",
+      "nodes": [
+        { "id": "entry", "label": "New App Build Request", "kind": "entrypoint", "inferred": true,
+          "outputs": [{ "id": "out", "label": "Start" }],
+          "meta": { "summary": "User initiates the AAAEE engine to design a new application end-to-end." } },
+
+        { "id": "p1", "label": "Phase 1 — Foundational Strategy & Financial Objectives", "kind": "service",
+          "drilldown": "phase1", "inferred": true,
+          "meta": { "summary": "Establishes business goal, ARR/ROI timeline, target platforms, and CapEx/OpEx envelope." } },
+        { "id": "g1", "label": "Phase 1 Approved?", "kind": "decision", "inferred": true,
+          "outputs": [{ "id": "approve", "label": "Approved" }, { "id": "revise", "label": "Revise" }] },
+
+        { "id": "p2", "label": "Phase 2 — Business Plan, MRD & PRD", "kind": "service",
+          "drilldown": "phase2", "inferred": true,
+          "meta": { "summary": "Defines TAM/SAM/SOM, competitive moat, GTM motion, and prioritized feature requirements." } },
+        { "id": "g2", "label": "Phase 2 Approved?", "kind": "decision", "inferred": true,
+          "outputs": [{ "id": "approve", "label": "Approved" }, { "id": "revise", "label": "Revise" }] },
+
+        { "id": "p3", "label": "Phase 3 — Financial Modeling & OpEx Calculator", "kind": "service",
+          "drilldown": "phase3", "inferred": true,
+          "meta": { "summary": "Models DAU/MAU growth, data ingestion load, and CAC/LTV unit economics." } },
+        { "id": "g3", "label": "Phase 3 Approved?", "kind": "decision", "inferred": true,
+          "outputs": [{ "id": "approve", "label": "Approved" }, { "id": "revise", "label": "Revise" }] },
+
+        { "id": "p4", "label": "Phase 4 — UX/UI Architecture & Information Dynamics", "kind": "service",
+          "drilldown": "phase4", "inferred": true,
+          "meta": { "summary": "Maps core user journeys, accessibility targets, and visual/branding language." } },
+        { "id": "g4", "label": "Phase 4 Approved?", "kind": "decision", "inferred": true,
+          "outputs": [{ "id": "approve", "label": "Approved" }, { "id": "revise", "label": "Revise" }] },
+
+        { "id": "p5", "label": "Phase 5 — General System Architecture", "kind": "service",
+          "drilldown": "phase5", "inferred": true,
+          "meta": { "summary": "Decides topology (monolith/microservices/serverless), CAP trade-offs, and data persistence model." } },
+        { "id": "g5", "label": "Phase 5 Approved?", "kind": "decision", "inferred": true,
+          "outputs": [{ "id": "approve", "label": "Approved" }, { "id": "revise", "label": "Revise" }] },
+
+        { "id": "p6", "label": "Phase 6 — Deep Technical Spec & Stack Selection", "kind": "service",
+          "drilldown": "phase6", "inferred": true,
+          "meta": { "summary": "Locks performance SLAs, security/compliance posture, and the final technology stack." } },
+        { "id": "g6", "label": "Phase 6 Approved?", "kind": "decision", "inferred": true,
+          "outputs": [{ "id": "approve", "label": "Approved" }, { "id": "revise", "label": "Revise" }] },
+
+        { "id": "p7", "label": "Phase 7 — Implementation Roadmap, QA & Deployment", "kind": "service",
+          "drilldown": "phase7", "inferred": true,
+          "meta": { "summary": "Produces the sprint plan, QA/load-testing matrix, and zero-downtime deployment plan." } },
+        { "id": "g7", "label": "Final QA & Deployment Approved?", "kind": "decision", "inferred": true,
+          "outputs": [{ "id": "approve", "label": "Approved" }, { "id": "revise", "label": "Revise" }] },
+
+        { "id": "ledger", "label": "Project Ledger (Living Doc)", "kind": "store", "inferred": true,
+          "meta": { "summary": "Cumulative record of business goal, CapEx/OpEx estimate, selected stack, and phase-completion status — updated every turn." } },
+
+        { "id": "final", "label": "Approved for Build — Handoff to Execution", "kind": "service", "inferred": true,
+          "meta": { "summary": "All 7 phases approved; the app is fully specified and ready for actual development to begin." } }
+      ],
+      "edges": [
+        { "id": "e.entry-p1", "source": "entry", "target": "p1", "kind": "call", "inferred": true },
+
+        { "id": "e.p1-g1", "source": "p1", "target": "g1", "kind": "call", "inferred": true },
+        { "id": "e.p1-ledger", "source": "p1", "target": "ledger", "kind": "data", "label": "Update Ledger", "inferred": true },
+        { "id": "e.g1-p2", "source": "g1", "sourcePort": "approve", "target": "p2", "kind": "call", "label": "Approved", "inferred": true },
+        { "id": "e.g1-p1", "source": "g1", "sourcePort": "revise", "target": "p1", "kind": "call", "label": "Revise", "inferred": true },
+
+        { "id": "e.p2-g2", "source": "p2", "target": "g2", "kind": "call", "inferred": true },
+        { "id": "e.p2-ledger", "source": "p2", "target": "ledger", "kind": "data", "label": "Update Ledger", "inferred": true },
+        { "id": "e.g2-p3", "source": "g2", "sourcePort": "approve", "target": "p3", "kind": "call", "label": "Approved", "inferred": true },
+        { "id": "e.g2-p2", "source": "g2", "sourcePort": "revise", "target": "p2", "kind": "call", "label": "Revise", "inferred": true },
+
+        { "id": "e.p3-g3", "source": "p3", "target": "g3", "kind": "call", "inferred": true },
+        { "id": "e.p3-ledger", "source": "p3", "target": "ledger", "kind": "data", "label": "Update Ledger", "inferred": true },
+        { "id": "e.g3-p4", "source": "g3", "sourcePort": "approve", "target": "p4", "kind": "call", "label": "Approved", "inferred": true },
+        { "id": "e.g3-p3", "source": "g3", "sourcePort": "revise", "target": "p3", "kind": "call", "label": "Revise", "inferred": true },
+
+        { "id": "e.p4-g4", "source": "p4", "target": "g4", "kind": "call", "inferred": true },
+        { "id": "e.p4-ledger", "source": "p4", "target": "ledger", "kind": "data", "label": "Update Ledger", "inferred": true },
+        { "id": "e.g4-p5", "source": "g4", "sourcePort": "approve", "target": "p5", "kind": "call", "label": "Approved", "inferred": true },
+        { "id": "e.g4-p4", "source": "g4", "sourcePort": "revise", "target": "p4", "kind": "call", "label": "Revise", "inferred": true },
+
+        { "id": "e.p5-g5", "source": "p5", "target": "g5", "kind": "call", "inferred": true },
+        { "id": "e.p5-ledger", "source": "p5", "target": "ledger", "kind": "data", "label": "Update Ledger", "inferred": true },
+        { "id": "e.g5-p6", "source": "g5", "sourcePort": "approve", "target": "p6", "kind": "call", "label": "Approved", "inferred": true },
+        { "id": "e.g5-p5", "source": "g5", "sourcePort": "revise", "target": "p5", "kind": "call", "label": "Revise", "inferred": true },
+
+        { "id": "e.p6-g6", "source": "p6", "target": "g6", "kind": "call", "inferred": true },
+        { "id": "e.p6-ledger", "source": "p6", "target": "ledger", "kind": "data", "label": "Update Ledger", "inferred": true },
+        { "id": "e.g6-p7", "source": "g6", "sourcePort": "approve", "target": "p7", "kind": "call", "label": "Approved", "inferred": true },
+        { "id": "e.g6-p6", "source": "g6", "sourcePort": "revise", "target": "p6", "kind": "call", "label": "Revise", "inferred": true },
+
+        { "id": "e.p7-g7", "source": "p7", "target": "g7", "kind": "call", "inferred": true },
+        { "id": "e.p7-ledger", "source": "p7", "target": "ledger", "kind": "data", "label": "Update Ledger", "inferred": true },
+        { "id": "e.g7-final", "source": "g7", "sourcePort": "approve", "target": "final", "kind": "call", "label": "Approved", "inferred": true },
+        { "id": "e.g7-p7", "source": "g7", "sourcePort": "revise", "target": "p7", "kind": "call", "label": "Revise", "inferred": true }
+      ]
+    },
+
+    "phase1": {
+      "id": "phase1", "title": "Phase 1 — Foundational Strategy", "kind": "runtime",
+      "nodes": [
+        { "id": "phase1.entry", "label": "Phase 1 Kickoff", "kind": "entrypoint", "inferred": true,
+          "meta": { "summary": "Discovery questions: ultimate goal (bootstrapped / venture-backed / internal tool / passive SaaS)? Target ARR or ROI timeline? Target audience & platforms (web/iOS/Android/desktop/IoT, native vs. cross-platform vs. PWA)? Initial CapEx vs. monthly OpEx capacity?" } },
+        { "id": "phase1.draft", "label": "Synthesize Strategic Direction", "kind": "logic", "inferred": true },
+        { "id": "phase1.d1", "label": "App Concept Validation & Viability Score", "kind": "store", "inferred": true },
+        { "id": "phase1.d2", "label": "Recommended App Ideas (Aligned to Financial Goal)", "kind": "store", "inferred": true },
+        { "id": "phase1.d3", "label": "Platform & Stack Paradigm Recommendation", "kind": "store", "inferred": true },
+        { "id": "phase1.exit", "label": "Phase 1 Deliverables Package", "kind": "service", "inferred": true }
+      ],
+      "edges": [
+        { "id": "e.p1.entry-draft", "source": "phase1.entry", "target": "phase1.draft", "kind": "call", "inferred": true },
+        { "id": "e.p1.draft-d1", "source": "phase1.draft", "target": "phase1.d1", "kind": "data", "inferred": true },
+        { "id": "e.p1.draft-d2", "source": "phase1.draft", "target": "phase1.d2", "kind": "data", "inferred": true },
+        { "id": "e.p1.draft-d3", "source": "phase1.draft", "target": "phase1.d3", "kind": "data", "inferred": true },
+        { "id": "e.p1.d1-exit", "source": "phase1.d1", "target": "phase1.exit", "kind": "data", "inferred": true },
+        { "id": "e.p1.d2-exit", "source": "phase1.d2", "target": "phase1.exit", "kind": "data", "inferred": true },
+        { "id": "e.p1.d3-exit", "source": "phase1.d3", "target": "phase1.exit", "kind": "data", "inferred": true }
+      ]
+    },
+
+    "phase2": {
+      "id": "phase2", "title": "Phase 2 — Business Plan, MRD & PRD", "kind": "runtime",
+      "nodes": [
+        { "id": "phase2.entry", "label": "Phase 2 Kickoff", "kind": "entrypoint", "inferred": true,
+          "meta": { "summary": "Discovery questions: TAM/SAM/SOM boundaries? Core competitors and defensible moat (IP, network effects, cost edge)? GTM strategy (B2B/B2C/PLG/Sales-led)? Functional requirements — core user stories, critical edge cases, must-have vs. nice-to-have." } },
+        { "id": "phase2.draft", "label": "Synthesize Market & Product Requirements", "kind": "logic", "inferred": true },
+        { "id": "phase2.d1", "label": "Market Requirements Document (MRD)", "kind": "store", "inferred": true },
+        { "id": "phase2.d2", "label": "Product Requirements Document — P0/P1/P2 Feature Matrix", "kind": "store", "inferred": true },
+        { "id": "phase2.d3", "label": "Preliminary Go-To-Market Strategy", "kind": "store", "inferred": true },
+        { "id": "phase2.exit", "label": "Phase 2 Deliverables Package", "kind": "service", "inferred": true }
+      ],
+      "edges": [
+        { "id": "e.p2.entry-draft", "source": "phase2.entry", "target": "phase2.draft", "kind": "call", "inferred": true },
+        { "id": "e.p2.draft-d1", "source": "phase2.draft", "target": "phase2.d1", "kind": "data", "inferred": true },
+        { "id": "e.p2.draft-d2", "source": "phase2.draft", "target": "phase2.d2", "kind": "data", "inferred": true },
+        { "id": "e.p2.draft-d3", "source": "phase2.draft", "target": "phase2.d3", "kind": "data", "inferred": true },
+        { "id": "e.p2.d1-exit", "source": "phase2.d1", "target": "phase2.exit", "kind": "data", "inferred": true },
+        { "id": "e.p2.d2-exit", "source": "phase2.d2", "target": "phase2.exit", "kind": "data", "inferred": true },
+        { "id": "e.p2.d3-exit", "source": "phase2.d3", "target": "phase2.exit", "kind": "data", "inferred": true }
+      ]
+    },
+
+    "phase3": {
+      "id": "phase3", "title": "Phase 3 — Financial Modeling & OpEx", "kind": "runtime",
+      "nodes": [
+        { "id": "phase3.entry", "label": "Phase 3 Kickoff", "kind": "entrypoint", "inferred": true,
+          "meta": { "summary": "Discovery questions: anticipated Day-1 vs. Year-1 DAU/MAU? Data ingestion/egress expectations (storage per user, API calls/sec)? Unit economics — CAC ceiling vs. LTV target." } },
+        { "id": "phase3.draft", "label": "Model Unit Economics & Infra Load", "kind": "logic", "inferred": true },
+        { "id": "phase3.d1", "label": "Dynamic Financial Spreadsheet (Revenue vs. OpEx)", "kind": "store", "inferred": true },
+        { "id": "phase3.d2", "label": "Initial Infrastructure Cost Floor", "kind": "store", "inferred": true },
+        { "id": "phase3.exit", "label": "Phase 3 Deliverables Package", "kind": "service", "inferred": true }
+      ],
+      "edges": [
+        { "id": "e.p3.entry-draft", "source": "phase3.entry", "target": "phase3.draft", "kind": "call", "inferred": true },
+        { "id": "e.p3.draft-d1", "source": "phase3.draft", "target": "phase3.d1", "kind": "data", "inferred": true },
+        { "id": "e.p3.draft-d2", "source": "phase3.draft", "target": "phase3.d2", "kind": "data", "inferred": true },
+        { "id": "e.p3.d1-exit", "source": "phase3.d1", "target": "phase3.exit", "kind": "data", "inferred": true },
+        { "id": "e.p3.d2-exit", "source": "phase3.d2", "target": "phase3.exit", "kind": "data", "inferred": true }
+      ]
+    },
+
+    "phase4": {
+      "id": "phase4", "title": "Phase 4 — UX/UI Architecture", "kind": "runtime",
+      "nodes": [
+        { "id": "phase4.entry", "label": "Phase 4 Kickoff", "kind": "entrypoint", "inferred": true,
+          "meta": { "summary": "Discovery questions: core user journeys — minimum clicks to primary value prop? Accessibility requirements (WCAG 2.1 AA/AAA)? Visual language & branding constraints." } },
+        { "id": "phase4.draft", "label": "Design Information Architecture", "kind": "logic", "inferred": true },
+        { "id": "phase4.d1", "label": "Information Architecture (IA) Sitemap", "kind": "store", "inferred": true },
+        { "id": "phase4.d2", "label": "Low-Fidelity Layout Blueprints / User Flow Trees", "kind": "store", "inferred": true },
+        { "id": "phase4.d3", "label": "Component System Specifications", "kind": "store", "inferred": true },
+        { "id": "phase4.exit", "label": "Phase 4 Deliverables Package", "kind": "service", "inferred": true }
+      ],
+      "edges": [
+        { "id": "e.p4.entry-draft", "source": "phase4.entry", "target": "phase4.draft", "kind": "call", "inferred": true },
+        { "id": "e.p4.draft-d1", "source": "phase4.draft", "target": "phase4.d1", "kind": "data", "inferred": true },
+        { "id": "e.p4.draft-d2", "source": "phase4.draft", "target": "phase4.d2", "kind": "data", "inferred": true },
+        { "id": "e.p4.draft-d3", "source": "phase4.draft", "target": "phase4.d3", "kind": "data", "inferred": true },
+        { "id": "e.p4.d1-exit", "source": "phase4.d1", "target": "phase4.exit", "kind": "data", "inferred": true },
+        { "id": "e.p4.d2-exit", "source": "phase4.d2", "target": "phase4.exit", "kind": "data", "inferred": true },
+        { "id": "e.p4.d3-exit", "source": "phase4.d3", "target": "phase4.exit", "kind": "data", "inferred": true }
+      ]
+    },
+
+    "phase5": {
+      "id": "phase5", "title": "Phase 5 — General System Architecture", "kind": "runtime",
+      "nodes": [
+        { "id": "phase5.entry", "label": "Phase 5 Kickoff", "kind": "entrypoint", "inferred": true,
+          "meta": { "summary": "Discovery questions: system topology — monolith, microservices, serverless, or hybrid? Consistency vs. availability priority (CAP trade-offs)? Data persistence needs — relational, document, vector, graph, or cache-first." } },
+        { "id": "phase5.draft", "label": "Define System Topology & Data Model", "kind": "logic", "inferred": true },
+        { "id": "phase5.d1", "label": "System Data Flow & ERD Schemas", "kind": "store", "inferred": true },
+        { "id": "phase5.d2", "label": "API Strategy (REST / GraphQL / gRPC / WebSockets)", "kind": "store", "inferred": true },
+        { "id": "phase5.exit", "label": "Phase 5 Deliverables Package", "kind": "service", "inferred": true }
+      ],
+      "edges": [
+        { "id": "e.p5.entry-draft", "source": "phase5.entry", "target": "phase5.draft", "kind": "call", "inferred": true },
+        { "id": "e.p5.draft-d1", "source": "phase5.draft", "target": "phase5.d1", "kind": "data", "inferred": true },
+        { "id": "e.p5.draft-d2", "source": "phase5.draft", "target": "phase5.d2", "kind": "data", "inferred": true },
+        { "id": "e.p5.d1-exit", "source": "phase5.d1", "target": "phase5.exit", "kind": "data", "inferred": true },
+        { "id": "e.p5.d2-exit", "source": "phase5.d2", "target": "phase5.exit", "kind": "data", "inferred": true }
+      ]
+    },
+
+    "phase6": {
+      "id": "phase6", "title": "Phase 6 — Deep Technical Spec & Stack Selection", "kind": "runtime",
+      "nodes": [
+        { "id": "phase6.entry", "label": "Phase 6 Kickoff", "kind": "entrypoint", "inferred": true,
+          "meta": { "summary": "Discovery questions: performance SLA targets (P99 latency)? Security & compliance needs (HIPAA, GDPR, SOC2, PCI-DSS)? Integration requirements (third-party APIs, LLM providers, MCP server protocols)." } },
+        { "id": "phase6.draft", "label": "Finalize Stack & Security Posture", "kind": "logic", "inferred": true },
+        { "id": "phase6.d1", "label": "Finalized Tech Stack Selection", "kind": "store", "inferred": true },
+        { "id": "phase6.d2", "label": "Security Architecture & Auth Protocol", "kind": "store", "inferred": true },
+        { "id": "phase6.d3", "label": "CI/CD & Infrastructure-as-Code Blueprints", "kind": "store", "inferred": true },
+        { "id": "phase6.exit", "label": "Phase 6 Deliverables Package", "kind": "service", "inferred": true }
+      ],
+      "edges": [
+        { "id": "e.p6.entry-draft", "source": "phase6.entry", "target": "phase6.draft", "kind": "call", "inferred": true },
+        { "id": "e.p6.draft-d1", "source": "phase6.draft", "target": "phase6.d1", "kind": "data", "inferred": true },
+        { "id": "e.p6.draft-d2", "source": "phase6.draft", "target": "phase6.d2", "kind": "data", "inferred": true },
+        { "id": "e.p6.draft-d3", "source": "phase6.draft", "target": "phase6.d3", "kind": "data", "inferred": true },
+        { "id": "e.p6.d1-exit", "source": "phase6.d1", "target": "phase6.exit", "kind": "data", "inferred": true },
+        { "id": "e.p6.d2-exit", "source": "phase6.d2", "target": "phase6.exit", "kind": "data", "inferred": true },
+        { "id": "e.p6.d3-exit", "source": "phase6.d3", "target": "phase6.exit", "kind": "data", "inferred": true }
+      ]
+    },
+
+    "phase7": {
+      "id": "phase7", "title": "Phase 7 — Implementation Roadmap, QA & Deployment", "kind": "runtime",
+      "nodes": [
+        { "id": "phase7.entry", "label": "Phase 7 Kickoff", "kind": "entrypoint", "inferred": true,
+          "meta": { "summary": "Discovery questions: development velocity — sprints, milestones, team size? Testing strategy — unit, integration, E2E (Playwright/Cypress), stress/load testing." } },
+        { "id": "phase7.draft", "label": "Plan Execution & QA", "kind": "logic", "inferred": true },
+        { "id": "phase7.d1", "label": "Sprint Execution Plan", "kind": "store", "inferred": true },
+        { "id": "phase7.d2", "label": "QA Matrix & Load-Testing Benchmarks", "kind": "store", "inferred": true },
+        { "id": "phase7.d3", "label": "Zero-Downtime Deployment Plan (Blue-Green / Canary)", "kind": "store", "inferred": true },
+        { "id": "phase7.exit", "label": "Phase 7 Deliverables Package", "kind": "service", "inferred": true }
+      ],
+      "edges": [
+        { "id": "e.p7.entry-draft", "source": "phase7.entry", "target": "phase7.draft", "kind": "call", "inferred": true },
+        { "id": "e.p7.draft-d1", "source": "phase7.draft", "target": "phase7.d1", "kind": "data", "inferred": true },
+        { "id": "e.p7.draft-d2", "source": "phase7.draft", "target": "phase7.d2", "kind": "data", "inferred": true },
+        { "id": "e.p7.draft-d3", "source": "phase7.draft", "target": "phase7.d3", "kind": "data", "inferred": true },
+        { "id": "e.p7.d1-exit", "source": "phase7.d1", "target": "phase7.exit", "kind": "data", "inferred": true },
+        { "id": "e.p7.d2-exit", "source": "phase7.d2", "target": "phase7.exit", "kind": "data", "inferred": true },
+        { "id": "e.p7.d3-exit", "source": "phase7.d3", "target": "phase7.exit", "kind": "data", "inferred": true }
+      ]
+    }
+
+  }
+}
+;
+
+export default function App() {
+  return (
+    <div style={{ width: '100%', height: 640, borderRadius: 12, overflow: 'hidden', border: '1px solid #3a3a44' }}>
+      <ErrorBoundary>
+        <FlowMapStandalone doc={doc} />
+      </ErrorBoundary>
+    </div>
+  );
+}

@@ -1,0 +1,266 @@
+{
+  "version": "1.0",
+  "project": {
+    "name": "AAAEE — Agnostic App Architecture & Execution Engine",
+    "source": "spec",
+    "generatedAt": "2026-08-03"
+  },
+  "views": ["system", "phase1", "phase2", "phase3", "phase4", "phase5", "phase6", "phase7"],
+  "rootGraph": "system",
+  "assumptions": [
+    "This map models the AAAEE discovery/build PROCESS defined in the system prompt (the 7-phase gatekeeper pipeline) — not the Vector LLM Capstone app's own internal software architecture, since that architecture will only be finalized once Phases 5 and 6 are actually run in this conversation.",
+    "Assumed each phase ends in a binary Approve/Revise gate, since the system prompt's 'Linear Gatekeeper Execution' rule requires explicit user approval before advancing but does not name the approval mechanism.",
+    "Assumed a 'Revise' outcome loops back to redo the SAME phase rather than restarting the whole pipeline from Phase 1, since the prompt only states that phases are sequential and gated, not what a rejection does.",
+    "Assumed the 'Project Ledger' is a single running store updated after every phase, since the prompt requires it to be maintained 'at the bottom of every turn' but does not specify a storage mechanism.",
+    "The questions and deliverables listed inside each phase's sub-diagram are transcribed directly from the system prompt's own phase definitions; nothing beyond what that document states has been added or guessed.",
+    "Because no phase has been executed yet in this conversation, every node here is necessarily a plan, not an observed system — this diagram will need to be revisited/expanded once each phase actually produces its real deliverables."
+  ],
+  "graphs": {
+
+    "system": {
+      "id": "system",
+      "title": "AAAEE Pipeline — System Overview",
+      "kind": "system",
+      "nodes": [
+        { "id": "entry", "label": "New App Build Request", "kind": "entrypoint", "inferred": true,
+          "outputs": [{ "id": "out", "label": "Start" }],
+          "meta": { "summary": "User initiates the AAAEE engine to design a new application end-to-end." } },
+
+        { "id": "p1", "label": "Phase 1 — Foundational Strategy & Financial Objectives", "kind": "service",
+          "drilldown": "phase1", "inferred": true,
+          "meta": { "summary": "Establishes business goal, ARR/ROI timeline, target platforms, and CapEx/OpEx envelope." } },
+        { "id": "g1", "label": "Phase 1 Approved?", "kind": "decision", "inferred": true,
+          "outputs": [{ "id": "approve", "label": "Approved" }, { "id": "revise", "label": "Revise" }] },
+
+        { "id": "p2", "label": "Phase 2 — Business Plan, MRD & PRD", "kind": "service",
+          "drilldown": "phase2", "inferred": true,
+          "meta": { "summary": "Defines TAM/SAM/SOM, competitive moat, GTM motion, and prioritized feature requirements." } },
+        { "id": "g2", "label": "Phase 2 Approved?", "kind": "decision", "inferred": true,
+          "outputs": [{ "id": "approve", "label": "Approved" }, { "id": "revise", "label": "Revise" }] },
+
+        { "id": "p3", "label": "Phase 3 — Financial Modeling & OpEx Calculator", "kind": "service",
+          "drilldown": "phase3", "inferred": true,
+          "meta": { "summary": "Models DAU/MAU growth, data ingestion load, and CAC/LTV unit economics." } },
+        { "id": "g3", "label": "Phase 3 Approved?", "kind": "decision", "inferred": true,
+          "outputs": [{ "id": "approve", "label": "Approved" }, { "id": "revise", "label": "Revise" }] },
+
+        { "id": "p4", "label": "Phase 4 — UX/UI Architecture & Information Dynamics", "kind": "service",
+          "drilldown": "phase4", "inferred": true,
+          "meta": { "summary": "Maps core user journeys, accessibility targets, and visual/branding language." } },
+        { "id": "g4", "label": "Phase 4 Approved?", "kind": "decision", "inferred": true,
+          "outputs": [{ "id": "approve", "label": "Approved" }, { "id": "revise", "label": "Revise" }] },
+
+        { "id": "p5", "label": "Phase 5 — General System Architecture", "kind": "service",
+          "drilldown": "phase5", "inferred": true,
+          "meta": { "summary": "Decides topology (monolith/microservices/serverless), CAP trade-offs, and data persistence model." } },
+        { "id": "g5", "label": "Phase 5 Approved?", "kind": "decision", "inferred": true,
+          "outputs": [{ "id": "approve", "label": "Approved" }, { "id": "revise", "label": "Revise" }] },
+
+        { "id": "p6", "label": "Phase 6 — Deep Technical Spec & Stack Selection", "kind": "service",
+          "drilldown": "phase6", "inferred": true,
+          "meta": { "summary": "Locks performance SLAs, security/compliance posture, and the final technology stack." } },
+        { "id": "g6", "label": "Phase 6 Approved?", "kind": "decision", "inferred": true,
+          "outputs": [{ "id": "approve", "label": "Approved" }, { "id": "revise", "label": "Revise" }] },
+
+        { "id": "p7", "label": "Phase 7 — Implementation Roadmap, QA & Deployment", "kind": "service",
+          "drilldown": "phase7", "inferred": true,
+          "meta": { "summary": "Produces the sprint plan, QA/load-testing matrix, and zero-downtime deployment plan." } },
+        { "id": "g7", "label": "Final QA & Deployment Approved?", "kind": "decision", "inferred": true,
+          "outputs": [{ "id": "approve", "label": "Approved" }, { "id": "revise", "label": "Revise" }] },
+
+        { "id": "ledger", "label": "Project Ledger (Living Doc)", "kind": "store", "inferred": true,
+          "meta": { "summary": "Cumulative record of business goal, CapEx/OpEx estimate, selected stack, and phase-completion status — updated every turn." } },
+
+        { "id": "final", "label": "Approved for Build — Handoff to Execution", "kind": "service", "inferred": true,
+          "meta": { "summary": "All 7 phases approved; the app is fully specified and ready for actual development to begin." } }
+      ],
+      "edges": [
+        { "id": "e.entry-p1", "source": "entry", "target": "p1", "kind": "call", "inferred": true },
+
+        { "id": "e.p1-g1", "source": "p1", "target": "g1", "kind": "call", "inferred": true },
+        { "id": "e.p1-ledger", "source": "p1", "target": "ledger", "kind": "data", "label": "Update Ledger", "inferred": true },
+        { "id": "e.g1-p2", "source": "g1", "sourcePort": "approve", "target": "p2", "kind": "call", "label": "Approved", "inferred": true },
+        { "id": "e.g1-p1", "source": "g1", "sourcePort": "revise", "target": "p1", "kind": "call", "label": "Revise", "inferred": true },
+
+        { "id": "e.p2-g2", "source": "p2", "target": "g2", "kind": "call", "inferred": true },
+        { "id": "e.p2-ledger", "source": "p2", "target": "ledger", "kind": "data", "label": "Update Ledger", "inferred": true },
+        { "id": "e.g2-p3", "source": "g2", "sourcePort": "approve", "target": "p3", "kind": "call", "label": "Approved", "inferred": true },
+        { "id": "e.g2-p2", "source": "g2", "sourcePort": "revise", "target": "p2", "kind": "call", "label": "Revise", "inferred": true },
+
+        { "id": "e.p3-g3", "source": "p3", "target": "g3", "kind": "call", "inferred": true },
+        { "id": "e.p3-ledger", "source": "p3", "target": "ledger", "kind": "data", "label": "Update Ledger", "inferred": true },
+        { "id": "e.g3-p4", "source": "g3", "sourcePort": "approve", "target": "p4", "kind": "call", "label": "Approved", "inferred": true },
+        { "id": "e.g3-p3", "source": "g3", "sourcePort": "revise", "target": "p3", "kind": "call", "label": "Revise", "inferred": true },
+
+        { "id": "e.p4-g4", "source": "p4", "target": "g4", "kind": "call", "inferred": true },
+        { "id": "e.p4-ledger", "source": "p4", "target": "ledger", "kind": "data", "label": "Update Ledger", "inferred": true },
+        { "id": "e.g4-p5", "source": "g4", "sourcePort": "approve", "target": "p5", "kind": "call", "label": "Approved", "inferred": true },
+        { "id": "e.g4-p4", "source": "g4", "sourcePort": "revise", "target": "p4", "kind": "call", "label": "Revise", "inferred": true },
+
+        { "id": "e.p5-g5", "source": "p5", "target": "g5", "kind": "call", "inferred": true },
+        { "id": "e.p5-ledger", "source": "p5", "target": "ledger", "kind": "data", "label": "Update Ledger", "inferred": true },
+        { "id": "e.g5-p6", "source": "g5", "sourcePort": "approve", "target": "p6", "kind": "call", "label": "Approved", "inferred": true },
+        { "id": "e.g5-p5", "source": "g5", "sourcePort": "revise", "target": "p5", "kind": "call", "label": "Revise", "inferred": true },
+
+        { "id": "e.p6-g6", "source": "p6", "target": "g6", "kind": "call", "inferred": true },
+        { "id": "e.p6-ledger", "source": "p6", "target": "ledger", "kind": "data", "label": "Update Ledger", "inferred": true },
+        { "id": "e.g6-p7", "source": "g6", "sourcePort": "approve", "target": "p7", "kind": "call", "label": "Approved", "inferred": true },
+        { "id": "e.g6-p6", "source": "g6", "sourcePort": "revise", "target": "p6", "kind": "call", "label": "Revise", "inferred": true },
+
+        { "id": "e.p7-g7", "source": "p7", "target": "g7", "kind": "call", "inferred": true },
+        { "id": "e.p7-ledger", "source": "p7", "target": "ledger", "kind": "data", "label": "Update Ledger", "inferred": true },
+        { "id": "e.g7-final", "source": "g7", "sourcePort": "approve", "target": "final", "kind": "call", "label": "Approved", "inferred": true },
+        { "id": "e.g7-p7", "source": "g7", "sourcePort": "revise", "target": "p7", "kind": "call", "label": "Revise", "inferred": true }
+      ]
+    },
+
+    "phase1": {
+      "id": "phase1", "title": "Phase 1 — Foundational Strategy", "kind": "runtime",
+      "nodes": [
+        { "id": "phase1.entry", "label": "Phase 1 Kickoff", "kind": "entrypoint", "inferred": true,
+          "meta": { "summary": "Discovery questions: ultimate goal (bootstrapped / venture-backed / internal tool / passive SaaS)? Target ARR or ROI timeline? Target audience & platforms (web/iOS/Android/desktop/IoT, native vs. cross-platform vs. PWA)? Initial CapEx vs. monthly OpEx capacity?" } },
+        { "id": "phase1.draft", "label": "Synthesize Strategic Direction", "kind": "logic", "inferred": true },
+        { "id": "phase1.d1", "label": "App Concept Validation & Viability Score", "kind": "store", "inferred": true },
+        { "id": "phase1.d2", "label": "Recommended App Ideas (Aligned to Financial Goal)", "kind": "store", "inferred": true },
+        { "id": "phase1.d3", "label": "Platform & Stack Paradigm Recommendation", "kind": "store", "inferred": true },
+        { "id": "phase1.exit", "label": "Phase 1 Deliverables Package", "kind": "service", "inferred": true }
+      ],
+      "edges": [
+        { "id": "e.p1.entry-draft", "source": "phase1.entry", "target": "phase1.draft", "kind": "call", "inferred": true },
+        { "id": "e.p1.draft-d1", "source": "phase1.draft", "target": "phase1.d1", "kind": "data", "inferred": true },
+        { "id": "e.p1.draft-d2", "source": "phase1.draft", "target": "phase1.d2", "kind": "data", "inferred": true },
+        { "id": "e.p1.draft-d3", "source": "phase1.draft", "target": "phase1.d3", "kind": "data", "inferred": true },
+        { "id": "e.p1.d1-exit", "source": "phase1.d1", "target": "phase1.exit", "kind": "data", "inferred": true },
+        { "id": "e.p1.d2-exit", "source": "phase1.d2", "target": "phase1.exit", "kind": "data", "inferred": true },
+        { "id": "e.p1.d3-exit", "source": "phase1.d3", "target": "phase1.exit", "kind": "data", "inferred": true }
+      ]
+    },
+
+    "phase2": {
+      "id": "phase2", "title": "Phase 2 — Business Plan, MRD & PRD", "kind": "runtime",
+      "nodes": [
+        { "id": "phase2.entry", "label": "Phase 2 Kickoff", "kind": "entrypoint", "inferred": true,
+          "meta": { "summary": "Discovery questions: TAM/SAM/SOM boundaries? Core competitors and defensible moat (IP, network effects, cost edge)? GTM strategy (B2B/B2C/PLG/Sales-led)? Functional requirements — core user stories, critical edge cases, must-have vs. nice-to-have." } },
+        { "id": "phase2.draft", "label": "Synthesize Market & Product Requirements", "kind": "logic", "inferred": true },
+        { "id": "phase2.d1", "label": "Market Requirements Document (MRD)", "kind": "store", "inferred": true },
+        { "id": "phase2.d2", "label": "Product Requirements Document — P0/P1/P2 Feature Matrix", "kind": "store", "inferred": true },
+        { "id": "phase2.d3", "label": "Preliminary Go-To-Market Strategy", "kind": "store", "inferred": true },
+        { "id": "phase2.exit", "label": "Phase 2 Deliverables Package", "kind": "service", "inferred": true }
+      ],
+      "edges": [
+        { "id": "e.p2.entry-draft", "source": "phase2.entry", "target": "phase2.draft", "kind": "call", "inferred": true },
+        { "id": "e.p2.draft-d1", "source": "phase2.draft", "target": "phase2.d1", "kind": "data", "inferred": true },
+        { "id": "e.p2.draft-d2", "source": "phase2.draft", "target": "phase2.d2", "kind": "data", "inferred": true },
+        { "id": "e.p2.draft-d3", "source": "phase2.draft", "target": "phase2.d3", "kind": "data", "inferred": true },
+        { "id": "e.p2.d1-exit", "source": "phase2.d1", "target": "phase2.exit", "kind": "data", "inferred": true },
+        { "id": "e.p2.d2-exit", "source": "phase2.d2", "target": "phase2.exit", "kind": "data", "inferred": true },
+        { "id": "e.p2.d3-exit", "source": "phase2.d3", "target": "phase2.exit", "kind": "data", "inferred": true }
+      ]
+    },
+
+    "phase3": {
+      "id": "phase3", "title": "Phase 3 — Financial Modeling & OpEx", "kind": "runtime",
+      "nodes": [
+        { "id": "phase3.entry", "label": "Phase 3 Kickoff", "kind": "entrypoint", "inferred": true,
+          "meta": { "summary": "Discovery questions: anticipated Day-1 vs. Year-1 DAU/MAU? Data ingestion/egress expectations (storage per user, API calls/sec)? Unit economics — CAC ceiling vs. LTV target." } },
+        { "id": "phase3.draft", "label": "Model Unit Economics & Infra Load", "kind": "logic", "inferred": true },
+        { "id": "phase3.d1", "label": "Dynamic Financial Spreadsheet (Revenue vs. OpEx)", "kind": "store", "inferred": true },
+        { "id": "phase3.d2", "label": "Initial Infrastructure Cost Floor", "kind": "store", "inferred": true },
+        { "id": "phase3.exit", "label": "Phase 3 Deliverables Package", "kind": "service", "inferred": true }
+      ],
+      "edges": [
+        { "id": "e.p3.entry-draft", "source": "phase3.entry", "target": "phase3.draft", "kind": "call", "inferred": true },
+        { "id": "e.p3.draft-d1", "source": "phase3.draft", "target": "phase3.d1", "kind": "data", "inferred": true },
+        { "id": "e.p3.draft-d2", "source": "phase3.draft", "target": "phase3.d2", "kind": "data", "inferred": true },
+        { "id": "e.p3.d1-exit", "source": "phase3.d1", "target": "phase3.exit", "kind": "data", "inferred": true },
+        { "id": "e.p3.d2-exit", "source": "phase3.d2", "target": "phase3.exit", "kind": "data", "inferred": true }
+      ]
+    },
+
+    "phase4": {
+      "id": "phase4", "title": "Phase 4 — UX/UI Architecture", "kind": "runtime",
+      "nodes": [
+        { "id": "phase4.entry", "label": "Phase 4 Kickoff", "kind": "entrypoint", "inferred": true,
+          "meta": { "summary": "Discovery questions: core user journeys — minimum clicks to primary value prop? Accessibility requirements (WCAG 2.1 AA/AAA)? Visual language & branding constraints." } },
+        { "id": "phase4.draft", "label": "Design Information Architecture", "kind": "logic", "inferred": true },
+        { "id": "phase4.d1", "label": "Information Architecture (IA) Sitemap", "kind": "store", "inferred": true },
+        { "id": "phase4.d2", "label": "Low-Fidelity Layout Blueprints / User Flow Trees", "kind": "store", "inferred": true },
+        { "id": "phase4.d3", "label": "Component System Specifications", "kind": "store", "inferred": true },
+        { "id": "phase4.exit", "label": "Phase 4 Deliverables Package", "kind": "service", "inferred": true }
+      ],
+      "edges": [
+        { "id": "e.p4.entry-draft", "source": "phase4.entry", "target": "phase4.draft", "kind": "call", "inferred": true },
+        { "id": "e.p4.draft-d1", "source": "phase4.draft", "target": "phase4.d1", "kind": "data", "inferred": true },
+        { "id": "e.p4.draft-d2", "source": "phase4.draft", "target": "phase4.d2", "kind": "data", "inferred": true },
+        { "id": "e.p4.draft-d3", "source": "phase4.draft", "target": "phase4.d3", "kind": "data", "inferred": true },
+        { "id": "e.p4.d1-exit", "source": "phase4.d1", "target": "phase4.exit", "kind": "data", "inferred": true },
+        { "id": "e.p4.d2-exit", "source": "phase4.d2", "target": "phase4.exit", "kind": "data", "inferred": true },
+        { "id": "e.p4.d3-exit", "source": "phase4.d3", "target": "phase4.exit", "kind": "data", "inferred": true }
+      ]
+    },
+
+    "phase5": {
+      "id": "phase5", "title": "Phase 5 — General System Architecture", "kind": "runtime",
+      "nodes": [
+        { "id": "phase5.entry", "label": "Phase 5 Kickoff", "kind": "entrypoint", "inferred": true,
+          "meta": { "summary": "Discovery questions: system topology — monolith, microservices, serverless, or hybrid? Consistency vs. availability priority (CAP trade-offs)? Data persistence needs — relational, document, vector, graph, or cache-first." } },
+        { "id": "phase5.draft", "label": "Define System Topology & Data Model", "kind": "logic", "inferred": true },
+        { "id": "phase5.d1", "label": "System Data Flow & ERD Schemas", "kind": "store", "inferred": true },
+        { "id": "phase5.d2", "label": "API Strategy (REST / GraphQL / gRPC / WebSockets)", "kind": "store", "inferred": true },
+        { "id": "phase5.exit", "label": "Phase 5 Deliverables Package", "kind": "service", "inferred": true }
+      ],
+      "edges": [
+        { "id": "e.p5.entry-draft", "source": "phase5.entry", "target": "phase5.draft", "kind": "call", "inferred": true },
+        { "id": "e.p5.draft-d1", "source": "phase5.draft", "target": "phase5.d1", "kind": "data", "inferred": true },
+        { "id": "e.p5.draft-d2", "source": "phase5.draft", "target": "phase5.d2", "kind": "data", "inferred": true },
+        { "id": "e.p5.d1-exit", "source": "phase5.d1", "target": "phase5.exit", "kind": "data", "inferred": true },
+        { "id": "e.p5.d2-exit", "source": "phase5.d2", "target": "phase5.exit", "kind": "data", "inferred": true }
+      ]
+    },
+
+    "phase6": {
+      "id": "phase6", "title": "Phase 6 — Deep Technical Spec & Stack Selection", "kind": "runtime",
+      "nodes": [
+        { "id": "phase6.entry", "label": "Phase 6 Kickoff", "kind": "entrypoint", "inferred": true,
+          "meta": { "summary": "Discovery questions: performance SLA targets (P99 latency)? Security & compliance needs (HIPAA, GDPR, SOC2, PCI-DSS)? Integration requirements (third-party APIs, LLM providers, MCP server protocols)." } },
+        { "id": "phase6.draft", "label": "Finalize Stack & Security Posture", "kind": "logic", "inferred": true },
+        { "id": "phase6.d1", "label": "Finalized Tech Stack Selection", "kind": "store", "inferred": true },
+        { "id": "phase6.d2", "label": "Security Architecture & Auth Protocol", "kind": "store", "inferred": true },
+        { "id": "phase6.d3", "label": "CI/CD & Infrastructure-as-Code Blueprints", "kind": "store", "inferred": true },
+        { "id": "phase6.exit", "label": "Phase 6 Deliverables Package", "kind": "service", "inferred": true }
+      ],
+      "edges": [
+        { "id": "e.p6.entry-draft", "source": "phase6.entry", "target": "phase6.draft", "kind": "call", "inferred": true },
+        { "id": "e.p6.draft-d1", "source": "phase6.draft", "target": "phase6.d1", "kind": "data", "inferred": true },
+        { "id": "e.p6.draft-d2", "source": "phase6.draft", "target": "phase6.d2", "kind": "data", "inferred": true },
+        { "id": "e.p6.draft-d3", "source": "phase6.draft", "target": "phase6.d3", "kind": "data", "inferred": true },
+        { "id": "e.p6.d1-exit", "source": "phase6.d1", "target": "phase6.exit", "kind": "data", "inferred": true },
+        { "id": "e.p6.d2-exit", "source": "phase6.d2", "target": "phase6.exit", "kind": "data", "inferred": true },
+        { "id": "e.p6.d3-exit", "source": "phase6.d3", "target": "phase6.exit", "kind": "data", "inferred": true }
+      ]
+    },
+
+    "phase7": {
+      "id": "phase7", "title": "Phase 7 — Implementation Roadmap, QA & Deployment", "kind": "runtime",
+      "nodes": [
+        { "id": "phase7.entry", "label": "Phase 7 Kickoff", "kind": "entrypoint", "inferred": true,
+          "meta": { "summary": "Discovery questions: development velocity — sprints, milestones, team size? Testing strategy — unit, integration, E2E (Playwright/Cypress), stress/load testing." } },
+        { "id": "phase7.draft", "label": "Plan Execution & QA", "kind": "logic", "inferred": true },
+        { "id": "phase7.d1", "label": "Sprint Execution Plan", "kind": "store", "inferred": true },
+        { "id": "phase7.d2", "label": "QA Matrix & Load-Testing Benchmarks", "kind": "store", "inferred": true },
+        { "id": "phase7.d3", "label": "Zero-Downtime Deployment Plan (Blue-Green / Canary)", "kind": "store", "inferred": true },
+        { "id": "phase7.exit", "label": "Phase 7 Deliverables Package", "kind": "service", "inferred": true }
+      ],
+      "edges": [
+        { "id": "e.p7.entry-draft", "source": "phase7.entry", "target": "phase7.draft", "kind": "call", "inferred": true },
+        { "id": "e.p7.draft-d1", "source": "phase7.draft", "target": "phase7.d1", "kind": "data", "inferred": true },
+        { "id": "e.p7.draft-d2", "source": "phase7.draft", "target": "phase7.d2", "kind": "data", "inferred": true },
+        { "id": "e.p7.draft-d3", "source": "phase7.draft", "target": "phase7.d3", "kind": "data", "inferred": true },
+        { "id": "e.p7.d1-exit", "source": "phase7.d1", "target": "phase7.exit", "kind": "data", "inferred": true },
+        { "id": "e.p7.d2-exit", "source": "phase7.d2", "target": "phase7.exit", "kind": "data", "inferred": true },
+        { "id": "e.p7.d3-exit", "source": "phase7.d3", "target": "phase7.exit", "kind": "data", "inferred": true }
+      ]
+    }
+
+  }
+}
