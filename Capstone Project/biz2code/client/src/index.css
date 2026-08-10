@@ -1,0 +1,29 @@
+/* Base styles. Placeholder branding — swap when the logo and fonts arrive. */
+
+:root {
+  --bg: #0f1115;
+  --surface: #171a21;
+  --border: #2a2f3a;
+  --text: #e8eaed;
+  --text-dim: #9aa1ad;
+  --accent: #4f8cff;
+  --warn: #f0b429;
+  --danger: #f2545b;
+  --ok: #38b26b;
+  --radius: 8px;
+  --font: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+  line-height: 1.5;
+}
+
+button { font: inherit; cursor: pointer; }
+button:disabled { cursor: not-allowed; opacity: 0.5; }
+input, select, textarea { font: inherit; }

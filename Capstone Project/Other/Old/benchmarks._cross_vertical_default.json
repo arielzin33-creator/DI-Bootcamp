@@ -1,0 +1,150 @@
+{
+  "$schema": "./_schema.json",
+  "verticalId": "_cross_vertical_default",
+  "displayName": "Cross-Vertical Aggregate (fallback)",
+  "sector": null,
+  "lastReviewed": "2026-08-10",
+  "usage": "Used ONLY when the selected vertical has no sourced value for a metric. Must still be labelled as an aggregate, never as vertical-specific.",
+  "metrics": {
+    "retention_d1_pct": {
+      "value": 25.5,
+      "unit": "percent",
+      "confidence": "secondary",
+      "source": {
+        "publisher": "Adjust (2026 retention data)",
+        "via": "core-mba.pro \u2014 Mobile App Retention Benchmarks 2026",
+        "url": "https://www.core-mba.pro/tool-hub/mobile-app-retention",
+        "retrieved": "2026-08-10",
+        "tier": "secondary",
+        "note": "Figure reported by a secondary summary citing Adjust. Verify against Adjust's own report before quoting in a deliverable."
+      },
+      "note": "Reported as a 25-26% band; midpoint stored."
+    },
+    "retention_d7_pct": {
+      "value": 12.0,
+      "unit": "percent",
+      "confidence": "secondary",
+      "source": {
+        "publisher": "Adjust (2026 retention data)",
+        "via": "core-mba.pro \u2014 Mobile App Retention Benchmarks 2026",
+        "url": "https://www.core-mba.pro/tool-hub/mobile-app-retention",
+        "retrieved": "2026-08-10",
+        "tier": "secondary",
+        "note": "Figure reported by a secondary summary citing Adjust. Verify against Adjust's own report before quoting in a deliverable."
+      },
+      "note": "Reported as an 11-13% band; midpoint stored."
+    },
+    "retention_d30_pct": {
+      "value": 6.0,
+      "unit": "percent",
+      "confidence": "secondary",
+      "source": {
+        "publisher": "Adjust (2026 retention data)",
+        "via": "core-mba.pro \u2014 Mobile App Retention Benchmarks 2026",
+        "url": "https://www.core-mba.pro/tool-hub/mobile-app-retention",
+        "retrieved": "2026-08-10",
+        "tier": "secondary",
+        "note": "Figure reported by a secondary summary citing Adjust. Verify against Adjust's own report before quoting in a deliverable."
+      },
+      "note": "Reported as a 5-7% band; midpoint stored."
+    },
+    "retention_d1_top_quartile_pct": {
+      "value": 30.0,
+      "unit": "percent",
+      "confidence": "secondary",
+      "source": {
+        "publisher": "Adjust (2026 retention data)",
+        "via": "core-mba.pro \u2014 Mobile App Retention Benchmarks 2026",
+        "url": "https://www.core-mba.pro/tool-hub/mobile-app-retention",
+        "retrieved": "2026-08-10",
+        "tier": "secondary",
+        "note": "Figure reported by a secondary summary citing Adjust. Verify against Adjust's own report before quoting in a deliverable."
+      },
+      "note": null
+    },
+    "retention_d7_top_quartile_pct": {
+      "value": 15.0,
+      "unit": "percent",
+      "confidence": "secondary",
+      "source": {
+        "publisher": "Adjust (2026 retention data)",
+        "via": "core-mba.pro \u2014 Mobile App Retention Benchmarks 2026",
+        "url": "https://www.core-mba.pro/tool-hub/mobile-app-retention",
+        "retrieved": "2026-08-10",
+        "tier": "secondary",
+        "note": "Figure reported by a secondary summary citing Adjust. Verify against Adjust's own report before quoting in a deliverable."
+      },
+      "note": null
+    },
+    "retention_d30_top_quartile_pct": {
+      "value": 8.0,
+      "unit": "percent",
+      "confidence": "secondary",
+      "source": {
+        "publisher": "Adjust (2026 retention data)",
+        "via": "core-mba.pro \u2014 Mobile App Retention Benchmarks 2026",
+        "url": "https://www.core-mba.pro/tool-hub/mobile-app-retention",
+        "retrieved": "2026-08-10",
+        "tier": "secondary",
+        "note": "Figure reported by a secondary summary citing Adjust. Verify against Adjust's own report before quoting in a deliverable."
+      },
+      "note": null
+    },
+    "app_store_commission_standard_pct": {
+      "value": 30.0,
+      "unit": "percent",
+      "confidence": "secondary",
+      "source": {
+        "publisher": "Apple App Store / Google Play published commission schedules",
+        "via": "Widely published standard rates; confirm current terms with each store.",
+        "url": null,
+        "retrieved": "2026-08-10",
+        "tier": "secondary",
+        "note": "30% standard; 15% under small-business / post-year-one subscription programs. Terms change - re-check before relying on this."
+      },
+      "note": null
+    },
+    "app_store_commission_reduced_pct": {
+      "value": 15.0,
+      "unit": "percent",
+      "confidence": "secondary",
+      "source": {
+        "publisher": "Apple App Store / Google Play published commission schedules",
+        "via": "Widely published standard rates; confirm current terms with each store.",
+        "url": null,
+        "retrieved": "2026-08-10",
+        "tier": "secondary",
+        "note": "30% standard; 15% under small-business / post-year-one subscription programs. Terms change - re-check before relying on this."
+      },
+      "note": "Small-business / post-year-one subscription programs."
+    },
+    "ltv_cac_target_ratio": {
+      "value": null,
+      "unit": "ratio",
+      "confidence": "placeholder",
+      "source": {
+        "publisher": null,
+        "via": null,
+        "url": null,
+        "retrieved": null,
+        "tier": "placeholder",
+        "note": "NOT YET SOURCED. Populate from a report you trust, then set confidence to 'primary' or 'secondary' and record the source."
+      },
+      "note": "The commonly cited 3:1 target is a rule of thumb, not a measured benchmark. Source it or leave unvalidated."
+    },
+    "tech_debt_provision_pct": {
+      "value": null,
+      "unit": "percent",
+      "confidence": "placeholder",
+      "source": {
+        "publisher": null,
+        "via": null,
+        "url": null,
+        "retrieved": null,
+        "tier": "placeholder",
+        "note": "NOT YET SOURCED. Populate from a report you trust, then set confidence to 'primary' or 'secondary' and record the source."
+      },
+      "note": "The 30%-of-dev-effort provision is a rule of thumb. Source it or leave unvalidated."
+    }
+  }
+}

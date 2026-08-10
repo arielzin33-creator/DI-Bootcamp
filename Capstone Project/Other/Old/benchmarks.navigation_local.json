@@ -1,0 +1,156 @@
+{
+  "$schema": "./_schema.json",
+  "verticalId": "navigation_local",
+  "displayName": "Navigation & Local Discovery",
+  "sector": "Travel & Local",
+  "typicalBusinessModels": [
+    "ad_supported",
+    "commission",
+    "b2b_licensing",
+    "freemium"
+  ],
+  "lastReviewed": "2026-08-10",
+  "coverage": {
+    "metricsTotal": 9,
+    "metricsSourced": 0,
+    "metricsPlaceholder": 9,
+    "warning": "NO sourced metrics for this vertical. The app will report every figure as 'unvalidated'."
+  },
+  "metrics": {
+    "arpu_12mo_blended_usd": {
+      "value": null,
+      "unit": "USD",
+      "confidence": "placeholder",
+      "source": {
+        "publisher": null,
+        "via": null,
+        "url": null,
+        "retrieved": null,
+        "tier": "placeholder",
+        "note": "NOT YET SOURCED. Populate from a report you trust, then set confidence to 'primary' or 'secondary' and record the source."
+      },
+      "note": null,
+      "description": "12-month blended average revenue per user."
+    },
+    "retention_d1_pct": {
+      "value": null,
+      "unit": "percent",
+      "confidence": "placeholder",
+      "source": {
+        "publisher": null,
+        "via": null,
+        "url": null,
+        "retrieved": null,
+        "tier": "placeholder",
+        "note": "NOT YET SOURCED. Populate from a report you trust, then set confidence to 'primary' or 'secondary' and record the source."
+      },
+      "note": null,
+      "description": "Day-1 retention."
+    },
+    "retention_d7_pct": {
+      "value": null,
+      "unit": "percent",
+      "confidence": "placeholder",
+      "source": {
+        "publisher": null,
+        "via": null,
+        "url": null,
+        "retrieved": null,
+        "tier": "placeholder",
+        "note": "NOT YET SOURCED. Populate from a report you trust, then set confidence to 'primary' or 'secondary' and record the source."
+      },
+      "note": null,
+      "description": "Day-7 retention."
+    },
+    "retention_d30_pct": {
+      "value": null,
+      "unit": "percent",
+      "confidence": "placeholder",
+      "source": {
+        "publisher": null,
+        "via": null,
+        "url": null,
+        "retrieved": null,
+        "tier": "placeholder",
+        "note": "NOT YET SOURCED. Populate from a report you trust, then set confidence to 'primary' or 'secondary' and record the source."
+      },
+      "note": null,
+      "description": "Day-30 retention."
+    },
+    "trial_to_paid_pct": {
+      "value": null,
+      "unit": "percent",
+      "confidence": "placeholder",
+      "source": {
+        "publisher": null,
+        "via": null,
+        "url": null,
+        "retrieved": null,
+        "tier": "placeholder",
+        "note": "NOT YET SOURCED. Populate from a report you trust, then set confidence to 'primary' or 'secondary' and record the source."
+      },
+      "note": null,
+      "description": "Trial-to-paid conversion rate."
+    },
+    "cac_usd": {
+      "value": null,
+      "unit": "USD",
+      "confidence": "placeholder",
+      "source": {
+        "publisher": null,
+        "via": null,
+        "url": null,
+        "retrieved": null,
+        "tier": "placeholder",
+        "note": "NOT YET SOURCED. Populate from a report you trust, then set confidence to 'primary' or 'secondary' and record the source."
+      },
+      "note": null,
+      "description": "Customer acquisition cost."
+    },
+    "ltv_usd": {
+      "value": null,
+      "unit": "USD",
+      "confidence": "placeholder",
+      "source": {
+        "publisher": null,
+        "via": null,
+        "url": null,
+        "retrieved": null,
+        "tier": "placeholder",
+        "note": "NOT YET SOURCED. Populate from a report you trust, then set confidence to 'primary' or 'secondary' and record the source."
+      },
+      "note": null,
+      "description": "Customer lifetime value."
+    },
+    "churn_monthly_pct": {
+      "value": null,
+      "unit": "percent",
+      "confidence": "placeholder",
+      "source": {
+        "publisher": null,
+        "via": null,
+        "url": null,
+        "retrieved": null,
+        "tier": "placeholder",
+        "note": "NOT YET SOURCED. Populate from a report you trust, then set confidence to 'primary' or 'secondary' and record the source."
+      },
+      "note": null,
+      "description": "Monthly churn rate."
+    },
+    "store_conversion_pct": {
+      "value": null,
+      "unit": "percent",
+      "confidence": "placeholder",
+      "source": {
+        "publisher": null,
+        "via": null,
+        "url": null,
+        "retrieved": null,
+        "tier": "placeholder",
+        "note": "NOT YET SOURCED. Populate from a report you trust, then set confidence to 'primary' or 'secondary' and record the source."
+      },
+      "note": null,
+      "description": "Store listing view-to-install conversion."
+    }
+  }
+}

@@ -1,0 +1,331 @@
+{
+  "version": "1.0",
+  "lastReviewed": "2026-08-10",
+  "project": {
+    "name": "IndoorWay \u2014 indoor navigation for retail venues",
+    "verticalId": "navigation_local",
+    "businessModel": "b2b_licensing",
+    "isSeed": true
+  },
+  "demoProtocol": {
+    "purpose": "Demo Day walkthrough. 15 answers pre-filled; 5 typed live on stage.",
+    "clearedOnLoad": [
+      "p1q1",
+      "p1q2",
+      "p2q3",
+      "p3q1",
+      "p4q2"
+    ],
+    "steps": [
+      "Click New Project \u2192 Start from seed.",
+      "Phase 1: type answers to p1q1 (the idea) and p1q2 (category). Approve.",
+      "Phase 2: type p2q3 (reachable market size). Approve.",
+      "Phase 3: type p3q1 (core features). Approve.",
+      "Phase 4: type p4q2 (price per month). Approve.",
+      "Generation runs: MRD \u2192 PRD \u2192 Business Plan (~30s each).",
+      "Open the Business Plan. Show a computed figure AND an 'unvalidated' badge.",
+      "Revise one answer, regenerate, show v2 sitting alongside v1."
+    ],
+    "talkingPoints": [
+      "The questions are fixed and in the repo \u2014 open question-bank.json on screen. A gatekeeper that invents its own gates is not a gatekeeper.",
+      "This vertical has NO published benchmarks. Its two figures are borrowed from the Travel & Local band and are labelled PROXY. Everything else renders 'unvalidated'. That is the guardrail working, live.",
+      "The economics are computed in TypeScript, not by the model. Run it twice and the numbers are identical \u2014 a business plan whose figures move between runs is worthless.",
+      "Where published sources disagree (fintech D30 retention spans 2% to 12%), the document reports the disagreement instead of silently picking one."
+    ],
+    "knownRoughEdges": [
+      "B2B licensing pricing means per-shopper ARPU benchmarks do not apply. The app should say so rather than force the comparison \u2014 check this renders correctly before the demo.",
+      "A 0.05% conversion rate is a deliberate edge case: it tests that the calculation layer does not produce absurd output for a B2B model.",
+      "iTunes returned 2 real competitors (InMapz, ArcGIS Indoors) and 2 irrelevant results (LinkedIn, komoot) for the term 'indoor navigation' \u2014 the search API matches keywords literally. Verify the MRD-generation prompt filters these before citing them as competitors, or the document will misrepresent the competitive set."
+    ]
+  },
+  "answers": [
+    {
+      "questionId": "p1q1",
+      "phaseNo": 1,
+      "type": "text",
+      "valueText": "An indoor navigation app that guides shoppers to specific products and stores inside malls, department stores and other large venues, where GPS stops working.",
+      "valueNumber": null,
+      "valueJson": null,
+      "clearOnDemo": true,
+      "note": null
+    },
+    {
+      "questionId": "p1q2",
+      "phaseNo": 1,
+      "type": "select",
+      "valueText": "Navigation & Local Discovery",
+      "valueNumber": null,
+      "valueJson": null,
+      "clearOnDemo": true,
+      "note": null
+    },
+    {
+      "questionId": "p1q3",
+      "phaseNo": 1,
+      "type": "select",
+      "valueText": "Sign business/enterprise customers",
+      "valueNumber": null,
+      "valueJson": null,
+      "clearOnDemo": false,
+      "note": null
+    },
+    {
+      "questionId": "p1q4",
+      "phaseNo": 1,
+      "type": "multiselect",
+      "valueText": null,
+      "valueNumber": null,
+      "valueJson": [
+        "iOS",
+        "Android"
+      ],
+      "clearOnDemo": false,
+      "note": null
+    },
+    {
+      "questionId": "p1q5",
+      "phaseNo": 1,
+      "type": "text",
+      "valueText": "Consumer maps stop at the building entrance. We map the interior and sell placement and analytics to the store owners and mall operators who benefit from footfall being routed past them.",
+      "valueNumber": null,
+      "valueJson": null,
+      "clearOnDemo": false,
+      "note": null
+    },
+    {
+      "questionId": "p2q1",
+      "phaseNo": 2,
+      "type": "text",
+      "valueText": "The user is a shopper trying to find a specific product or store inside a large venue. The payer is the venue operator or an individual store owner buying placement, wayfinding coverage and footfall analytics. They are never the same person.",
+      "valueNumber": null,
+      "valueJson": null,
+      "clearOnDemo": false,
+      "note": null
+    },
+    {
+      "questionId": "p2q2",
+      "phaseNo": 2,
+      "type": "text",
+      "valueText": "Israel",
+      "valueNumber": null,
+      "valueJson": null,
+      "clearOnDemo": false,
+      "note": null
+    },
+    {
+      "questionId": "p2q3",
+      "phaseNo": 2,
+      "type": "number",
+      "valueText": null,
+      "valueNumber": 1200000,
+      "valueJson": null,
+      "clearOnDemo": true,
+      "note": "Adult smartphone users who regularly visit large indoor retail venues in the launch market. Deliberately conservative."
+    },
+    {
+      "questionId": "p2q4",
+      "phaseNo": 2,
+      "type": "text",
+      "valueText": "Google Maps (indoor coverage is partial and venue-dependent), Waze (outdoor only), and individual mall-operator apps (one app per venue, low install rates).",
+      "valueNumber": null,
+      "valueJson": null,
+      "clearOnDemo": false,
+      "note": null
+    },
+    {
+      "questionId": "p2q5",
+      "phaseNo": 2,
+      "type": "text",
+      "valueText": "Shoppers wander, read static directory boards, ask staff, or give up and leave. Venue operators have no reliable way to influence movement once a visitor is inside.",
+      "valueNumber": null,
+      "valueJson": null,
+      "clearOnDemo": false,
+      "note": null
+    },
+    {
+      "questionId": "p3q1",
+      "phaseNo": 3,
+      "type": "text",
+      "valueText": "Indoor map rendering per venue; live position within the venue; search for a store or product; turn-by-turn indoor routing.",
+      "valueNumber": null,
+      "valueJson": null,
+      "clearOnDemo": true,
+      "note": null
+    },
+    {
+      "questionId": "p3q2",
+      "phaseNo": 3,
+      "type": "text",
+      "valueText": "Accessibility routing (lifts and step-free paths); offline map caching; sponsored placement from nearby stores; multi-floor transitions; footfall analytics dashboard for venue operators.",
+      "valueNumber": null,
+      "valueJson": null,
+      "clearOnDemo": false,
+      "note": null
+    },
+    {
+      "questionId": "p3q3",
+      "phaseNo": 3,
+      "type": "text",
+      "valueText": "Find a specific product inside a venue and be walked to it, without asking a human.",
+      "valueNumber": null,
+      "valueJson": null,
+      "clearOnDemo": false,
+      "note": null
+    },
+    {
+      "questionId": "p3q4",
+      "phaseNo": 3,
+      "type": "multiselect",
+      "valueText": null,
+      "valueNumber": null,
+      "valueJson": [
+        "Users complete the core action (activation)",
+        "Users return regularly (retention)",
+        "Technical stability (crash-free, performance)"
+      ],
+      "clearOnDemo": false,
+      "note": null
+    },
+    {
+      "questionId": "p3q5",
+      "phaseNo": 3,
+      "type": "text",
+      "valueText": "Indoor positioning without GPS requires per-venue surveying or hardware. Every new venue is manual onboarding cost, so coverage does not scale on its own \u2014 this is the central constraint on the whole business model, not a minor technical detail.",
+      "valueNumber": null,
+      "valueJson": null,
+      "clearOnDemo": false,
+      "note": null
+    },
+    {
+      "questionId": "p4q1",
+      "phaseNo": 4,
+      "type": "select",
+      "valueText": "Sold to businesses (B2B licence)",
+      "valueNumber": null,
+      "valueJson": null,
+      "clearOnDemo": false,
+      "note": null
+    },
+    {
+      "questionId": "p4q2",
+      "phaseNo": 4,
+      "type": "number",
+      "valueText": null,
+      "valueNumber": 450,
+      "valueJson": null,
+      "clearOnDemo": true,
+      "note": "Monthly licence per venue. B2B pricing, so ARPU-per-shopper benchmarks do not apply directly \u2014 the app should say so."
+    },
+    {
+      "questionId": "p4q3",
+      "phaseNo": 4,
+      "type": "number",
+      "valueText": null,
+      "valueNumber": 0.05,
+      "valueJson": null,
+      "clearOnDemo": false,
+      "note": "Share of reachable users converting to a PAYING relationship. Near-zero because payers are venues, not shoppers. Deliberately included to test that the calculation layer handles a B2B model without producing nonsense."
+    },
+    {
+      "questionId": "p4q4",
+      "phaseNo": 4,
+      "type": "number",
+      "valueText": null,
+      "valueNumber": 6500,
+      "valueJson": null,
+      "clearOnDemo": false,
+      "note": "Monthly burn: one developer, mapping/surveying contractor, hosting."
+    },
+    {
+      "questionId": "p4q5",
+      "phaseNo": 4,
+      "type": "multiselect",
+      "valueText": null,
+      "valueNumber": null,
+      "valueJson": [
+        "Partnerships with businesses",
+        "Direct sales",
+        "App store search (ASO)"
+      ],
+      "clearOnDemo": false,
+      "note": null
+    }
+  ],
+  "externalCache": [
+    {
+      "source": "worldbank",
+      "cacheKey": "ISR/SP.POP.TOTL",
+      "payload": {
+        "country": "Israel",
+        "indicator": "SP.POP.TOTL",
+        "indicatorName": "Population, total",
+        "value": 10122800,
+        "year": 2025,
+        "_status": "FETCHED",
+        "_fetchedAt": "2026-08-10"
+      },
+      "note": "FETCHED for real on 2026-08-10 via fetch-seed-data.ts. Pre-cached so the demo survives a bad network. Value intentionally null until fetched for real \u2014 the app must not ship an invented population figure."
+    },
+    {
+      "source": "worldbank",
+      "cacheKey": "ISR/IT.NET.USER.ZS",
+      "payload": {
+        "country": "Israel",
+        "indicator": "IT.NET.USER.ZS",
+        "indicatorName": "Individuals using the Internet (% of population)",
+        "value": 88.18242225,
+        "year": 2024,
+        "_status": "FETCHED",
+        "_fetchedAt": "2026-08-10"
+      },
+      "note": "FETCHED for real on 2026-08-10 via fetch-seed-data.ts. Used for TAM grounding in the MRD."
+    },
+    {
+      "source": "itunes",
+      "cacheKey": "indoor navigation/IL",
+      "payload": {
+        "resultCount": 4,
+        "results": [
+          {
+            "trackName": "InMapz indoor navigation maps",
+            "artistName": "InMapz",
+            "formattedPrice": "Free",
+            "averageUserRating": 5,
+            "userRatingCount": null,
+            "primaryGenreName": "Navigation"
+          },
+          {
+            "trackName": "ArcGIS Indoors (Classic)",
+            "artistName": "Esri",
+            "formattedPrice": "Free",
+            "averageUserRating": 0,
+            "userRatingCount": null,
+            "primaryGenreName": "Business"
+          },
+          {
+            "trackName": "LinkedIn: Community & Career",
+            "artistName": "LinkedIn",
+            "formattedPrice": "Free",
+            "averageUserRating": 4.67292,
+            "userRatingCount": null,
+            "primaryGenreName": "Business",
+            "_note": "Search-relevance noise, not a real competitor \u2014 kept to show the search returns literal term matches, not curated results."
+          },
+          {
+            "trackName": "komoot - hike, bike & run",
+            "artistName": "komoot GmbH",
+            "formattedPrice": "Free",
+            "averageUserRating": 4.67769,
+            "userRatingCount": null,
+            "primaryGenreName": "Health & Fitness",
+            "_note": "Search-relevance noise, not a real competitor."
+          }
+        ],
+        "_status": "FETCHED",
+        "_fetchedAt": "2026-08-10",
+        "_note": "Only 2 of 4 results (InMapz, ArcGIS Indoors) are genuine indoor-navigation competitors. The MRD-generation prompt should filter by relevance, not assume every result is a competitor."
+      },
+      "note": "FETCHED for real on 2026-08-10 via fetch-seed-data.ts. Competitor lookup for p2q4. iTunes is ~20 req/min and has no CORS, so this is fetched server-side and cached."
+    }
+  ]
+}
