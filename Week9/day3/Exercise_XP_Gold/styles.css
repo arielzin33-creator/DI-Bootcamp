@@ -1,0 +1,235 @@
+:root {
+  --wall: #16241d;
+  --wall-edge: #0e1712;
+  --gold: #c9a24a;
+  --gold-dim: #8a7238;
+  --velvet: #6b1f2a;
+  --ink: #f1efe8;
+  --muted: #9aa79e;
+  --success: #5fa681;
+
+  --serif: Georgia, 'Iowan Old Style', 'Times New Roman', serif;
+  --sans: 'Helvetica Neue', Inter, system-ui, -apple-system, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--wall);
+  background-image:
+    radial-gradient(circle at 50% 20%, rgba(201, 162, 74, 0.08), transparent 60%),
+    linear-gradient(180deg, var(--wall) 0%, var(--wall-edge) 100%);
+  color: var(--ink);
+  font-family: var(--sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+.page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 3.5rem 1.25rem 5rem;
+}
+
+/* ---- Masthead ---- */
+
+.masthead {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.masthead__eyebrow {
+  margin: 0 0 0.5rem;
+  font-size: 0.65rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.masthead__title {
+  margin: 0;
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(1.9rem, 5vw, 2.6rem);
+  letter-spacing: 0.02em;
+}
+
+/* ---- Gate / lock ---- */
+
+.gate {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 340px;
+}
+
+.lock {
+  position: relative;
+  width: 46px;
+  height: 54px;
+  margin-bottom: -18px;
+  z-index: 1;
+}
+
+.lock__shackle {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 26px;
+  height: 24px;
+  border: 5px solid var(--gold);
+  border-bottom: none;
+  border-radius: 13px 13px 0 0;
+  transition: transform 300ms ease;
+  transform-origin: 8px 22px;
+}
+
+.lock--open .lock__shackle {
+  transform: translateX(-70%) rotate(-28deg);
+}
+
+.lock__body {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40px;
+  height: 30px;
+  background: linear-gradient(180deg, var(--gold), var(--gold-dim));
+  border-radius: 6px;
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.4);
+}
+
+.lock__body::after {
+  content: '';
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 6px;
+  height: 10px;
+  background: var(--wall-edge);
+  border-radius: 2px;
+}
+
+/* ---- Card ---- */
+
+.card {
+  width: 100%;
+  background: rgba(241, 239, 232, 0.08);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(201, 162, 74, 0.35);
+  border-radius: 14px;
+  padding: 2rem 1.5rem 1.6rem;
+  box-shadow: 0 24px 46px rgba(0, 0, 0, 0.4);
+}
+
+.card__content {
+  text-align: center;
+}
+
+.card__eyebrow {
+  margin: 0 0 0.3rem;
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.card__welcome {
+  margin: 0 0 1.3rem;
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: 1.4rem;
+}
+
+/* ---- Login form ---- */
+
+.login,
+.profile-editor {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  text-align: left;
+  margin-bottom: 1rem;
+}
+
+.login__label,
+.profile-editor__label {
+  font-size: 0.68rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.login__input,
+.profile-editor__input {
+  padding: 0.55rem 0.7rem;
+  border: 1px solid rgba(241, 239, 232, 0.25);
+  background: rgba(241, 239, 232, 0.06);
+  color: var(--ink);
+  border-radius: 6px;
+  font-family: var(--sans);
+  font-size: 0.9rem;
+}
+
+.login__input:focus,
+.profile-editor__input:focus {
+  outline: none;
+  border-color: var(--gold);
+}
+
+.login__submit,
+.profile-editor__submit {
+  margin-top: 0.3rem;
+  padding: 0.55rem 0.9rem;
+  border: none;
+  border-radius: 6px;
+  background: var(--gold);
+  color: #2a220e;
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.login__submit:hover,
+.profile-editor__submit:hover {
+  background: #d9b25c;
+}
+
+.login__submit:focus-visible,
+.profile-editor__submit:focus-visible,
+.logout:focus-visible {
+  outline: 2px solid var(--success);
+  outline-offset: 2px;
+}
+
+/* ---- Logout ---- */
+
+.logout {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid var(--velvet);
+  border-radius: 6px;
+  background: transparent;
+  color: #e8b4bb;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.logout:hover {
+  background: var(--velvet);
+  color: var(--ink);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lock__shackle {
+    transition: none;
+  }
+}

@@ -1,0 +1,249 @@
+:root {
+  --wall: #f3ebe6;
+  --plate: #fbf7f0;
+  --frosting: #f6d9df;
+  --frosting-dark: #eab8c3;
+  --candle: #7fb3a3;
+  --candle-dark: #5f9585;
+  --flame: #f2a33d;
+  --flame-glow: #ffd166;
+  --ink: #4a3b3f;
+  --muted: #9c8b8f;
+
+  --rounded: 'Segoe UI Rounded', 'Helvetica Neue', system-ui, -apple-system, sans-serif;
+  --sans: 'Helvetica Neue', Inter, system-ui, -apple-system, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--wall);
+  background-image: radial-gradient(ellipse at 50% -10%, #fbf3ee 0%, var(--wall) 60%);
+  color: var(--ink);
+  font-family: var(--sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+.page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 3.5rem 1.25rem 5rem;
+}
+
+/* ---- Masthead ---- */
+
+.masthead {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.masthead__eyebrow {
+  margin: 0 0 0.5rem;
+  font-size: 0.68rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.masthead__title {
+  margin: 0;
+  font-family: var(--rounded);
+  font-weight: 700;
+  font-size: clamp(1.9rem, 5vw, 2.5rem);
+}
+
+/* ---- Cake ---- */
+
+.cake {
+  width: 100%;
+  max-width: 340px;
+  margin-bottom: 1.75rem;
+  text-align: center;
+}
+
+.cake__candles {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 6px;
+  min-height: 46px;
+  margin-bottom: -6px;
+  flex-wrap: wrap;
+}
+
+.candle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.candle__flame {
+  width: 7px;
+  height: 11px;
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  background: radial-gradient(circle at 50% 30%, var(--flame-glow), var(--flame) 70%);
+  animation: flicker 1.6s ease-in-out infinite;
+  margin-bottom: 1px;
+}
+
+.candle__stick {
+  width: 5px;
+  height: 22px;
+  background: var(--candle);
+  border-radius: 1px;
+  box-shadow: inset -1px 0 0 var(--candle-dark);
+}
+
+@keyframes flicker {
+  0%,
+  100% {
+    transform: scaleY(1) rotate(0deg);
+    opacity: 1;
+  }
+  50% {
+    transform: scaleY(0.92) rotate(-2deg);
+    opacity: 0.9;
+  }
+}
+
+.cake__overflow {
+  align-self: center;
+  font-size: 0.7rem;
+  color: var(--muted);
+  margin-left: 0.3rem;
+}
+
+.cake__base {
+  position: relative;
+  background: var(--frosting);
+  border-radius: 16px;
+  padding: 1.6rem 1rem 1.4rem;
+  box-shadow:
+    0 0 0 1px var(--frosting-dark),
+    0 16px 30px rgba(74, 59, 63, 0.18);
+}
+
+.cake__age {
+  margin: 0;
+  font-family: var(--rounded);
+  font-weight: 700;
+  font-size: 3.2rem;
+  line-height: 1;
+  min-height: 3.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cake__label {
+  margin: 0.3rem 0 0;
+  font-size: 0.78rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.cake__spinner {
+  display: inline-flex;
+  width: 28px;
+  height: 28px;
+  align-items: center;
+  justify-content: center;
+}
+
+.cake__spinner-flame {
+  width: 14px;
+  height: 20px;
+  border-radius: 50% 50% 50% 50% / 65% 65% 35% 35%;
+  background: radial-gradient(circle at 50% 30%, var(--flame-glow), var(--flame) 70%);
+  animation: spin-flicker 0.9s ease-in-out infinite;
+}
+
+@keyframes spin-flicker {
+  0%,
+  100% {
+    transform: scale(1) rotate(-6deg);
+  }
+  50% {
+    transform: scale(0.8) rotate(6deg);
+  }
+}
+
+/* ---- Controls ---- */
+
+.controls {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.controls__button {
+  padding: 0.65rem 1.3rem;
+  border: none;
+  border-radius: 999px;
+  font-family: var(--rounded);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  color: var(--plate);
+}
+
+.controls__button--up {
+  background: var(--candle-dark);
+}
+
+.controls__button--up:hover:not(:disabled) {
+  background: #4c7d6f;
+}
+
+.controls__button--down {
+  background: var(--flame);
+}
+
+.controls__button--down:hover:not(:disabled) {
+  background: #d98a2a;
+}
+
+.controls__button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.controls__button:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 2px;
+}
+
+.controls__reset {
+  padding: 0.65rem 1rem;
+  border: 1px solid var(--muted);
+  border-radius: 999px;
+  background: transparent;
+  color: var(--muted);
+  font-family: var(--sans);
+  font-size: 0.82rem;
+  cursor: pointer;
+}
+
+.controls__reset:hover:not(:disabled) {
+  border-color: var(--ink);
+  color: var(--ink);
+}
+
+.controls__reset:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .candle__flame,
+  .cake__spinner-flame {
+    animation: none;
+  }
+}
