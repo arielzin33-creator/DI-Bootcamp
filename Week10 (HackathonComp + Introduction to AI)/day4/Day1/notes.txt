@@ -1,0 +1,1 @@
+MCP workshop — Day 1. If you can read this, read_file works!
