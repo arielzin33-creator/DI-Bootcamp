@@ -1,0 +1,133 @@
+.clock-wrapper {
+  display: flex;
+  justify-content: center;
+  padding: 40px 0;
+  font-family: "Segoe UI", Arial, sans-serif;
+}
+
+.clock-face {
+  position: relative;
+  width: 320px;
+  height: 320px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 45%, #1f2a38 0%, #0d141f 100%);
+  border: 6px solid #d8b25c;
+  box-shadow: 0 0 0 2px #0d141f, 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+
+/* Year / month, anchored to the corners of the clock face
+   (Exercise 1, point 3) */
+.clock-year,
+.clock-month {
+  position: absolute;
+  color: #d8b25c;
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+}
+
+.clock-year {
+  top: 14%;
+  left: 14%;
+  transform: translate(-50%, -50%);
+}
+
+.clock-month {
+  bottom: 14%;
+  right: 14%;
+  transform: translate(50%, 50%);
+}
+
+/* Each hour position covers the whole face and gets rotated;
+   its label is then counter-rotated so it reads upright. */
+.clock-hour-mark {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: center;
+}
+
+.clock-hour-mark span {
+  display: inline-block;
+  margin-top: 18px;
+  color: #e8ecf1;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.clock-compass-label {
+  color: #d8b25c !important;
+  font-size: 1.2rem !important;
+  font-weight: 700 !important;
+}
+
+/* Hands share a rotation center at the middle of the face. */
+.clock-hand {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform-origin: 50% 100%;
+  border-radius: 4px;
+  background: #e8ecf1;
+  transition: transform 0.2s cubic-bezier(0.4, 2.3, 0.6, 1);
+}
+
+.clock-hour-hand {
+  width: 6px;
+  height: 70px;
+  margin-left: -3px;
+  margin-top: -70px;
+  background: #e8ecf1;
+}
+
+.clock-minute-hand {
+  width: 4px;
+  height: 100px;
+  margin-left: -2px;
+  margin-top: -100px;
+  background: #cdd4dd;
+}
+
+.clock-second-hand {
+  width: 2px;
+  height: 115px;
+  margin-left: -1px;
+  margin-top: -115px;
+  background: #d8b25c;
+}
+
+.clock-center-dot {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 12px;
+  height: 12px;
+  margin: -6px 0 0 -6px;
+  background: #d8b25c;
+  border-radius: 50%;
+  z-index: 2;
+}
+
+/* The plain, linear (non-rotated) digital readout, sat lower in
+   the face so it doesn't collide with the hands (Exercise 1,
+   point 4). */
+.clock-digital-readout {
+  position: absolute;
+  bottom: 32%;
+  left: 50%;
+  transform: translateX(-50%);
+  text-align: center;
+  white-space: nowrap;
+}
+
+.clock-digital-date {
+  color: #9aa5b1;
+  font-size: 0.75rem;
+}
+
+.clock-digital-time {
+  color: #e8ecf1;
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
