@@ -1,0 +1,28 @@
+$ python agent.py
+Notes tools: ['notes_add', 'notes_list']
+Airbnb tools: ['airbnb_search', 'airbnb_listing_details']
+
+Prompt: 'Find listings in Paris and note that I searched Paris.'
+Proposed tool_calls: [{'name': 'airbnb_search', 'arguments': {'location': 'Paris'}}, {'name': 'notes_add', 'arguments': {'text': 'I searched Paris'}}]
+
+airbnb_search({'location': 'Paris'}) ->
+  [{'id': '1001', 'name': 'Cozy studio near the Louvre', 'price': '$95/night', 'location': 'Paris, France'}, {'id': '1002', 'name': 'Montmartre 1BR with a view', 'price': '$120/night', 'location': 'Paris, France'}]
+
+notes_add({'text': 'I searched Paris'}) ->
+  Saved note #1: I searched Paris
+
+$ python agent.py   # (prompt changed: different city, and a compound sentence testing the note-boundary fix)
+Notes tools: ['notes_add', 'notes_list']
+Airbnb tools: ['airbnb_search', 'airbnb_listing_details']
+
+Prompt: 'Find listings in Lisbon and note that I am planning a trip. Then list my notes.'
+Proposed tool_calls: [{'name': 'airbnb_search', 'arguments': {'location': 'Lisbon'}}, {'name': 'notes_add', 'arguments': {'text': 'I am planning a trip'}}, {'name': 'notes_list', 'arguments': {}}]
+
+airbnb_search({'location': 'Lisbon'}) ->
+  [{'id': '2001', 'name': 'Sunny loft in Alfama', 'price': '$70/night', 'location': 'Lisbon, Portugal'}, {'id': '2002', 'name': 'Modern flat near Belém', 'price': '$85/night', 'location': 'Lisbon, Portugal'}]
+
+notes_add({'text': 'I am planning a trip'}) ->
+  Saved note #1: I am planning a trip
+
+notes_list({}) ->
+  ['I am planning a trip']

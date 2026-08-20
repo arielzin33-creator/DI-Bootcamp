@@ -1,0 +1,104 @@
+{
+  "info": {
+    "name": "Web Research Briefing",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:8787" },
+    { "key": "token", "value": "dev-test-token-12345" }
+  ],
+  "item": [
+    {
+      "name": "GET /tools",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": { "raw": "{{baseUrl}}/tools", "host": ["{{baseUrl}}"], "path": ["tools"] }
+      }
+    },
+    {
+      "name": "POST /tools/search_web",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{token}}" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"query\": \"renewable energy trends\",\n  \"k\": 5\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/tools/search_web",
+          "host": ["{{baseUrl}}"],
+          "path": ["tools", "search_web"]
+        }
+      }
+    },
+    {
+      "name": "POST /tools/fetch_readable",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{token}}" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"url\": \"https://en.wikipedia.org/wiki/Web_scraping\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/tools/fetch_readable",
+          "host": ["{{baseUrl}}"],
+          "path": ["tools", "fetch_readable"]
+        }
+      }
+    },
+    {
+      "name": "POST /tools/summarize_with_citations",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{token}}" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"topic\": \"renewable energy trends\",\n  \"docs\": [\n    {\n      \"title\": \"Renewable energy - Wikipedia\",\n      \"url\": \"https://en.wikipedia.org/wiki/Renewable_energy\",\n      \"text\": \"Renewable energy is energy made from renewable natural resources...\"\n    }\n  ]\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/tools/summarize_with_citations",
+          "host": ["{{baseUrl}}"],
+          "path": ["tools", "summarize_with_citations"]
+        }
+      }
+    },
+    {
+      "name": "POST /tools/save_markdown",
+      "request": {
+        "method": "POST",
+        "header": [
+          { "key": "Content-Type", "value": "application/json" },
+          { "key": "Authorization", "value": "Bearer {{token}}" }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"filename\": \"test.md\",\n  \"content\": \"# Hello\\n\\nThis is a test.\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/tools/save_markdown",
+          "host": ["{{baseUrl}}"],
+          "path": ["tools", "save_markdown"]
+        }
+      }
+    },
+    {
+      "name": "GET /health",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": { "raw": "{{baseUrl}}/health", "host": ["{{baseUrl}}"], "path": ["health"] }
+      }
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+# Base list from the assignment, kept as-is:
+langgraph
+langchain
+langchain_community
+langchainhub
+ipykernel
+langchain_groq
+langchain_huggingface
+bs4
+tiktoken
+chromadb
+langchain_google_genai
+
+# Added after actually testing this end-to-end — the assignment's list alone is not
+# enough to run app.py or agentic_rag.ipynb:
+streamlit               # app.py imports streamlit directly — not in the original list at all
+python-dotenv            # app.py/rag_agent.py load .env via load_dotenv()
+langchain-chroma          # `chromadb` alone is the vector DB engine; the LangChain integration
+                          # package (Chroma the VectorStore class) is a separate package
+langchain-tavily          # Tavily's LangChain tool now lives in its own package, not
+                          # langchain_community
+sentence-transformers     # required by HuggingFaceEmbeddings at runtime — langchain_huggingface
+                          # raises ImportError without it, even though it's not a declared dep
+accelerate                # required transitively by sentence-transformers' model loading path
+tokenizers<=0.23.0        # pin needed: the current `transformers` release requires
+                          # tokenizers<=0.23.0, but a plain `pip install tokenizers` can resolve
+                          # to a newer incompatible version and crash HuggingFaceEmbeddings import

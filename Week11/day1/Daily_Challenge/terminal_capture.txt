@@ -1,0 +1,24 @@
+$ python client.py
+Resources: ['list_cities']
+Tools: ['get_weather']
+2026-08-02 21:12:02,647 [INFO] cities://list read
+cities://list ->
+London
+NYC
+Paris
+2026-08-02 21:12:02,650 [INFO] get_weather called with city='Paris'
+get_weather('Paris') -> {
+  "city": "Paris",
+  "temp_c": 21,
+  "condition": "sunny"
+}
+2026-08-02 21:12:02,652 [INFO] get_weather called with city='Atlantis'
+2026-08-02 21:12:02,652 [INFO] get_weather: 'Atlantis' not found (supported: ['London', 'NYC', 'Paris'])
+get_weather('Atlantis') -> {
+  "error": "No weather data for 'Atlantis'.",
+  "supported_cities": [
+    "London",
+    "NYC",
+    "Paris"
+  ]
+}

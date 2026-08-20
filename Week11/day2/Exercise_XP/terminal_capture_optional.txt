@@ -1,0 +1,9 @@
+$ python optional_multiply_client.py
+Session initialized (server_with_multiply.py).
+Tools (rebuilt list): ['add', 'multiply']
+Converted LLM tool specs: ['add', 'multiply']
+Prompt: 'Multiply 6 by 7.'
+Proposed tool_calls: [{'name': 'multiply', 'arguments': {'a': 6, 'b': 7}}]
+multiply({'a': 6, 'b': 7}) -> 42
+Prompt: 'Add 2 to 20.'
+add({'a': 2, 'b': 20}) -> 22

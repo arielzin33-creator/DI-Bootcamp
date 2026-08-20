@@ -1,0 +1,12 @@
+$ python client.py
+[Exercise 2] Session initialized.
+[Exercise 3] Resources: ['about']
+[Exercise 3] Tools:
+  - add: inputSchema properties = ['a', 'b']
+      a: integer
+      b: integer
+[Exercise 4] Converted LLM tool specs:
+  {'type': 'function', 'function': {'name': 'add', 'description': 'Return the sum of two integers.', 'parameters': {'properties': {'a': {'title': 'A', 'type': 'integer'}, 'b': {'title': 'B', 'type': 'integer'}}, 'required': ['a', 'b'], 'type': 'object', 'title': 'addArguments'}}}
+[Exercise 5] Prompt: 'Add 2 to 20.'
+[Exercise 5] Proposed tool_calls: [{'name': 'add', 'arguments': {'a': 2, 'b': 20}}]
+[Exercise 5] add({'a': 2, 'b': 20}) -> 22
