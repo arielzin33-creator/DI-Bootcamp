@@ -1,0 +1,5 @@
+/* Vite's scaffold default here (dark-mode palette, its own flex-centering) fights
+   App.css, which already owns full-page centering — stripped to nothing extra. */
+* {
+  box-sizing: border-box;
+}

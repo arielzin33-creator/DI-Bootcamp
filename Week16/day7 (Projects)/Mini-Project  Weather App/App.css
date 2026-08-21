@@ -1,0 +1,148 @@
+.wrapper {
+  min-height: 100vh;
+  background: linear-gradient(90deg, #e67e22, #e74c3c);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+.main {
+  width: 100%;
+  max-width: 1100px;
+}
+
+.container {
+  width: 100%;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 40px;
+}
+
+.col {
+  flex: 1 1 320px;
+  min-width: 0; /* lets flex children shrink instead of overflowing the row */
+}
+
+/* ---------- Titles ---------- */
+
+.title-container__title {
+  font-size: 50px;
+  font-weight: 700;
+  color: #000;
+  margin: 0 0 10px;
+  line-height: 1.1;
+}
+
+.title-container__subtitle {
+  font-size: 20px;
+  font-weight: 400;
+  color: rgba(0, 0, 0, 0.7);
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* ---------- Form ---------- */
+
+form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+form input {
+  flex: 1 1 160px;
+  min-width: 0;
+  padding: 14px 16px;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  font-family: inherit;
+  background: rgba(255, 255, 255, 0.9);
+  color: #333;
+}
+
+form input::placeholder {
+  color: #999;
+}
+
+form input:focus {
+  outline: 2px solid rgba(255, 255, 255, 0.9);
+  background: #fff;
+}
+
+.form-button {
+  flex: 0 0 auto;
+  padding: 14px 28px;
+  border: none;
+  border-radius: 4px;
+  background: #f16051;
+  color: #fff;
+  font-size: 16px;
+  font-family: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.form-button:hover:not(:disabled) {
+  background: #d94f41;
+}
+
+.form-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* ---------- Results ---------- */
+
+.weather__info {
+  margin-top: 26px;
+}
+
+/* :empty keeps the panel from rendering a stray box before the first search */
+.weather__info:not(:empty) {
+  background: rgba(0, 0, 0, 0.18);
+  border-radius: 6px;
+  padding: 18px 22px;
+}
+
+.weather__key {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 17px;
+  margin: 0 0 10px;
+}
+
+.weather__key:last-child {
+  margin-bottom: 0;
+}
+
+.weather__value {
+  color: #fff;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.weather__error {
+  color: #fff;
+  background: rgba(0, 0, 0, 0.25);
+  border-left: 4px solid #ffe08a;
+  padding: 10px 14px;
+  border-radius: 3px;
+  margin: 0;
+  font-size: 16px;
+}
+
+@media (max-width: 720px) {
+  .title-container__title {
+    font-size: 38px;
+  }
+
+  .row {
+    gap: 28px;
+  }
+}

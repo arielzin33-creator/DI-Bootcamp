@@ -1,0 +1,6 @@
+/* Vite's scaffold default here sets a dark-mode color scheme and centered flex body
+   that fights Bootstrap's own resets, so it's stripped down — Bootstrap's CSS is the
+   one actually driving layout/typography now. */
+body {
+  margin: 0;
+}
