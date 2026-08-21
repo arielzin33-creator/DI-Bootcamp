@@ -1,0 +1,14 @@
+{
+  "name": "collaborative-storytelling-app",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Monorepo root. Convenience scripts only -- backend/ and frontend/ each have their own package.json and are installed independently (which is also how Render deploys them).",
+  "scripts": {
+    "install:all": "npm install --prefix backend && npm install --prefix frontend",
+    "dev:backend": "npm run dev --prefix backend",
+    "dev:frontend": "npm run dev --prefix frontend",
+    "db:init": "npm run db:init --prefix backend",
+    "typecheck": "npm run typecheck --prefix backend && npm run typecheck --prefix frontend",
+    "build": "npm run build --prefix backend && npm run build --prefix frontend"
+  }
+}

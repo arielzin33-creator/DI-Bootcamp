@@ -1,0 +1,8 @@
+{
+  "name": "@storyapp/types",
+  "version": "1.0.0",
+  "private": true,
+  "description": "TypeScript types shared between the backend and the frontend.",
+  "main": "index.js",
+  "types": "index.d.ts"
+}

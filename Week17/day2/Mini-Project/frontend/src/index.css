@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Keep long story text readable rather than stretched across a wide monitor. */
+.story-content {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
