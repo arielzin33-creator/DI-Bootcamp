@@ -1,0 +1,71 @@
+.page {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 2rem 1rem 3rem;
+  font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+}
+
+.error {
+  color: #b91c1c;
+}
+
+.legend {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+  color: #374151;
+}
+
+.legend-swatch {
+  width: 14px;
+  height: 14px;
+  background: #ececec;
+  border: 1px solid #9ca3af;
+}
+
+.chart-bars {
+  display: flex;
+  align-items: flex-end;
+  gap: 2.5rem;
+  padding: 0 0.5rem;
+}
+
+.bar-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  height: 100%;
+}
+
+.bar-value {
+  margin-bottom: 0.4rem;
+  font-size: 0.85rem;
+  color: #374151;
+  white-space: nowrap;
+}
+
+.bar {
+  width: 64px;
+  background: #ececec;
+  border: 1px solid #9ca3af;
+  transition: height 0.2s ease;
+}
+
+.bar-label {
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  color: #111827;
+}
+
+@media (max-width: 600px) {
+  .chart-bars {
+    gap: 1rem;
+  }
+
+  .bar {
+    width: 40px;
+  }
+}
