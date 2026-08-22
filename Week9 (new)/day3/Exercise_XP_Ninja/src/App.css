@@ -1,0 +1,132 @@
+.app {
+  max-width: 640px;
+  margin: 60px auto;
+  padding: 32px;
+  background: #fff;
+  border: 1px solid #e0e4e7;
+  border-radius: 10px;
+}
+
+.app h1 {
+  text-align: center;
+  color: #2c3e50;
+  margin-bottom: 24px;
+}
+
+.add-product {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.add-product input[type='text'] {
+  flex: 1;
+  min-width: 0;
+}
+
+.add-product input[type='number'] {
+  width: 100px;
+}
+
+.add-product input {
+  padding: 10px 12px;
+  border: 1px solid #d3dbe0;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+.add-product input:focus {
+  outline: 2px solid #2980b9;
+  border-color: transparent;
+}
+
+.add-product button {
+  padding: 10px 18px;
+  border: none;
+  border-radius: 8px;
+  background: #2980b9;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.add-product button:hover {
+  background: #216a94;
+}
+
+.inventory-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.inventory-table th,
+.inventory-table td {
+  text-align: left;
+  padding: 10px 12px;
+  border-bottom: 1px solid #e0e4e7;
+}
+
+.inventory-table th {
+  color: #7f8c8d;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+}
+
+.inventory-table tr.out-of-stock td:first-child {
+  color: #c0392b;
+  font-weight: 600;
+}
+
+.update-quantity {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.update-quantity input {
+  width: 56px;
+  text-align: center;
+  padding: 6px 4px;
+  border: 1px solid #d3dbe0;
+  border-radius: 6px;
+}
+
+.update-quantity button {
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: 6px;
+  background: #ecf0f1;
+  color: #2c3e50;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.update-quantity button:hover:not(:disabled) {
+  background: #dde3e6;
+}
+
+.update-quantity button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.remove-product {
+  padding: 6px 14px;
+  border: none;
+  border-radius: 6px;
+  background: #c0392b;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.remove-product:hover {
+  background: #a53125;
+}
+
+.empty-message {
+  color: #7f8c8d;
+  text-align: center;
+}
