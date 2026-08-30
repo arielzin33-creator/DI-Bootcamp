@@ -1,0 +1,19 @@
+C:\Users\ariel\mcp-101\.venv\Lib\site-packages\pydantic_settings\sources\utils.py:47: IncompleteFieldDefinitionWarning: Field 'lifespan' has an incomplete definition: its annotation contains an unresolved forward reference, so settings sources may fail to correctly resolve its value. Call `model_rebuild()` on the model where the field is defined, once all the referenced types are defined.
+  warnings.warn(
+INFO:mcp.server.lowlevel.server:Processing request of type ListResourcesRequest
+INFO:mcp.server.lowlevel.server:Processing request of type ListResourceTemplatesRequest
+INFO:mcp.server.lowlevel.server:Processing request of type ListToolsRequest
+INFO:mcp.server.lowlevel.server:Processing request of type ReadResourceRequest
+INFO:mcp.server.lowlevel.server:Processing request of type CallToolRequest
+INFO:weather-server:get_weather called with city='Paris'
+Resources: ['list_cities']
+Resource templates: []
+Tools: ['get_weather']
+cities://list -> Paris
+London
+NYC
+get_weather('Paris') -> {
+  "city": "Paris",
+  "temp_c": 21,
+  "condition": "sunny"
+}
