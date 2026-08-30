@@ -1,0 +1,128 @@
+.app {
+  max-width: 520px;
+  margin: 48px auto;
+  padding: 24px 28px;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+h1 {
+  margin-top: 0;
+  font-size: 1.5rem;
+  text-align: center;
+}
+
+/* --- Task form --- */
+.task-form {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.task-form input {
+  flex: 1;
+  padding: 8px 10px;
+  border: 1px solid #d0d3d9;
+  border-radius: 6px;
+  font-size: 0.95rem;
+}
+
+.task-form button {
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  background-color: #2f6fed;
+  color: #fff;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.task-form button:hover {
+  background-color: #255bc4;
+}
+
+/* --- Filter buttons --- */
+.filter-buttons {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.filter-buttons button {
+  padding: 6px 14px;
+  border: 1px solid #d0d3d9;
+  border-radius: 999px;
+  background: #fff;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+.filter-buttons button.filter-active {
+  background-color: #2f6fed;
+  border-color: #2f6fed;
+  color: #fff;
+}
+
+/* --- Task list --- */
+.task-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.task-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 4px;
+  border-bottom: 1px solid #eef0f3;
+}
+
+.task-item:last-child {
+  border-bottom: none;
+}
+
+.task-item.completed .task-text {
+  text-decoration: line-through;
+  color: #9aa0a6;
+}
+
+.task-text {
+  flex: 1;
+  cursor: pointer;
+  word-break: break-word;
+}
+
+.edit-input {
+  flex: 1;
+  padding: 6px 8px;
+  border: 1px solid #2f6fed;
+  border-radius: 6px;
+  font-size: 0.95rem;
+}
+
+.task-actions {
+  display: flex;
+  gap: 6px;
+}
+
+.task-actions button {
+  padding: 4px 10px;
+  border: 1px solid #d0d3d9;
+  border-radius: 6px;
+  background: #fff;
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+
+.task-actions button:hover {
+  background-color: #f4f5f7;
+}
+
+.empty-message {
+  text-align: center;
+  color: #9aa0a6;
+  margin: 24px 0;
+}
