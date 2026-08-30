@@ -1,0 +1,286 @@
+.app {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #e0e4e7;
+}
+
+.app-header h1 {
+  color: #2c3e50;
+  font-size: 1.5rem;
+  margin: 0;
+}
+
+/* Auth form */
+.auth-form {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.auth-form input {
+  padding: 8px 10px;
+  border: 1px solid #d3dbe0;
+  border-radius: 6px;
+  width: 120px;
+}
+
+.auth-form button {
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  background: #2980b9;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.auth-form button:hover {
+  background: #216a94;
+}
+
+.auth-form.authenticated {
+  color: #2c3e50;
+  font-weight: 600;
+}
+
+.auth-form.authenticated button {
+  background: #c0392b;
+}
+
+.auth-form.authenticated button:hover {
+  background: #a53125;
+}
+
+.auth-error {
+  color: #c0392b;
+  font-size: 0.85rem;
+}
+
+/* Layout */
+.app-body {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 24px;
+  align-items: start;
+}
+
+@media (max-width: 800px) {
+  .app-body {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Product listing */
+.product-listing-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.product-listing-header h2 {
+  margin: 0;
+  color: #2c3e50;
+}
+
+.product-listing-header button {
+  padding: 8px 14px;
+  border: none;
+  border-radius: 6px;
+  background: #ecf0f1;
+  color: #2c3e50;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.product-listing-header button:hover:not(:disabled) {
+  background: #dde3e6;
+}
+
+.product-listing-header button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.status-message {
+  color: #5a6b76;
+}
+
+.status-message.error {
+  color: #c0392b;
+  font-weight: 600;
+}
+
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 16px;
+}
+
+.product-card {
+  background: #fff;
+  border: 1px solid #e0e4e7;
+  border-radius: 10px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.product-card img {
+  height: 100px;
+  object-fit: contain;
+  margin-bottom: 10px;
+}
+
+.product-title {
+  font-size: 0.85rem;
+  color: #2c3e50;
+  min-height: 40px;
+  margin: 0 0 6px;
+}
+
+.product-price {
+  font-weight: 700;
+  color: #27ae60;
+  margin: 0 0 10px;
+}
+
+.product-card button {
+  width: 100%;
+  padding: 8px 10px;
+  border: none;
+  border-radius: 6px;
+  background: #2980b9;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.product-card button:hover:not(:disabled) {
+  background: #216a94;
+}
+
+.product-card button:disabled {
+  background: #bdc3c7;
+  cursor: not-allowed;
+}
+
+/* Shopping cart */
+.shopping-cart {
+  background: #fff;
+  border: 1px solid #e0e4e7;
+  border-radius: 10px;
+  padding: 16px;
+}
+
+.shopping-cart h2 {
+  margin: 0 0 16px;
+  color: #2c3e50;
+}
+
+.cart-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.cart-item {
+  display: grid;
+  grid-template-columns: 40px 1fr auto auto;
+  align-items: center;
+  gap: 8px;
+}
+
+.cart-item img {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}
+
+.cart-item-title {
+  font-size: 0.85rem;
+  margin: 0;
+  color: #2c3e50;
+}
+
+.cart-item-price {
+  font-size: 0.75rem;
+  margin: 0;
+  color: #7f8c8d;
+}
+
+.cart-item-quantity {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.cart-item-quantity button {
+  width: 24px;
+  height: 24px;
+  border: none;
+  border-radius: 4px;
+  background: #ecf0f1;
+  cursor: pointer;
+}
+
+.cart-item-quantity button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.remove-item {
+  padding: 4px 8px;
+  border: none;
+  border-radius: 6px;
+  background: #c0392b;
+  color: #fff;
+  font-size: 0.75rem;
+  cursor: pointer;
+}
+
+.remove-item:hover {
+  background: #a53125;
+}
+
+.cart-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid #e0e4e7;
+}
+
+.cart-total {
+  font-weight: 700;
+  color: #2c3e50;
+}
+
+.cart-footer button {
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  background: #ecf0f1;
+  color: #2c3e50;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.cart-footer button:hover {
+  background: #dde3e6;
+}

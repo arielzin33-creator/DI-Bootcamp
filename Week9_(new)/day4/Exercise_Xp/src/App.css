@@ -1,0 +1,67 @@
+.user-data {
+  max-width: 420px;
+  margin: 60px auto;
+  padding: 32px;
+  background: #fff;
+  border: 1px solid #e0e4e7;
+  border-radius: 10px;
+  text-align: center;
+}
+
+.user-data h1 {
+  color: #2c3e50;
+  margin-bottom: 20px;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.actions button {
+  flex: 1;
+  padding: 10px 14px;
+  border: none;
+  border-radius: 8px;
+  background: #2980b9;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.actions button:hover:not(:disabled) {
+  background: #216a94;
+}
+
+.actions button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.status-message {
+  color: #5a6b76;
+}
+
+.status-message.error {
+  color: #c0392b;
+  font-weight: 600;
+}
+
+.user-card {
+  text-align: left;
+  background: #f7f8fa;
+  border: 1px solid #e0e4e7;
+  border-radius: 8px;
+  padding: 16px 20px;
+}
+
+.user-card h2 {
+  margin: 0 0 10px;
+  color: #2c3e50;
+}
+
+.user-card p {
+  margin: 4px 0;
+  color: #5a6b76;
+}
