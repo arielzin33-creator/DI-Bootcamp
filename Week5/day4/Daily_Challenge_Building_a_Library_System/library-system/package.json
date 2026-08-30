@@ -1,0 +1,17 @@
+{
+  "name": "library-system",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A simple library system demonstrating TypeScript classes, interfaces, access modifiers, and inheritance.",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "ts-node src/index.ts"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.0",
+    "ts-node": "^10.9.2",
+    "@types/node": "^20.11.0"
+  }
+}
